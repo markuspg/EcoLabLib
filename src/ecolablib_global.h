@@ -1,0 +1,12 @@
+#ifndef ECOLABLIB_GLOBAL_H
+#define ECOLABLIB_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(ECOLABLIB_LIBRARY)
+#  define ECOLABLIBSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define ECOLABLIBSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // ECOLABLIB_GLOBAL_H
