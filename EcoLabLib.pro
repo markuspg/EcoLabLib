@@ -13,10 +13,12 @@ TEMPLATE = lib
 
 DEFINES += ECOLABLIB_LIBRARY
 
-SOURCES += src/ecolablib.cpp
+SOURCES += src/ecolablib.cpp \
+    src/builder.cpp
 
 HEADERS += src/ecolablib.h\
-        src/ecolablib_global.h
+        src/ecolablib_global.h \
+    src/builder.h
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -24,3 +26,6 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+OTHER_FILES += \
+    data/EcoLabLib.conf

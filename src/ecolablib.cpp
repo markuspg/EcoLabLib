@@ -20,7 +20,7 @@
 #include "ecolablib.h"
 
 
-EcoLabLib::EcoLabLib( QObject *argParent ) :
+EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
     QObject{ argParent }
 {
 }

@@ -24,11 +24,13 @@
 
 #include <QObject>
 
+class ellBuilder;
+
 class ECOLABLIBSHARED_EXPORT EcoLabLib : public QObject {
     Q_OBJECT
 
 public:
-    EcoLabLib( QObject *argParent = nullptr );
+    EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
 };
 
 #endif // ECOLABLIB_H
