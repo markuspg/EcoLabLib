@@ -13,3 +13,20 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
     settingsStorage{ argSettingsStorage }
 {
 }
+
+ellClient::~ellClient() {
+    delete socket;
+}
+
+void ellClient::Disconnected() {
+    delete socket;
+    socket = nullptr;
+}
+
+void ellClient::SetSocket( QTcpSocket *argSocket ) {
+    if ( socket ) {
+        socket->abort();
+        delete socket;
+    }
+    socket = argSocket;
+}

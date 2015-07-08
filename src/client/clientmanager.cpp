@@ -1,10 +1,16 @@
 #include "clientmanager.h"
 
 ellClientManager::ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
-    QObject{ argParent },
+    QTcpServer{ argParent },
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
     settingsStorage{ argSettingsStorage }
 {
+    if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
+        throw 20;
+    }
+
+    connect( this, &ellClientManager::newConnection, this, &ellClientManager::HandleIncomingConnection );
+
     QSettings clientData{ "Economic Laboratory", "EcoLabLib" };
 
     // Get the client quantity to check the value lists for clients creation for correct length
@@ -54,4 +60,22 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
 
 ellClientManager::~ellClientManager() {
     delete clientIPsToClientsMap;
+}
+
+void ellClientManager::HandleIncomingConnection() {
+    while ( this->hasPendingConnections() ) {
+        QTcpSocket *incConnection = this->nextPendingConnection();
+        QString peerAddress = incConnection->peerAddress().toString();
+        if ( clientIPsToClientsMap->contains( peerAddress ) ) {
+            ellClient *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
+            connectingClient->SetSocket( incConnection );
+            connect( incConnection, &QTcpSocket::disconnected,
+                     connectingClient, &ellClient::Disconnected );
+            connect( incConnection, &QTcpSocket::disconnected,
+                     incConnection, &QTcpSocket::deleteLater );
+        } else {
+            incConnection->abort();
+            delete incConnection;
+        }
+    }
 }

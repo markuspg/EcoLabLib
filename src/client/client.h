@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include <QObject>
+#include <QTcpSocket>
 
 class ellSettingsStorage;
 
@@ -12,6 +13,7 @@ public:
     explicit ellClient( const QString &argHostName, const QString &argIP, const QString &argMAC,
                         const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
                         const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
+    ~ellClient();
 
     const QString hostName;
     const QString ip;
@@ -20,12 +22,16 @@ public:
     const unsigned int xPosition = 1;
     const unsigned int yPosition = 1;
 
+    void SetSocket( QTcpSocket *argSocket );
+
 signals:
 
 public slots:
+    void Disconnected();
 
 private:
     const ellSettingsStorage * const settingsStorage = nullptr;
+    QTcpSocket *socket = nullptr;
 };
 
 #endif // CLIENT_H
