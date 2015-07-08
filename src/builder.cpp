@@ -20,11 +20,14 @@ bool ellBuilder::CheckPath( const QString * const argPath ) {
 }
 
 quint16 *ellBuilder::ConvertToNumber( const QString * const argValueString ) {
-    bool conversionSuccessful = false;
-    quint16 *tempNumber = new quint16{ argValueString->toUShort( &conversionSuccessful ) };
-    if ( !conversionSuccessful ) {
-        delete tempNumber;
-        tempNumber = nullptr;
+    quint16 *tempNumber = nullptr;
+    if ( argValueString ) {
+        bool conversionSuccessful = false;
+        tempNumber = new quint16{ argValueString->toUShort( &conversionSuccessful ) };
+        if ( !conversionSuccessful ) {
+            delete tempNumber;
+            tempNumber = nullptr;
+        }
     }
     delete argValueString;
     return tempNumber;
