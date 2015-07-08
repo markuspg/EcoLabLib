@@ -23,6 +23,7 @@
 #include "ecolablib_global.h"
 #include "settingsstorage.h"
 
+#include <QDir>
 #include <QObject>
 
 class ellBuilder;
@@ -32,9 +33,15 @@ class ECOLABLIBSHARED_EXPORT EcoLabLib : public QObject {
 
 public:
     explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
+    ~EcoLabLib();
 
 private:
+    QStringList *installedLaTeXHeaders = nullptr;
+    QStringList *installedzTreeVersions = nullptr;
     ellSettingsStorage settingsStorage;
+
+    //! Detects installed zTree versions and LaTeX headers and initializes the respective QStringLists
+    void DetectInstalledZTreeVersionsAndLaTeXHeaders();
 };
 
 #endif // ECOLABLIB_H
