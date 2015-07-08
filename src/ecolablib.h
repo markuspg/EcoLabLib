@@ -20,6 +20,7 @@
 #ifndef ECOLABLIB_H
 #define ECOLABLIB_H
 
+#include "client/clientmanager.h"
 #include "ecolablib_global.h"
 #include "settingsstorage.h"
 
@@ -40,6 +41,7 @@ public:
 
 private:
     const ellSettingsStorage * const settingsStorage = nullptr;
+    ellClientManager clientManager;
 };
 
 #endif // ECOLABLIB_H

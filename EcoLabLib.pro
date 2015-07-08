@@ -15,12 +15,16 @@ DEFINES += ECOLABLIB_LIBRARY
 
 SOURCES += src/ecolablib.cpp \
     src/builder.cpp \
-    src/settingsstorage.cpp
+    src/settingsstorage.cpp \
+    src/client/client.cpp \
+    src/client/clientmanager.cpp
 
 HEADERS += src/ecolablib.h\
         src/ecolablib_global.h \
     src/builder.h \
-    src/settingsstorage.h
+    src/settingsstorage.h \
+    src/client/client.h \
+    src/client/clientmanager.h
 
 QMAKE_CXXFLAGS += -std=c++11
 
