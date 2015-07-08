@@ -59,3 +59,17 @@ void EcoLabLib::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
         }
     }
 }
+
+bool EcoLabLib::ShowORSEE() {
+    QProcess showORSEEProcess;
+    showORSEEProcess.setProcessEnvironment( *settingsStorage.processEnvironment );
+    return showORSEEProcess.startDetached( *settingsStorage.browserCommand,
+                                           QStringList{ *settingsStorage.orseeURL } );
+}
+
+bool EcoLabLib::ShowPreprints() {
+    QProcess showPreprintsProcess;
+    showPreprintsProcess.setProcessEnvironment( *settingsStorage.processEnvironment );
+    QStringList arguments{ QStringList{} << *settingsStorage.ecolablibInstallationDirectory +  "/preprints" };
+    return showPreprintsProcess.startDetached( *settingsStorage.fileManager, arguments );
+}

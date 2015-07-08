@@ -2,6 +2,7 @@
 
 ellBuilder::ellBuilder( QObject *argParent ) :
     QObject{ argParent },
+    processEnvironment{ new QProcessEnvironment{ QProcessEnvironment::systemEnvironment() } },
     settings{ "Economic Laboratory", "EcoLabLib" }
 {
     ReadSettings();

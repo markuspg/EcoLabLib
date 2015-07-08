@@ -35,6 +35,9 @@ public:
     explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
     ~EcoLabLib();
 
+    bool ShowORSEE();
+    bool ShowPreprints();
+
 private:
     QStringList *installedLaTeXHeaders = nullptr;
     QStringList *installedzTreeVersions = nullptr;

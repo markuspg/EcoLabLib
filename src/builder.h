@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QObject>
+#include <QProcessEnvironment>
 #include <QSettings>
 
 class ellBuilder : public QObject {
@@ -25,6 +26,7 @@ public:
     QString *orseeURL = nullptr;
     QString *pingCommand = nullptr;
     QString *postscriptViewer = nullptr;
+    const QProcessEnvironment * const processEnvironment = nullptr;
     QString *ps2pdfCommand = nullptr;
     QString *publicKeyPathRoot = nullptr;
     QString *publicKeyPathUser = nullptr;

@@ -16,6 +16,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     orseeURL{ argBuilder.orseeURL },
     pingCommand{ argBuilder.pingCommand },
     postscriptViewer{ argBuilder.postscriptViewer },
+    processEnvironment{ argBuilder.processEnvironment },
     ps2pdfCommand{ argBuilder.ps2pdfCommand },
     publicKeyPathRoot{ argBuilder.publicKeyPathRoot },
     publicKeyPathUser{ argBuilder.publicKeyPathUser },
@@ -53,6 +54,7 @@ ellSettingsStorage::~ellSettingsStorage() {
     delete orseeURL;
     delete pingCommand;
     delete postscriptViewer;
+    delete processEnvironment;
     delete ps2pdfCommand;
     delete publicKeyPathRoot;
     delete publicKeyPathUser;

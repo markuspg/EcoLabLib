@@ -26,6 +26,7 @@ public:
     const QString * const orseeURL = nullptr;
     const QString * const pingCommand = nullptr;
     const QString * const postscriptViewer = nullptr;
+    const QProcessEnvironment * const processEnvironment = nullptr;
     const QString * const ps2pdfCommand = nullptr;
     const QString * const publicKeyPathRoot = nullptr;
     const QString * const publicKeyPathUser = nullptr;
