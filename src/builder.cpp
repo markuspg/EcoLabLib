@@ -70,6 +70,12 @@ void ellBuilder::ReadSettings() {
     adminUsers = SplitStringListsToStrings( '|', tempAdminUsers );
     webcamNames = SplitStringListsToStrings( '|', tempWebcamNames );
     webcamURLs = SplitStringListsToStrings( '|', tempWebcamURLs );
+    if ( !( webcamNames->length() == webcamURLs->length() ) ) {
+        delete webcamNames;
+        webcamNames = nullptr;
+        delete webcamURLs;
+        webcamURLs = nullptr;
+    }
 
     // Convert the numeric values
     defaultReceiptIndex = ConvertToNumber( tempDefaultReceiptIndex );
