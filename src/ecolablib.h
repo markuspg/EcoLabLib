@@ -21,6 +21,7 @@
 #define ECOLABLIB_H
 
 #include "ecolablib_global.h"
+#include "settingsstorage.h"
 
 #include <QObject>
 
@@ -30,7 +31,10 @@ class ECOLABLIBSHARED_EXPORT EcoLabLib : public QObject {
     Q_OBJECT
 
 public:
-    EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
+    explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
+
+private:
+    ellSettingsStorage settingsStorage;
 };
 
 #endif // ECOLABLIB_H

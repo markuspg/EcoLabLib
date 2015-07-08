@@ -14,11 +14,13 @@ TEMPLATE = lib
 DEFINES += ECOLABLIB_LIBRARY
 
 SOURCES += src/ecolablib.cpp \
-    src/builder.cpp
+    src/builder.cpp \
+    src/settingsstorage.cpp
 
 HEADERS += src/ecolablib.h\
         src/ecolablib_global.h \
-    src/builder.h
+    src/builder.h \
+    src/settingsstorage.h
 
 QMAKE_CXXFLAGS += -std=c++11
 
