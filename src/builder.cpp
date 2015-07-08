@@ -6,6 +6,8 @@ ellBuilder::ellBuilder( QObject *argParent ) :
     settings{ "Economic Laboratory", "EcoLabLib" }
 {
     ReadSettings();
+
+    DetectInstalledZTreeVersionsAndLaTeXHeaders();
 }
 
 bool ellBuilder::CheckPath( const QString * const argPath ) {
@@ -26,6 +28,34 @@ quint16 *ellBuilder::ConvertToNumber( const QString * const argValueString ) {
     }
     delete argValueString;
     return tempNumber;
+}
+
+void ellBuilder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
+    // Detect the installed LaTeX headers
+    if ( ecolablibInstallationDirectory ) {
+        QDir latexDirectory{ *ecolablibInstallationDirectory,
+                    "*_header.tex", QDir::Name, QDir::CaseSensitive | QDir::Files | QDir::Readable };
+        if ( !latexDirectory.exists() || latexDirectory.entryList().isEmpty() ) {
+            true;
+            installedLaTeXHeaders = new QStringList{ "None found" };
+        } else {
+            installedLaTeXHeaders = new QStringList{ latexDirectory.entryList() };
+            installedLaTeXHeaders->replaceInStrings( "_header.tex", "" );
+        }
+    }
+
+    // Detect the installed zTree versions
+    if ( zTreeInstallationDirectory ) {
+        QDir zTreeDirectory{ *zTreeInstallationDirectory, "zTree_*", QDir::Name,
+                    QDir::NoDotAndDotDot | QDir::Dirs | QDir::Readable | QDir::CaseSensitive };
+        if ( zTreeDirectory.entryList().isEmpty() ) {
+            true;
+        }
+        else {
+            installedzTreeVersions = new QStringList{ zTreeDirectory.entryList() };
+            installedzTreeVersions->replaceInStrings( "zTree_", "" );
+        }
+    }
 }
 
 void ellBuilder::ReadSettings() {

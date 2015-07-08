@@ -9,6 +9,8 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     ecolablibInstallationDirectory{ argBuilder.ecolablibInstallationDirectory },
     fileManager{ argBuilder.fileManager },
     initialzTreePort{ argBuilder.initialzTreePort },
+    installedLaTeXHeaders{ argBuilder.installedLaTeXHeaders },
+    installedzTreeVersions{ argBuilder.installedzTreeVersions },
     latexCommand{ argBuilder.latexCommand },
     lprCommand{ argBuilder.lprCommand },
     netstatCommand{ argBuilder.netstatCommand },
@@ -46,6 +48,8 @@ ellSettingsStorage::~ellSettingsStorage() {
     delete ecolablibInstallationDirectory;
     delete fileManager;
     delete initialzTreePort;
+    delete installedLaTeXHeaders;
+    delete installedzTreeVersions;
     delete latexCommand;
     delete localzLeafName;
     delete lprCommand;

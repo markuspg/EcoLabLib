@@ -1,6 +1,7 @@
 #ifndef BUILDER_H
 #define BUILDER_H
 
+#include <QDir>
 #include <QFile>
 #include <QObject>
 #include <QProcessEnvironment>
@@ -18,6 +19,8 @@ public:
     QString *ecolablibInstallationDirectory = nullptr;
     QString *fileManager = nullptr;
     quint16 *initialzTreePort = nullptr;
+    QStringList *installedLaTeXHeaders = nullptr;
+    QStringList *installedzTreeVersions = nullptr;
     QString *latexCommand = nullptr;
     QString *localzLeafName = nullptr;
     QString *lprCommand = nullptr;
@@ -64,6 +67,8 @@ private:
      * @return                  A pointer to the quint16 on success, otherwise nullptr
      */
     quint16 *ConvertToNumber( const QString * const argValueString );
+    //! Detects installed zTree versions and LaTeX headers and initializes the respective QStringLists (settings must be read before!)
+    void DetectInstalledZTreeVersionsAndLaTeXHeaders();
     //! Reads all settings from QSettings
     void ReadSettings();
     //! Reads the specified settings item and returns the value represented by it

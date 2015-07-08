@@ -23,7 +23,6 @@
 #include "ecolablib_global.h"
 #include "settingsstorage.h"
 
-#include <QDir>
 #include <QObject>
 
 class ellBuilder;
@@ -35,16 +34,12 @@ public:
     explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
     ~EcoLabLib();
 
+    const ellSettingsStorage *GetSettingsStorage() { return settingsStorage; }
     bool ShowORSEE();
     bool ShowPreprints();
 
 private:
-    QStringList *installedLaTeXHeaders = nullptr;
-    QStringList *installedzTreeVersions = nullptr;
-    ellSettingsStorage settingsStorage;
-
-    //! Detects installed zTree versions and LaTeX headers and initializes the respective QStringLists
-    void DetectInstalledZTreeVersionsAndLaTeXHeaders();
+    const ellSettingsStorage * const settingsStorage = nullptr;
 };
 
 #endif // ECOLABLIB_H

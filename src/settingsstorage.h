@@ -19,6 +19,8 @@ public:
     const QString * const ecolablibInstallationDirectory = nullptr;
     const QString * const fileManager = nullptr;
     const quint16 * const initialzTreePort = nullptr;
+    const QStringList * const installedLaTeXHeaders = nullptr;
+    const QStringList * const installedzTreeVersions = nullptr;
     const QString * const latexCommand = nullptr;
     const QString * const lprCommand = nullptr;
     const QString * const netstatCommand = nullptr;
