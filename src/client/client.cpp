@@ -21,6 +21,7 @@ ellClient::~ellClient() {
 void ellClient::Disconnected() {
     delete socket;
     socket = nullptr;
+    state = ellClientState::disconnected;
 }
 
 void ellClient::SetSocket( QTcpSocket *argSocket ) {
@@ -29,4 +30,7 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
         delete socket;
     }
     socket = argSocket;
+    if ( socket->isValid() ) {
+        state = ellClientState::connected;
+    }
 }
