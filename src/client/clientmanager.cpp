@@ -5,7 +5,8 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
     settingsStorage{ argSettingsStorage }
 {
-    if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
+    if ( !settingsStorage->serverIP || !settingsStorage->serverPort ||
+         !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
         throw 20;
     }
 
@@ -50,8 +51,8 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     }
 
     for ( int i = 0; i < clientQuantity; i++ ) {
-        clients.append( new ellClient{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientXPositions[ i ],
-                                       clientYPositions[ i ], clientWebcams[ i ], settingsStorage, this } );
+        clients.append( new ellClient{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
+                                       clientYPositions[ i ], settingsStorage, this } );
 
         // Add an corresponding entry to the 'client_ips_to_clients_map' std::map<QString, Client*>
         ( *clientIPsToClientsMap )[ clients.last()->ip ] = clients.last();
