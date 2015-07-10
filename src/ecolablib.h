@@ -23,6 +23,7 @@
 #include "client/clientmanager.h"
 #include "ecolablib_global.h"
 #include "settingsstorage.h"
+#include "session/sessionsmodel.h"
 
 #include <QObject>
 
@@ -36,11 +37,13 @@ public:
     ~EcoLabLib();
 
     QVector< ellClient* > *GetClients() const { return clientManager.GetClients(); }
+    ellSessionsModel *GetSessionsModel() const { return sessionsModel; }
     const ellSettingsStorage *GetSettingsStorage() { return settingsStorage; }
     bool ShowORSEE();
     bool ShowPreprints();
 
 private:
+    ellSessionsModel *sessionsModel = nullptr;
     const ellSettingsStorage * const settingsStorage = nullptr;
     ellClientManager clientManager;
 };

@@ -22,6 +22,7 @@
 
 EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
     QObject{ argParent },
+    sessionsModel{ new ellSessionsModel{ this } },
     settingsStorage{ new ellSettingsStorage{ argBuilder, this } },
     clientManager{ settingsStorage, this }
 {
