@@ -16,6 +16,8 @@ signals:
 
 public slots:
 
+private:
+    QProcess ztreeInstance;
 };
 
 #endif // ZTREE_H
