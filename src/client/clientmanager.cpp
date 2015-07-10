@@ -50,17 +50,21 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         throw 20;
     }
 
+    // If all preparations where successful, create the 'clients' QVector and add the ellClient instances to it
+    clients = new QVector< ellClient* >;
     for ( int i = 0; i < clientQuantity; i++ ) {
-        clients.append( new ellClient{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
-                                       clientYPositions[ i ], settingsStorage, this } );
+        clients->append( new ellClient{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
+                                        clientYPositions[ i ], settingsStorage, this } );
 
         // Add an corresponding entry to the 'client_ips_to_clients_map' std::map<QString, Client*>
-        ( *clientIPsToClientsMap )[ clients.last()->ip ] = clients.last();
+        ( *clientIPsToClientsMap )[ clients->last()->ip ] = clients->last();
     }
+    clients->squeeze();
 }
 
 ellClientManager::~ellClientManager() {
     delete clientIPsToClientsMap;
+    delete clients;
 }
 
 void ellClientManager::HandleIncomingConnection() {

@@ -35,6 +35,7 @@ public:
     explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
     ~EcoLabLib();
 
+    QVector< ellClient* > *GetClients() const { return clientManager.GetClients(); }
     const ellSettingsStorage *GetSettingsStorage() { return settingsStorage; }
     bool ShowORSEE();
     bool ShowPreprints();

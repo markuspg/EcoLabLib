@@ -20,13 +20,15 @@ public:
     explicit ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     ~ellClientManager();
 
+    QVector< ellClient* > *GetClients() const { return clients; }
+
 signals:
 
 public slots:
 
 private:
     QMap< QString, ellClient* > * clientIPsToClientsMap = nullptr;
-    QVector< ellClient* > clients;
+    QVector< ellClient* > *clients = nullptr;
     int clientQuantity = 0;
     const ellSettingsStorage * const settingsStorage;
 
