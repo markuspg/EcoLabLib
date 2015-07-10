@@ -1,14 +1,16 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "../settingsstorage.h"
+
 #include <QObject>
 #include <QTcpSocket>
 
-class ellSettingsStorage;
-
-enum class ellClientState : unsigned short int {
-    disconnected,
-    connected
+enum class ellClientState_t : unsigned short int {
+    BOOTING,
+    CONNECTED,
+    DISCONNECTED,
+    SHUTTING_DOWN
 };
 
 class ellClient : public QObject
@@ -27,6 +29,7 @@ public:
     const unsigned int xPosition = 1;
     const unsigned int yPosition = 1;
 
+    void Boot();
     void SetSocket( QTcpSocket *argSocket );
 
 signals:
@@ -37,7 +40,7 @@ public slots:
 private:
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
-    ellClientState state = ellClientState::disconnected;
+    ellClientState_t state = ellClientState_t::DISCONNECTED;
 };
 
 #endif // CLIENT_H

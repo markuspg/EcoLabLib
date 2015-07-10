@@ -18,10 +18,25 @@ ellClient::~ellClient() {
     delete socket;
 }
 
+void ellClient::Boot() {
+    if ( state == ellClientState_t::CONNECTED || state == ellClientState_t::SHUTTING_DOWN ) {
+        return;
+    }
+    QStringList arguments;
+    arguments << "-i" << *settingsStorage->networkBroadcastAddress << mac;
+
+    // Start the process
+    QProcess wakeonlanProcess;
+    wakeonlanProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    wakeonlanProcess.startDetached( *settingsStorage->wakeonlanCommand, arguments );
+
+    state = ellClientState_t::BOOTING;
+}
+
 void ellClient::Disconnected() {
     delete socket;
     socket = nullptr;
-    state = ellClientState::disconnected;
+    state = ellClientState_t::DISCONNECTED;
 }
 
 void ellClient::SetSocket( QTcpSocket *argSocket ) {
@@ -31,6 +46,6 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
     }
     socket = argSocket;
     if ( socket->isValid() ) {
-        state = ellClientState::connected;
+        state = ellClientState_t::CONNECTED;
     }
 }
