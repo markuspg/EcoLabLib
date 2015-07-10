@@ -39,6 +39,25 @@ void ellClient::Disconnected() {
     state = ellClientState_t::DISCONNECTED;
 }
 
+void ellClient::ReadMessage() {
+
+}
+
+void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
+    QByteArray block;
+    QDataStream out{ &block, QIODevice::WriteOnly };
+    out.setVersion( QDataStream::Qt_5_2 );
+    out << ( quint16 )0;
+    out << ( quint16 )argMessageID;
+    if ( argMessage ) {
+        out << *argMessage;
+    }
+    out.device()->seek( 0 );
+    out << ( quint16 )( block.size() - sizeof( quint16 ) * 2 );
+
+    socket->write( block );
+}
+
 void ellClient::SetSocket( QTcpSocket *argSocket ) {
     if ( socket ) {
         socket->abort();
@@ -48,4 +67,8 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
     if ( socket->isValid() ) {
         state = ellClientState_t::CONNECTED;
     }
+}
+
+void ellClient::Shutdown() {
+    SendMessage( 0 );
 }

@@ -31,6 +31,7 @@ public:
 
     void Boot();
     void SetSocket( QTcpSocket *argSocket );
+    void Shutdown();
 
 signals:
 
@@ -41,6 +42,11 @@ private:
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
     ellClientState_t state = ellClientState_t::DISCONNECTED;
+
+    void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
+
+private slots:
+    void ReadMessage();
 };
 
 #endif // CLIENT_H
