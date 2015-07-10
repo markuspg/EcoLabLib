@@ -39,6 +39,10 @@ void ellClient::Disconnected() {
     state = ellClientState_t::DISCONNECTED;
 }
 
+void ellClient::KillzLeaf() {
+    SendMessage( 2 );
+}
+
 void ellClient::ReadMessage() {
 
 }
@@ -51,6 +55,7 @@ void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) 
     out << ( quint16 )argMessageID;
     if ( argMessage ) {
         out << *argMessage;
+        delete argMessage;
     }
     out.device()->seek( 0 );
     out << ( quint16 )( block.size() - sizeof( quint16 ) * 2 );
@@ -71,4 +76,8 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
 
 void ellClient::Shutdown() {
     SendMessage( 0 );
+}
+
+void ellClient::StartzLeaf() {
+    SendMessage( 1, new QString{ "3.4.7|" + *settingsStorage->serverIP } );
 }

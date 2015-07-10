@@ -30,8 +30,10 @@ public:
     const unsigned int yPosition = 1;
 
     void Boot();
+    void KillzLeaf();
     void SetSocket( QTcpSocket *argSocket );
     void Shutdown();
+    void StartzLeaf();
 
 signals:
 
