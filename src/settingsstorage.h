@@ -43,6 +43,7 @@ public:
     const QString * const wakeonlanCommand = nullptr;
     const QStringList * const webcamNames = nullptr;
     const QStringList * const webcamURLs = nullptr;
+    const QString * const wineCommand = nullptr;
     const QString * const wmctrlCommand = nullptr;
     const QString * const xsetCommand = nullptr;
     const QString * const zTreeInstallationDirectory = nullptr;

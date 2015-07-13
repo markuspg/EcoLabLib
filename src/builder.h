@@ -44,6 +44,7 @@ public:
     QString *wakeonlanCommand = nullptr;
     QStringList *webcamNames = nullptr;
     QStringList *webcamURLs = nullptr;
+    QString *wineCommand = nullptr;
     QString *wmctrlCommand = nullptr;
     QString *xsetCommand = nullptr;
     QString *zTreeInstallationDirectory = nullptr;

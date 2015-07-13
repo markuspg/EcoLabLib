@@ -91,6 +91,7 @@ void ellBuilder::ReadSettings() {
     wakeonlanCommand = ReadSettingsItem( "wakeonlan_command", true );
     QString *tempWebcamNames = ReadSettingsItem( "webcam_names", false );
     QString *tempWebcamURLs = ReadSettingsItem( "webcam_urls", false );
+    wineCommand = ReadSettingsItem( "wine_command", true );
     wmctrlCommand = ReadSettingsItem( "wmctrl_command", true );
     xsetCommand = ReadSettingsItem( "xset_command", true );
     zTreeInstallationDirectory = ReadSettingsItem( "ztree_installation_directory", true );

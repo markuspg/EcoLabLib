@@ -33,6 +33,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     wakeonlanCommand{ argBuilder.wakeonlanCommand },
     webcamNames{ argBuilder.webcamNames },
     webcamURLs{ argBuilder.webcamURLs },
+    wineCommand{ argBuilder.wineCommand },
     wmctrlCommand{ argBuilder.wmctrlCommand },
     xsetCommand{ argBuilder.xsetCommand },
     zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory },
@@ -72,6 +73,7 @@ ellSettingsStorage::~ellSettingsStorage() {
     delete vncViewer;
     delete wakeonlanCommand;
     delete webcamNames;
+    delete wineCommand;
     delete webcamURLs;
     delete wmctrlCommand;
     delete xsetCommand;

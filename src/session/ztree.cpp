@@ -4,9 +4,17 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
                     const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent ) :
     QObject{ argParent }
 {
-    QString program{ *argSettingsStorage->ecolablibInstallationDirectory + "/scripts/start_zTree_labcontrol2.sh" };
+    QString program;
     QStringList arguments;
-    arguments << *argSettingsStorage->zTreeInstallationDirectory << argZTreeVersionPath << argZTreeDataTargetPath << QString::number( static_cast<int>( argZTreePort ) - 7000 );
+#ifdef Q_OS_UNIX
+    program = *argSettingsStorage->wineCommand;
+    arguments.append( QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" } );
+#else
+    program = QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" };
+#endif
+    arguments << "/datadir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/privdir" << QString{ "Z:/" + argZTreeDataTargetPath }
+              << "/gsfdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/tempdir" << QString{ "Z:/" + argZTreeDataTargetPath }
+              << "/leafdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/channel" << QString::number( argZTreePort - 7000 );
 
     ztreeInstance.setProcessEnvironment( *argSettingsStorage->processEnvironment );
     ztreeInstance.startDetached( program, arguments, QDir::currentPath() );
