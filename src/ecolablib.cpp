@@ -45,3 +45,10 @@ bool EcoLabLib::ShowPreprints() {
     QStringList arguments{ QStringList{} << *settingsStorage->ecolablibInstallationDirectory +  "/preprints" };
     return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
 }
+
+void EcoLabLib::StartNewSession( const QString &argParticipiantNameReplacement, const bool &argPrintAnonymousReceipts,
+                                 const QString &argReceiptsHeader, const QString &argzTreeDataTargetPath,
+                                 const quint16 &argzTreePort, const QString &argzTreeVersion ) {
+    sessionsModel->push_back( new ellSession{ argParticipiantNameReplacement, argReceiptsHeader, argPrintAnonymousReceipts,
+                                              settingsStorage, argzTreeDataTargetPath, argzTreePort, argzTreeVersion, this } );
+}

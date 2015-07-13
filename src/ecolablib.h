@@ -42,6 +42,11 @@ public:
     bool ShowORSEE();
     bool ShowPreprints();
 
+public slots:
+    void StartNewSession( const QString &argParticipiantNameReplacement, const bool &argPrintAnonymousReceipts,
+                          const QString &argReceiptsHeader, const QString &argzTreeDataTargetPath,
+                          const quint16 &argzTreePort, const QString &argzTreeVersion );
+
 private:
     ellSessionsModel *sessionsModel = nullptr;
     const ellSettingsStorage * const settingsStorage = nullptr;

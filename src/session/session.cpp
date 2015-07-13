@@ -1,12 +1,12 @@
 #include "session.h"
 
-ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QString &argLatexHeaderName,
-                        bool argPrintReceiptsForLocalClients, const ellSettingsStorage * const argSettingsStorage,
-                        const QString &argzTreeDataTargetPath, const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent ) :
+ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QString &argLatexHeaderName, const bool &argAnonReceipts,
+                        const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
+                        const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceiptsPlaceholder{ argAnonymousReceiptsPlaceholder },
     latexHeaderName{ argLatexHeaderName },
-    printReceiptsForLocalClients{ argPrintReceiptsForLocalClients },
+    printAnonymousReceipts{ argAnonReceipts },
     settingsStorage{ argSettingsStorage },
     zTreeDataTargetPath{ argzTreeDataTargetPath },
     zTreePort{ argzTreePort },
