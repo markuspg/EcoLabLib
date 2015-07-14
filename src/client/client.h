@@ -10,7 +10,8 @@ enum class ellClientState_t : unsigned short int {
     BOOTING,
     CONNECTED,
     DISCONNECTED,
-    SHUTTING_DOWN
+    SHUTTING_DOWN,
+    ZLEAF_RUNNING
 };
 
 class ellClient : public QObject
@@ -28,6 +29,9 @@ public:
     const bool webcamAvailable = 0;
     const unsigned int xPosition = 1;
     const unsigned int yPosition = 1;
+
+    //! This function gets frequently polled by Labcontrol to update the table view showing the clients
+    ellClientState_t GetClientState() const { return state; }
 
     void Boot();
     void KillzLeaf();
