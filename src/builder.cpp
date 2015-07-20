@@ -105,7 +105,7 @@ void ellBuilder::ReadSettings() {
     adminUsers = SplitStringListsToStrings( '|', tempAdminUsers );
     webcamNames = SplitStringListsToStrings( '|', tempWebcamNames );
     webcamURLs = SplitStringListsToStrings( '|', tempWebcamURLs );
-    if ( !( webcamNames->length() == webcamURLs->length() ) ) {
+    if ( webcamNames && webcamURLs && !( webcamNames->length() == webcamURLs->length() ) ) {
         delete webcamNames;
         webcamNames = nullptr;
         delete webcamURLs;
