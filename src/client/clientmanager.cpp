@@ -5,8 +5,11 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
     settingsStorage{ argSettingsStorage }
 {
-    if ( !settingsStorage->serverIP || !settingsStorage->serverPort ||
-         !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
+    if ( settingsStorage->serverIP && settingsStorage->serverPort ) {
+        if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
+            throw 20;
+        }
+    } else {
         throw 20;
     }
 
