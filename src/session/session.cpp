@@ -43,7 +43,7 @@ void ellSession::InitializeClasses() {
     // Create the new data directory
     QDir dir{ zTreeDataTargetPath };
     QString date_string( QDateTime::currentDateTime().toString( "yyMMdd_hhmm" ) );
-    if ( !dir.mkdir( zTreeDataTargetPath + "/" + date_string + "-" + QString::number( zTreePort ) ) ) {
+    if ( !dir.mkpath( zTreeDataTargetPath + "/" + date_string + "-" + QString::number( zTreePort ) ) ) {
         true;
     }
     zTreeDataTargetPath.append( "/" + date_string + "-" + QString::number( zTreePort ) );
