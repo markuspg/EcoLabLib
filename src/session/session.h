@@ -1,6 +1,7 @@
 #ifndef ELLSESSION_H
 #define ELLSESSION_H
 
+#include "receiptscreator.h"
 #include "../settingsstorage.h"
 #include "ztree.h"
 
@@ -31,6 +32,7 @@ private:
     const QString anonymousReceiptsPlaceholder;                 //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
     const QString latexHeaderName;                              //! The name of the chosen LaTeX header
     const bool printAnonymousReceipts = false;
+    ellReceiptsCreator *receiptsCreator = nullptr;
     const ellSettingsStorage * const settingsStorage = nullptr;
     QString zTreeDataTargetPath;                                //! The path were the data of this zTree instance's session will be saved
     ellzTree *zTreeInstance= nullptr;                            //! The session's zTree instance

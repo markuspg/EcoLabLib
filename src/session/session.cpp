@@ -51,7 +51,8 @@ void ellSession::InitializeClasses() {
     zTreeInstance = new ellzTree{ settingsStorage, zTreeDataTargetPath, zTreePort, zTreeVersionPath, this };
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
     if ( latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
-        // receiptsHandler = new lcReceiptsHandler{ debugMessagesTextEdit, zTreeDataTargetPath, printReceiptsForLocalClients, anonymousReceiptsPlaceholder, latexHeaderName, settingsItems };
+        receiptsCreator = new ellReceiptsCreator{ date_string, QString{ zTreeDataTargetPath + "/" + date_string + ".pay" },
+                                                  QString::number( zTreePort ), settingsStorage, this };
         true;
     } else {
         true;
