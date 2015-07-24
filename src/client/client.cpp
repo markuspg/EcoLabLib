@@ -34,6 +34,7 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 }
 
 ellClient::~ellClient() {
+    delete sessionPort;
     delete socket;
 }
 
@@ -53,12 +54,18 @@ void ellClient::Boot() {
 }
 
 void ellClient::Disconnected() {
+    delete sessionPort;
+    sessionPort = nullptr;
+
     delete socket;
     socket = nullptr;
     state = ellClientState_t::DISCONNECTED;
 }
 
 void ellClient::KillzLeaf() {
+    delete sessionPort;
+    sessionPort = nullptr;
+
     SendMessage( 2 );
 }
 
@@ -82,6 +89,11 @@ void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) 
     socket->write( block );
 }
 
+void ellClient::SetSessionPort( QString * const argSessionPort ) {
+    delete sessionPort;
+    sessionPort = argSessionPort;
+}
+
 void ellClient::SetSocket( QTcpSocket *argSocket ) {
     if ( socket ) {
         socket->abort();
@@ -94,6 +106,9 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
 }
 
 void ellClient::Shutdown() {
+    delete sessionPort;
+    sessionPort = nullptr;
+
     SendMessage( 0 );
 }
 

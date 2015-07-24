@@ -53,7 +53,9 @@ public:
     ellClientState_t GetClientState() const { return state; }
 
     void Boot();
+    QString *GetSessionPort() const { return sessionPort; }
     void KillzLeaf();
+    void SetSessionPort( QString * const argSessionPort );
     void SetSocket( QTcpSocket *argSocket );
     void Shutdown();
     void StartzLeaf();
@@ -64,6 +66,7 @@ public slots:
     void Disconnected();
 
 private:
+    QString *sessionPort = nullptr; //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
     ellClientState_t state = ellClientState_t::DISCONNECTED;
