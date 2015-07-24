@@ -42,6 +42,12 @@ ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceip
 }
 
 ellReceiptsCreator::~ellReceiptsCreator() {
+    if ( receiptsPrinter ) {
+        receiptsPrinter->quit();
+        receiptsPrinter->wait();
+        delete receiptsPrinter;
+        receiptsPrinter = nullptr;
+    }
     delete dateString;
 }
 
@@ -136,14 +142,24 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     delete latexText;
     latexText = nullptr;
 
-    // receiptsPrinter = new lcReceiptsPrinter{ dateString, zTreeDataTargetPath, settingsItems };
-    // receiptsPrinter->start();
-    // connect( receiptsPrinter, &lcReceiptsPrinter::PrintingFinished, this, &lcReceiptsHandler::DeleteReceiptsPrinterInstance );
+    receiptsPrinter = new ellReceiptsPrinter{ dateString, zTreeDataTargetPath, settingsStorage, this };
+    receiptsPrinter->start();
+    connect( receiptsPrinter, &ellReceiptsPrinter::PrintingFinished,
+             this, &ellReceiptsCreator::DeleteReceiptsPrinterInstance );
     // connect( receiptsPrinter, &lcReceiptsPrinter::ErrorOccurred, this, &lcReceiptsHandler::DisplayMessageBox );
 
     // Clean up
     texFile->close();
     delete texFile;
+}
+
+void ellReceiptsCreator::DeleteReceiptsPrinterInstance() {
+    receiptsPrinter->quit();
+    receiptsPrinter->wait();
+    delete receiptsPrinter;
+    receiptsPrinter = nullptr;
+
+    emit PrintingFinished();
 }
 
 QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( double &argOverallPayoff, QVector<QString> *argRawData ) {

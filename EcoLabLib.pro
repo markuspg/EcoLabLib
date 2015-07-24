@@ -21,7 +21,8 @@ SOURCES += src/ecolablib.cpp \
     src/session/sessionsmodel.cpp \
     src/session/session.cpp \
     src/session/ztree.cpp \
-    src/session/receiptscreator.cpp
+    src/session/receiptscreator.cpp \
+    src/session/receiptsprinter.cpp
 
 HEADERS += src/ecolablib.h\
         src/ecolablib_global.h \
@@ -32,7 +33,8 @@ HEADERS += src/ecolablib.h\
     src/session/sessionsmodel.h \
     src/session/session.h \
     src/session/ztree.h \
-    src/session/receiptscreator.h
+    src/session/receiptscreator.h \
+    src/session/receiptsprinter.h
 
 QMAKE_CXXFLAGS += -std=c++11
 

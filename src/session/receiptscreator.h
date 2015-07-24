@@ -20,6 +20,7 @@
 #ifndef RECEIPTSCREATOR_H
 #define RECEIPTSCREATOR_H
 
+#include "receiptsprinter.h"
 #include "../settingsstorage.h"
 
 #include <QFile>
@@ -46,12 +47,14 @@ public:
     ~ellReceiptsCreator();
 
 signals:
+    void PrintingFinished();
 
 public slots:
 
 private:
     const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
     const QString * const dateString = nullptr;                     //! The date string of the session to be printed ("YYMMDD_hhmm")
+    ellReceiptsPrinter *receiptsPrinter = nullptr;                  //! Prints the created receipts in another thread
     QString expectedPaymentFileName;                                //! The name of the payment file whose appearence will be regularily queried
     QTimer fileCheckTimer;                                          //! The timer initiating the checks for the payment file existance
     const QString * const latexHeaderName = nullptr;                //! The name of the LaTeX header file to be used for receipts creation
@@ -68,6 +71,9 @@ private:
     void MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, QVector< ellPaymentEntry_t* > *argDataVector );
 
 private slots:
+    //! Deletes the ellReceiptsPrinter instance after successful printing
+    void DeleteReceiptsPrinterInstance();
+    //! Prints the receipts, if the payment file exists
     void PrintReceipts();
 };
 
