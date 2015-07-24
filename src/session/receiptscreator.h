@@ -20,34 +20,52 @@
 #ifndef RECEIPTSCREATOR_H
 #define RECEIPTSCREATOR_H
 
+#include "../settingsstorage.h"
+
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
 #include <QTimer>
 #include <QVector>
 
-class ellSettingsStorage;
+//! A struct representing one payoff entry.
+/*!
+  This class represents a single payoff entry which will be used in the receipts creation process. Multiple instances of this will be used to represent the individual participants' outcomes.
+*/
+struct ellPaymentEntry_t { QString computer; QString name; double payoff; };
 
 class ellReceiptsCreator : public QObject {
     Q_OBJECT
 public:
-    explicit ellReceiptsCreator( const QString &argDateString, const QString &argPaymentFilePath,
-                                 const QString &argPort, const ellSettingsStorage * const argSettingsStorage,
+    explicit ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder,
+                                 const QString &argDateString, const QString * const argLaTeXHeaderName,
+                                 const QString &argPaymentFilePath, const QString &argPort,
+                                 const ellSettingsStorage * const argSettingsStorage,
+                                 const QString * const argzTreeDataTargetPath,
                                  QObject *argParent = 0 );
+    ~ellReceiptsCreator();
 
-    const QString dateString;
-    const QString port;
-    const ellSettingsStorage * const settingsStorage;
 signals:
 
 public slots:
 
 private:
-    QTimer fileCheckTimer;
+    const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
+    const QString * const dateString = nullptr;                     //! The date string of the session to be printed ("YYMMDD_hhmm")
+    QString expectedPaymentFileName;                                //! The name of the payment file whose appearence will be regularily queried
+    QTimer fileCheckTimer;                                          //! The timer initiating the checks for the payment file existance
+    const QString * const latexHeaderName = nullptr;                //! The name of the LaTeX header file to be used for receipts creation
     QFile paymentFile;
+    const QString port;                                             //! The port the containing session is running on
+    const ellSettingsStorage * const settingsStorage;
+    const QString * const zTreeDataTargetPath = nullptr;            //! The path were the data of this zTree instance's session will be saved
 
     void CreateReceiptsFromPaymentFile();
+    //! Extracts the data of the participants whose receipts shall be printed
+    QVector< ellPaymentEntry_t* > *ExtractParticipantsData( double &argOverallPayoff, QVector<QString> *argRawData );
     QVector<QString> *GetParticipantsDataFromPaymentFile();
+    QString *LoadLatexHeader();
+    void MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, QVector< ellPaymentEntry_t* > *argDataVector );
 
 private slots:
     void PrintReceipts();

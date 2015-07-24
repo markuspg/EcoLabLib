@@ -37,6 +37,7 @@ public:
     explicit ellSession( const QString &argAnonymousReceiptsPlaceholder, const QString &argLatexHeaderName, const bool &argAnonReceipts,
                          const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
                          const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent = nullptr );
+    ~ellSession();
 
     /*! Returns the data item with the given index
      *
@@ -48,12 +49,12 @@ signals:
 public slots:
 
 private:
-    const QString anonymousReceiptsPlaceholder;                 //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
-    const QString latexHeaderName;                              //! The name of the chosen LaTeX header
+    const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
+    const QString * const latexHeaderName;                          //! The name of the chosen LaTeX header
     const bool printAnonymousReceipts = false;
     ellReceiptsCreator *receiptsCreator = nullptr;
     const ellSettingsStorage * const settingsStorage = nullptr;
-    QString zTreeDataTargetPath;                                //! The path were the data of this zTree instance's session will be saved
+    QString * const zTreeDataTargetPath = nullptr;                  //! The path were the data of this zTree instance's session will be saved
     ellzTree *zTreeInstance= nullptr;                            //! The session's zTree instance
     const int zTreePort = 7000;
     const QString zTreeVersionPath;                             //! The path to the version of zTree used by this session's instance

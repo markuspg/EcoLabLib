@@ -23,11 +23,11 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QS
                         const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
                         const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent ) :
     QObject{ argParent },
-    anonymousReceiptsPlaceholder{ argAnonymousReceiptsPlaceholder },
-    latexHeaderName{ argLatexHeaderName },
+    anonymousReceiptsPlaceholder{ new QString { argAnonymousReceiptsPlaceholder } },
+    latexHeaderName{ new QString{ argLatexHeaderName } },
     printAnonymousReceipts{ argAnonReceipts },
     settingsStorage{ argSettingsStorage },
-    zTreeDataTargetPath{ argzTreeDataTargetPath },
+    zTreeDataTargetPath{ new QString{ argzTreeDataTargetPath } },
     zTreePort{ argzTreePort },
     zTreeVersionPath{ argzTreeVersionPath }
 {
@@ -47,6 +47,12 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QS
     }
 }
 
+ellSession::~ellSession() {
+    delete anonymousReceiptsPlaceholder;
+    delete latexHeaderName;
+    delete zTreeDataTargetPath;
+}
+
 QVariant ellSession::GetDataItem( int argIndex ) {
     switch ( argIndex ) {
     case 0:
@@ -60,18 +66,20 @@ QVariant ellSession::GetDataItem( int argIndex ) {
 
 void ellSession::InitializeClasses() {
     // Create the new data directory
-    QDir dir{ zTreeDataTargetPath };
+    QDir dir{ *zTreeDataTargetPath };
     QString date_string( QDateTime::currentDateTime().toString( "yyMMdd_hhmm" ) );
-    if ( !dir.mkpath( zTreeDataTargetPath + "/" + date_string + "-" + QString::number( zTreePort ) ) ) {
+    if ( !dir.mkpath( *zTreeDataTargetPath + "/" + date_string + "-" + QString::number( zTreePort ) ) ) {
         true;
     }
-    zTreeDataTargetPath.append( "/" + date_string + "-" + QString::number( zTreePort ) );
+    zTreeDataTargetPath->append( "/" + date_string + "-" + QString::number( zTreePort ) );
 
-    zTreeInstance = new ellzTree{ settingsStorage, zTreeDataTargetPath, zTreePort, zTreeVersionPath, this };
+    zTreeInstance = new ellzTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionPath, this };
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
-    if ( latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
-        receiptsCreator = new ellReceiptsCreator{ date_string, QString{ zTreeDataTargetPath + "/" + date_string + ".pay" },
-                                                  QString::number( zTreePort ), settingsStorage, this };
+    if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
+        receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, date_string, latexHeaderName,
+                                                  QString{ *zTreeDataTargetPath + "/" + date_string + ".pay" },
+                                                  QString::number( zTreePort ), settingsStorage,
+                                                  zTreeDataTargetPath, this };
         true;
     } else {
         true;
