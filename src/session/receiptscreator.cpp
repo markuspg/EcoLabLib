@@ -5,10 +5,10 @@ ellReceiptsCreator::ellReceiptsCreator( const QString &argDateString, const QStr
                                         QObject *argParent ) :
     QObject{ argParent },
     dateString{ argDateString },
-    paymentFile{ argPaymentFilePath },
     port{ argPort },
     settingsStorage{ argSettingsStorage },
-    fileCheckTimer{ this }
+    fileCheckTimer{ this },
+    paymentFile{ argPaymentFilePath }
 {
     connect( &fileCheckTimer, &QTimer::timeout, this, &ellReceiptsCreator::PrintReceipts );
     fileCheckTimer.start( 1000 );
@@ -20,7 +20,7 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     rawParticipantsData = GetParticipantsDataFromPaymentFile();
 }
 
-void ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
+QVector<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
     // Create the vector to store the single lines of the file
     QVector<QString> *participantsData = new QVector< QString >;
 

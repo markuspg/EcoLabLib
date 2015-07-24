@@ -3,7 +3,9 @@
 
 #include <QFile>
 #include <QObject>
+#include <QTextStream>
 #include <QTimer>
+#include <QVector>
 
 class ellSettingsStorage;
 
@@ -15,7 +17,6 @@ public:
                                  QObject *argParent = 0 );
 
     const QString dateString;
-    const QFile paymentFile;
     const QString port;
     const ellSettingsStorage * const settingsStorage;
 signals:
@@ -24,6 +25,7 @@ public slots:
 
 private:
     QTimer fileCheckTimer;
+    QFile paymentFile;
 
     void CreateReceiptsFromPaymentFile();
     QVector<QString> *GetParticipantsDataFromPaymentFile();
