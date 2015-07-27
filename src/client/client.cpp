@@ -54,18 +54,12 @@ void ellClient::Boot() {
 }
 
 void ellClient::Disconnected() {
-    delete sessionPort;
-    sessionPort = nullptr;
-
     delete socket;
     socket = nullptr;
     state = ellClientState_t::DISCONNECTED;
 }
 
 void ellClient::KillzLeaf() {
-    delete sessionPort;
-    sessionPort = nullptr;
-
     SendMessage( 2 );
 }
 
@@ -106,12 +100,9 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
 }
 
 void ellClient::Shutdown() {
-    delete sessionPort;
-    sessionPort = nullptr;
-
     SendMessage( 0 );
 }
 
 void ellClient::StartzLeaf() {
-    SendMessage( 1, new QString{ "3.4.7|" + *settingsStorage->serverIP } );
+    SendMessage( 1, new QString{ "3.4.7|" + *settingsStorage->serverIP + "|" + *sessionPort } );
 }
