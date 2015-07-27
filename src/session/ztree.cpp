@@ -23,6 +23,8 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
                     const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent ) :
     QObject{ argParent }
 {
+    connect( &ztreeInstance, SIGNAL( finished( int, QProcess::ExitStatus ) ),
+             this, SIGNAL( zTreeClosed( int, QProcess::ExitStatus ) ) );
     QString program;
     QStringList arguments;
 #ifdef Q_OS_UNIX
@@ -36,5 +38,6 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
               << "/leafdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/channel" << QString::number( argZTreePort - 7000 );
 
     ztreeInstance.setProcessEnvironment( *argSettingsStorage->processEnvironment );
-    ztreeInstance.startDetached( program, arguments, QDir::currentPath() );
+    ztreeInstance.setWorkingDirectory( QDir::currentPath() );
+    ztreeInstance.start( program, arguments );
 }

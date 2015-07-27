@@ -35,6 +35,12 @@ ellSession *ellSessionsModel::back() const {
     return sessionsVector->back();
 }
 
+void ellSessionsModel::CleanupFinishedSession( ellSession *argSession ) {
+    int finishedSessionIndex = sessionsVector->indexOf( argSession );
+    delete argSession;
+    sessionsVector->remove( finishedSessionIndex );
+}
+
 int ellSessionsModel::columnCount( const QModelIndex &argParent ) const {
     Q_UNUSED( argParent );
     return 2;
@@ -75,6 +81,8 @@ QVariant ellSessionsModel::headerData( int argSection, Qt::Orientation argOrient
 }
 
 void ellSessionsModel::push_back( ellSession *argSession ) {
+    connect( argSession, SIGNAL( SessionFinished( ellSession* ) ),
+             this, SLOT( CleanupFinishedSession( ellSession* ) ) );
     sessionsVector->push_back( argSession );
 }
 

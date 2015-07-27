@@ -74,6 +74,8 @@ void ellSession::InitializeClasses() {
     zTreeDataTargetPath->append( "/" + date_string + "-" + QString::number( zTreePort ) );
 
     zTreeInstance = new ellzTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionPath, this };
+    connect( zTreeInstance, SIGNAL( zTreeClosed( int,QProcess::ExitStatus ) ),
+             this, SLOT( zTreeClosed() ) );
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
     if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
         receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, date_string, latexHeaderName,
@@ -96,4 +98,8 @@ void ellSession::RenameWindow() {
     QProcess renameZTreeWindowProcess;
     renameZTreeWindowProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
     renameZTreeWindowProcess.startDetached( *settingsStorage->wmctrlCommand, arguments );
+}
+
+void ellSession::zTreeClosed() {
+    emit SessionFinished( this );
 }

@@ -45,6 +45,7 @@ public:
      */
     QVariant GetDataItem( int argIndex );
 signals:
+    void SessionFinished( ellSession *argSession );
 
 public slots:
 
@@ -66,6 +67,7 @@ private slots:
     /*! Changes zTree's window title to contain its port number to make zTree windows distinguishable
      */
     void RenameWindow();
+    void zTreeClosed();
 };
 
 #endif // ELLSESSION_H

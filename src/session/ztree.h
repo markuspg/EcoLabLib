@@ -32,6 +32,7 @@ public:
                        const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent = nullptr );
 
 signals:
+    void zTreeClosed( const int &argExitCode, const QProcess::ExitStatus &argExitStatus );
 
 public slots:
 

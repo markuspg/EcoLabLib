@@ -45,6 +45,9 @@ public slots:
 
 private:
     QVector< ellSession* > *sessionsVector;
+
+private slots:
+    void CleanupFinishedSession( ellSession *argSession );
 };
 
 #endif // SESSIONSMODEL_H
