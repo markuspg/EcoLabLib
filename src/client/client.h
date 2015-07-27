@@ -64,8 +64,10 @@ signals:
 
 public slots:
     void Disconnected();
+    void ReadMessage();
 
 private:
+    quint16 blockSize = 0;
     QString *sessionPort = nullptr; //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
@@ -74,7 +76,6 @@ private:
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
 
 private slots:
-    void ReadMessage();
 };
 
 #endif // CLIENT_H

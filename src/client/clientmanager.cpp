@@ -98,6 +98,8 @@ void ellClientManager::HandleIncomingConnection() {
             connectingClient->SetSocket( incConnection );
             connect( incConnection, &QTcpSocket::disconnected,
                      connectingClient, &ellClient::Disconnected );
+            connect( incConnection, &QTcpSocket::readyRead,
+                     connectingClient, &ellClient::ReadMessage );
             connect( incConnection, &QTcpSocket::disconnected,
                      incConnection, &QTcpSocket::deleteLater );
         } else {

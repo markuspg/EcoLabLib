@@ -64,7 +64,38 @@ void ellClient::KillzLeaf() {
 }
 
 void ellClient::ReadMessage() {
+    QDataStream in( socket );
+    in.setVersion( QDataStream::Qt_5_2 );
 
+    quint16 messageID = 0;
+    blockSize = 0;
+    if ( blockSize == 0 ) {
+        if ( socket->bytesAvailable() < ( int )sizeof( quint16 ) ) {
+            return;
+        }
+        in >> blockSize;
+        in >> messageID;
+    }
+
+    if ( socket->bytesAvailable() < blockSize ) {
+        return;
+    }
+
+    qDebug() << QString::number( blockSize );
+    qDebug() << QString::number( messageID );
+
+    QString serverAnswer;
+    in >> serverAnswer;
+
+    qDebug() << serverAnswer;
+
+    switch ( messageID ) {
+    case 1:
+        state = ellClientState_t::CONNECTED;
+        break;
+    default:
+        true;
+    }
 }
 
 void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
