@@ -19,11 +19,13 @@
 
 #include "session.h"
 
-ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QString &argLatexHeaderName, const bool &argAnonReceipts,
+ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector< ellClient* > * const argAssociatedClients,
+                        const QString &argLatexHeaderName, const bool &argAnonReceipts,
                         const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
                         const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceiptsPlaceholder{ new QString { argAnonymousReceiptsPlaceholder } },
+    associatedClients{ argAssociatedClients },
     latexHeaderName{ new QString{ argLatexHeaderName } },
     printAnonymousReceipts{ argAnonReceipts },
     settingsStorage{ argSettingsStorage },
@@ -49,6 +51,11 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, const QS
 
 ellSession::~ellSession() {
     delete anonymousReceiptsPlaceholder;
+    for ( auto s : *associatedClients ) {
+        s->SetSessionPort( nullptr );
+        s->SetzLeafVersion( nullptr );
+    }
+    delete associatedClients;
     delete latexHeaderName;
     delete zTreeDataTargetPath;
 }

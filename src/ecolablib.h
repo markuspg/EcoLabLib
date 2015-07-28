@@ -43,9 +43,9 @@ public:
     bool ShowPreprints();
 
 public slots:
-    void StartNewSession( const QString &argParticipiantNameReplacement, const bool &argPrintAnonymousReceipts,
-                          const QString &argReceiptsHeader, const QString &argzTreeDataTargetPath,
-                          const quint16 &argzTreePort, const QString &argzTreeVersion );
+    void StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
+                          const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
+                          const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion );
 
 private:
     ellSessionsModel *sessionsModel = nullptr;

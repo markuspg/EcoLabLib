@@ -20,6 +20,7 @@
 #ifndef ELLSESSION_H
 #define ELLSESSION_H
 
+#include "../client/client.h"
 #include "receiptscreator.h"
 #include "../settingsstorage.h"
 #include "ztree.h"
@@ -34,7 +35,8 @@ class ellSession : public QObject
 {
     Q_OBJECT
 public:
-    explicit ellSession( const QString &argAnonymousReceiptsPlaceholder, const QString &argLatexHeaderName, const bool &argAnonReceipts,
+    explicit ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector< ellClient* > * const argAssociatedClients,
+                         const QString &argLatexHeaderName, const bool &argAnonReceipts,
                          const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
                          const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent = nullptr );
     ~ellSession();
@@ -51,6 +53,7 @@ public slots:
 
 private:
     const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
+    QVector< ellClient* > *associatedClients = nullptr;             //! This vector stores all clients belonging to this session
     const QString * const latexHeaderName;                          //! The name of the chosen LaTeX header
     const bool printAnonymousReceipts = false;
     ellReceiptsCreator *receiptsCreator = nullptr;
