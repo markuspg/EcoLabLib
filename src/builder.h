@@ -40,6 +40,7 @@ public:
     quint16 *initialzTreePort = nullptr;
     QStringList *installedLaTeXHeaders = nullptr;
     QStringList *installedzTreeVersions = nullptr;
+    QString *killallCommand = nullptr;
     QString *latexCommand = nullptr;
     QString *localzLeafName = nullptr;
     QString *lprCommand = nullptr;

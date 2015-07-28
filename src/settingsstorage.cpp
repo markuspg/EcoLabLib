@@ -30,6 +30,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     initialzTreePort{ argBuilder.initialzTreePort },
     installedLaTeXHeaders{ argBuilder.installedLaTeXHeaders },
     installedzTreeVersions{ argBuilder.installedzTreeVersions },
+    killallCommand{ argBuilder.killallCommand },
     latexCommand{ argBuilder.latexCommand },
     lprCommand{ argBuilder.lprCommand },
     netstatCommand{ argBuilder.netstatCommand },
@@ -70,6 +71,7 @@ ellSettingsStorage::~ellSettingsStorage() {
     delete initialzTreePort;
     delete installedLaTeXHeaders;
     delete installedzTreeVersions;
+    delete killallCommand;
     delete latexCommand;
     delete localzLeafName;
     delete lprCommand;

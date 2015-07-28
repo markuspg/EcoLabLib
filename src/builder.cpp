@@ -88,6 +88,7 @@ void ellBuilder::ReadSettings() {
     ecolablibInstallationDirectory = ReadSettingsItem( "ecolablib_installation_directory", true );
     fileManager = ReadSettingsItem( "file_manager", true );
     QString *tempInitialzTreePort = ReadSettingsItem( "initial_ztree_port", false );
+    killallCommand = ReadSettingsItem( "killall_command", true );
     latexCommand = ReadSettingsItem( "latex_command", true );
     localzLeafName = ReadSettingsItem( "localzLeafName", false );
     lprCommand = ReadSettingsItem( "lpr_command", true );

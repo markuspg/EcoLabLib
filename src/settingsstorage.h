@@ -40,6 +40,7 @@ public:
     const quint16 * const initialzTreePort = nullptr;
     const QStringList * const installedLaTeXHeaders = nullptr;
     const QStringList * const installedzTreeVersions = nullptr;
+    const QString * const killallCommand = nullptr;
     const QString * const latexCommand = nullptr;
     const QString * const lprCommand = nullptr;
     const QString * const netstatCommand = nullptr;
