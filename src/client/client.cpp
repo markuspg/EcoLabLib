@@ -36,6 +36,7 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 ellClient::~ellClient() {
     delete sessionPort;
     delete socket;
+    delete zleafVersion;
 }
 
 void ellClient::Boot() {
@@ -130,10 +131,15 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
     }
 }
 
+void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
+    delete zleafVersion;
+    zleafVersion = argzLeafVersion;
+}
+
 void ellClient::Shutdown() {
     SendMessage( 0 );
 }
 
 void ellClient::StartzLeaf() {
-    SendMessage( 1, new QString{ "3.4.7|" + *settingsStorage->serverIP + "|" + *sessionPort } );
+    SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP + "|" + *sessionPort } );
 }

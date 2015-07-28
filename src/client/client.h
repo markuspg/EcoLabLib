@@ -56,6 +56,7 @@ public:
     QString *GetSessionPort() const { return sessionPort; }
     void KillzLeaf();
     void SetSessionPort( QString * const argSessionPort );
+    void SetzLeafVersion( QString * const argzLeafVersion );
     void SetSocket( QTcpSocket *argSocket );
     void Shutdown();
     void StartzLeaf();
@@ -68,10 +69,11 @@ public slots:
 
 private:
     quint16 blockSize = 0;
-    QString *sessionPort = nullptr; //! The port the z-Leaf on this client uses (for the 'TVClients')
+    QString *sessionPort = nullptr;     //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
     ellClientState_t state = ellClientState_t::DISCONNECTED;
+    QString *zleafVersion = nullptr;    //! The z-Leaf version this client shall use
 
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
 
