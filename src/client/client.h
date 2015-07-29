@@ -58,6 +58,7 @@ public:
     void SetSessionPort( QString * const argSessionPort );
     void SetzLeafVersion( QString * const argzLeafVersion );
     void SetSocket( QTcpSocket *argSocket );
+    void ShowDesktop();
     void Shutdown();
     void StartzLeaf();
 

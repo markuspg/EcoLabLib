@@ -44,7 +44,16 @@ void ellClient::Boot() {
         return;
     }
     QStringList arguments;
-    arguments << "-i" << *settingsStorage->networkBroadcastAddress << mac;
+#ifdef Q_OS_UNIX
+    // For Debian based UNIXes shipping the 'wakeonlan' program
+    if ( settingsStorage->wakeonlanCommand->contains( "wakeonlan" ) ) {
+        arguments << "-i" << *settingsStorage->networkBroadcastAddress << mac;
+    }
+    // For Fedora based UNIXes shipping the 'wol' program
+    if ( settingsStorage->wakeonlanCommand->contains( "wol" ) ) {
+        arguments << "-i" << *settingsStorage->serverIP << mac;
+    }
+#endif
 
     // Start the process
     QProcess wakeonlanProcess;
@@ -134,6 +143,14 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
 void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
     delete zleafVersion;
     zleafVersion = argzLeafVersion;
+}
+
+void ellClient::ShowDesktop() {
+    QStringList arguments{ ip };
+
+    QProcess showDesktopProcess;
+    showDesktopProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    showDesktopProcess.startDetached( *settingsStorage->vncViewer, arguments );
 }
 
 void ellClient::Shutdown() {
