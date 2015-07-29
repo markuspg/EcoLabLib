@@ -160,6 +160,12 @@ void ellClient::Shutdown() {
     SendMessage( 0 );
 }
 
-void ellClient::StartzLeaf() {
-    SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP + "|" + *sessionPort } );
+void ellClient::StartzLeaf( const QString * const fakeName ) {
+    if ( !fakeName ) {
+        SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP + "|" + *sessionPort } );
+    } else {
+        SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP
+                                     + "|" + *sessionPort + "|" + *fakeName } );
+        delete fakeName;
+    }
 }

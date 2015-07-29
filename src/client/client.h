@@ -60,7 +60,7 @@ public:
     void SetSocket( QTcpSocket *argSocket );
     void ShowDesktop();
     void Shutdown();
-    void StartzLeaf();
+    void StartzLeaf( const QString * const fakeName = nullptr );
 
 signals:
 
