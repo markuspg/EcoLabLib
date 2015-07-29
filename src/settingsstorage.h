@@ -61,6 +61,7 @@ public:
     const QString * const userNameOnClients = nullptr;
     const QString * const vncViewer = nullptr;
     const QString * const wakeonlanCommand = nullptr;
+    const QString * const webcamDisplayCommand = nullptr;
     const QStringList * const webcamNames = nullptr;
     const QStringList * const webcamURLs = nullptr;
     const QString * const wineCommand = nullptr;

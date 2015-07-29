@@ -54,6 +54,13 @@ bool EcoLabLib::ShowPreprints() {
     return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
 }
 
+bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
+    QProcess showWebcamProcess;
+    showWebcamProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    QStringList arguments{ QStringList{} << argWebcamURL };
+    return showWebcamProcess.startDetached( *settingsStorage->webcamDisplayCommand, arguments );
+}
+
 void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
                                  const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
                                  const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion ) {

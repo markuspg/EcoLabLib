@@ -51,6 +51,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     userNameOnClients{ argBuilder.userNameOnClients },
     vncViewer{ argBuilder.vncViewer },
     wakeonlanCommand{ argBuilder.wakeonlanCommand },
+    webcamDisplayCommand{ argBuilder.webcamDisplayCommand },
     webcamNames{ argBuilder.webcamNames },
     webcamURLs{ argBuilder.webcamURLs },
     wineCommand{ argBuilder.wineCommand },
@@ -93,6 +94,7 @@ ellSettingsStorage::~ellSettingsStorage() {
     delete userNameOnClients;
     delete vncViewer;
     delete wakeonlanCommand;
+    delete webcamDisplayCommand;
     delete webcamNames;
     delete wineCommand;
     delete webcamURLs;

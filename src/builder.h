@@ -62,6 +62,7 @@ public:
     QString *userNameOnClients = nullptr;
     QString *vncViewer = nullptr;
     QString *wakeonlanCommand = nullptr;
+    QString *webcamDisplayCommand = nullptr;
     QStringList *webcamNames = nullptr;
     QStringList *webcamURLs = nullptr;
     QString *wineCommand = nullptr;

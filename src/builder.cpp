@@ -109,6 +109,7 @@ void ellBuilder::ReadSettings() {
     userNameOnClients = ReadSettingsItem( "user_name_on_clients", false );
     vncViewer = ReadSettingsItem( "vnc_viewer", true );
     wakeonlanCommand = ReadSettingsItem( "wakeonlan_command", true );
+    webcamDisplayCommand = ReadSettingsItem( "webcam_display_command", true );
     QString *tempWebcamNames = ReadSettingsItem( "webcam_names", false );
     QString *tempWebcamURLs = ReadSettingsItem( "webcam_urls", false );
     wineCommand = ReadSettingsItem( "wine_command", true );

@@ -42,6 +42,7 @@ public:
     void KillLocalzLeaves();
     bool ShowORSEE();
     bool ShowPreprints();
+    bool ShowWebcam( const QString &argWebcamURL );
     void StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort );
 
 public slots:
