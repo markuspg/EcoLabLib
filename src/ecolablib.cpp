@@ -32,6 +32,14 @@ EcoLabLib::~EcoLabLib() {
     delete settingsStorage;
 }
 
+void EcoLabLib::KillLocalzLeaves() {
+    QProcess killzLeavesProcess;
+    killzLeavesProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+#ifdef Q_OS_UNIX
+    killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
+#endif
+}
+
 bool EcoLabLib::ShowORSEE() {
     QProcess showORSEEProcess;
     showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
@@ -52,4 +60,8 @@ void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClie
     sessionsModel->push_back( new ellSession{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
                                               argPrintAnonymousReceipts, settingsStorage, argzTreeDataTargetPath, argzTreePort,
                                               argzTreeVersion, this } );
+}
+
+void EcoLabLib::StartLocalzLeaf( const QString &argName, const QString &argzLeafVersion, const int &argzTreePort ) {
+
 }

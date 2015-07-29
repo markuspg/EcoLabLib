@@ -39,8 +39,10 @@ public:
     QVector< ellClient* > *GetClients() const { return clientManager.GetClients(); }
     ellSessionsModel *GetSessionsModel() const { return sessionsModel; }
     const ellSettingsStorage *GetSettingsStorage() { return settingsStorage; }
+    void KillLocalzLeaves();
     bool ShowORSEE();
     bool ShowPreprints();
+    void StartLocalzLeaf( const QString &argName, const QString &argzLeafVersion, const int &argzTreePort );
 
 public slots:
     void StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
