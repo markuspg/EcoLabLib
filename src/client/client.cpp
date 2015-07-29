@@ -100,6 +100,9 @@ void ellClient::ReadMessage() {
     qDebug() << serverAnswer;
 
     switch ( messageID ) {
+    case 0:
+        state = ellClientState_t::ZLEAF_RUNNING;
+        break;
     case 1:
         state = ellClientState_t::CONNECTED;
         break;

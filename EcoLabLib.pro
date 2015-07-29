@@ -45,3 +45,7 @@ unix {
 
 OTHER_FILES += \
     data/EcoLabLib.conf
+
+DISTFILES += \
+    LICENSE \
+    doc/doc.md
