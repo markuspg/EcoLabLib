@@ -42,7 +42,7 @@ public:
     void KillLocalzLeaves();
     bool ShowORSEE();
     bool ShowPreprints();
-    void StartLocalzLeaf( const QString &argName, const QString &argzLeafVersion, const int &argzTreePort );
+    void StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort );
 
 public slots:
     void StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,

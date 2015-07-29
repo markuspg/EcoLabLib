@@ -62,6 +62,22 @@ void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClie
                                               argzTreeVersion, this } );
 }
 
-void EcoLabLib::StartLocalzLeaf( const QString &argName, const QString &argzLeafVersion, const int &argzTreePort ) {
+void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort ) {
+    QProcess startLocalzLeafProcess;
+    startLocalzLeafProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
 
+    QString program;
+    QStringList arguments;
+#ifdef Q_OS_UNIX
+    program = *settingsStorage->wineCommand;
+    arguments.append( *settingsStorage->zTreeInstallationDirectory
+                      + "/zTree_" + argzLeafVersion + "/zleaf.exe" );
+#else
+    program = QString{ *settingsStorage->zTreeInstallationDirectory
+                       + "/zTree_" + argzLeafVersion + "/zleaf.exe" };
+#endif
+    arguments << "/server" << "127.0.0.1"
+              << "/channel" << QString::number( argzTreePort - 7000 )
+              << "/name" << argzLeafName;
+    startLocalzLeafProcess.startDetached( program, arguments );
 }
