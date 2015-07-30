@@ -35,7 +35,6 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 
 ellClient::~ellClient() {
     delete sessionPort;
-    delete socket;
     delete zleafVersion;
 }
 
@@ -138,6 +137,7 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
         delete socket;
     }
     socket = argSocket;
+    socket->setParent( this );
     if ( socket->isValid() ) {
         state = ellClientState_t::CONNECTED;
     }
