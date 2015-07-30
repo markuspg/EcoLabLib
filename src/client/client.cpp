@@ -123,7 +123,9 @@ void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) 
     out.device()->seek( 0 );
     out << ( quint16 )( block.size() - sizeof( quint16 ) * 2 );
 
-    socket->write( block );
+    if ( socket ) {
+        socket->write( block );
+    }
 }
 
 void ellClient::SetSessionPort( QString * const argSessionPort ) {
@@ -161,6 +163,14 @@ void ellClient::Shutdown() {
 }
 
 void ellClient::StartzLeaf( const QString * const fakeName ) {
+    // Don't crash if the port or version for z-Leaf are not set yet
+    if ( !sessionPort || !zleafVersion ) {
+        return;
+        if ( fakeName ) {
+            delete fakeName;
+        }
+    }
+
     if ( !fakeName ) {
         SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP + "|" + *sessionPort } );
     } else {
