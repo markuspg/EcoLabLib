@@ -92,10 +92,8 @@ void ellBuilder::ReadSettings() {
     latexCommand = ReadSettingsItem( "latex_command", true );
     localzLeafName = ReadSettingsItem( "localzLeafName", false );
     lprCommand = ReadSettingsItem( "lpr_command", true );
-    netstatCommand = ReadSettingsItem( "netstat_command", true );
     networkBroadcastAddress = ReadSettingsItem( "network_broadcast_address", false );
     orseeURL = ReadSettingsItem( "orsee_url", false );
-    pingCommand = ReadSettingsItem( "ping_command", true );
     postscriptViewer = ReadSettingsItem( "postscript_viewer", true );
     ps2pdfCommand = ReadSettingsItem( "ps2pdf_command", true );
     publicKeyPathRoot = ReadSettingsItem( "public_key_path_root", true );

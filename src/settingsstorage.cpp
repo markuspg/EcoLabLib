@@ -33,10 +33,8 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     killallCommand{ argBuilder.killallCommand },
     latexCommand{ argBuilder.latexCommand },
     lprCommand{ argBuilder.lprCommand },
-    netstatCommand{ argBuilder.netstatCommand },
     networkBroadcastAddress{ argBuilder.networkBroadcastAddress },
     orseeURL{ argBuilder.orseeURL },
-    pingCommand{ argBuilder.pingCommand },
     postscriptViewer{ argBuilder.postscriptViewer },
     processEnvironment{ argBuilder.processEnvironment },
     ps2pdfCommand{ argBuilder.ps2pdfCommand },
@@ -63,42 +61,5 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
 }
 
 ellSettingsStorage::~ellSettingsStorage() {
-    delete adminUsers;
-    delete browserCommand;
-    delete defaultReceiptIndex;
-    delete dvipsCommand;
-    delete ecolablibInstallationDirectory;
-    delete fileManager;
-    delete initialzTreePort;
-    delete installedLaTeXHeaders;
-    delete installedzTreeVersions;
-    delete killallCommand;
-    delete latexCommand;
     delete localzLeafName;
-    delete lprCommand;
-    delete netstatCommand;
-    delete networkBroadcastAddress;
-    delete orseeURL;
-    delete pingCommand;
-    delete postscriptViewer;
-    delete processEnvironment;
-    delete ps2pdfCommand;
-    delete publicKeyPathRoot;
-    delete publicKeyPathUser;
-    delete rcpCommand;
-    delete rmCommand;
-    delete serverIP;
-    delete serverPort;
-    delete sshCommand;
-    delete terminalEmulatorCommand;
-    delete userNameOnClients;
-    delete vncViewer;
-    delete wakeonlanCommand;
-    delete webcamDisplayCommand;
-    delete webcamNames;
-    delete wineCommand;
-    delete webcamURLs;
-    delete wmctrlCommand;
-    delete xsetCommand;
-    delete zTreeInstallationDirectory;
 }

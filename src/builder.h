@@ -44,10 +44,8 @@ public:
     QString *latexCommand = nullptr;
     QString *localzLeafName = nullptr;
     QString *lprCommand = nullptr;
-    QString *netstatCommand = nullptr;
     QString *networkBroadcastAddress = nullptr;
     QString *orseeURL = nullptr;
-    QString *pingCommand = nullptr;
     QString *postscriptViewer = nullptr;
     const QProcessEnvironment * const processEnvironment = nullptr;
     QString *ps2pdfCommand = nullptr;
