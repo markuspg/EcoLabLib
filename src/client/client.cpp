@@ -33,11 +33,6 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 {
 }
 
-ellClient::~ellClient() {
-    delete sessionPort;
-    delete zleafVersion;
-}
-
 void ellClient::Boot() {
     if ( state == ellClientState_t::CONNECTED || state == ellClientState_t::SHUTTING_DOWN ) {
         return;
@@ -129,8 +124,7 @@ void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) 
 }
 
 void ellClient::SetSessionPort( QString * const argSessionPort ) {
-    delete sessionPort;
-    sessionPort = argSessionPort;
+    sessionPort.reset( argSessionPort );
 }
 
 void ellClient::SetSocket( QTcpSocket *argSocket ) {
@@ -146,8 +140,7 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
 }
 
 void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
-    delete zleafVersion;
-    zleafVersion = argzLeafVersion;
+    zleafVersion.reset( argzLeafVersion );
 }
 
 void ellClient::ShowDesktop() {

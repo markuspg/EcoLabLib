@@ -40,7 +40,7 @@ public:
     explicit ellClient( const QString &argHostName, const QString &argIP, const QString &argMAC,
                         const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
                         const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
-    ~ellClient();
+    ellClient( const ellClient &argClient ) = delete;
 
     const QString hostName;
     const QString ip;
@@ -53,7 +53,7 @@ public:
     ellClientState_t GetClientState() const { return state; }
 
     void Boot();
-    QString *GetSessionPort() const { return sessionPort; }
+    const QString *GetSessionPort() const { return sessionPort.get(); }
     void KillzLeaf();
     void SetSessionPort( QString * const argSessionPort );
     void SetzLeafVersion( QString * const argzLeafVersion );
@@ -70,11 +70,11 @@ public slots:
 
 private:
     quint16 blockSize = 0;
-    QString *sessionPort = nullptr;     //! The port the z-Leaf on this client uses (for the 'TVClients')
+    std::unique_ptr < const QString > sessionPort = nullptr;    //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr;
     QTcpSocket *socket = nullptr;
     ellClientState_t state = ellClientState_t::DISCONNECTED;
-    QString *zleafVersion = nullptr;    //! The z-Leaf version this client shall use
+    std::unique_ptr < const QString > zleafVersion = nullptr;   //! The z-Leaf version this client shall use
 
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
 
