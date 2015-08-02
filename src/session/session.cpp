@@ -85,8 +85,7 @@ void ellSession::InitializeClasses() {
     if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
         receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, printAnonymousReceipts, dateString, latexHeaderName,
                                                   QString{ *zTreeDataTargetPath + "/" + dateString + ".pay" },
-                                                  QString::number( zTreePort ), settingsStorage,
-                                                  zTreeDataTargetPath, this };
+                                                  settingsStorage, zTreeDataTargetPath, this };
         true;
     } else {
         true;

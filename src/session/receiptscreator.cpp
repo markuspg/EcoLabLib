@@ -21,10 +21,8 @@
 
 ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
                                         const QString &argDateString, const QString * const argLaTeXHeaderName,
-                                        const QString &argPaymentFilePath, const QString &argPort,
-                                        const ellSettingsStorage * const argSettingsStorage,
-                                        const QString * const argzTreeDataTargetPath,
-                                        QObject *argParent ) :
+                                        const QString &argPaymentFilePath, const ellSettingsStorage * const argSettingsStorage,
+                                        const QString * const argzTreeDataTargetPath, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceipts{ argAnonReceipts },
     anonymousReceiptsPlaceholder{ argAnonymousReceiptsPlaceholder },
@@ -32,7 +30,6 @@ ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceip
     fileCheckTimer{ this },
     latexHeaderName{ argLaTeXHeaderName },
     paymentFile{ argPaymentFilePath },
-    port{ argPort },
     settingsStorage{ argSettingsStorage },
     zTreeDataTargetPath{ argzTreeDataTargetPath }
 {
@@ -54,18 +51,16 @@ ellReceiptsCreator::~ellReceiptsCreator() {
 
 void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     // Get the data needed for receipts creation from the payment file
-    QVector< QString > *rawParticipantsData = nullptr;
+    QList< QString > *rawParticipantsData = nullptr;
     rawParticipantsData = GetParticipantsDataFromPaymentFile();
 
     double overallPayoff = 0.0;
     QVector< ellPaymentEntry_t* > *participants = ExtractParticipantsData( overallPayoff, rawParticipantsData );
-    delete rawParticipantsData;
-    rawParticipantsData = nullptr;
 
     /* Make receipts overview anonymous if requested
      * (at this stage just names are removed, so that the overview still contains the client names)
      */
-    if ( !anonymousReceiptsPlaceholder->isEmpty() ) {
+    if ( anonymousReceipts ) {
         MakeReceiptsAnonymous( false, participants );
     }
 
@@ -96,7 +91,7 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     /* Make also the clients on the receipts anonymous.
      * This is done as second step, so that the beforehand created overview still contains the clients
      */
-    if ( !anonymousReceiptsPlaceholder->isEmpty() ) {
+    if ( anonymousReceipts ) {
         MakeReceiptsAnonymous( true, participants );
     }
 
@@ -120,24 +115,24 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     latexText->append( "\\end{document}" );
 
     // Create the tex file
-    QFile *texFile = new QFile( *zTreeDataTargetPath + "/" + *dateString + ".tex" );
+    QFile texFile{ *zTreeDataTargetPath + "/" + *dateString + ".tex" };
     // Clean up any already existing files
-    if ( texFile->exists() ) {
-        if ( !texFile->remove() ) {
+    if ( texFile.exists() ) {
+        if ( !texFile.remove() ) {
             true;
             delete latexText;
             return;
         }
     }
     // Create a new file
-    if ( !texFile->open( QIODevice::Text | QIODevice::WriteOnly ) ) {
+    if ( !texFile.open( QIODevice::Text | QIODevice::WriteOnly ) ) {
         true;
         delete latexText;
         return;
     }
 
     // Open a QTextStream to write to the file
-    QTextStream out( texFile );
+    QTextStream out( &texFile );
 
     out << *latexText;
     delete latexText;
@@ -150,8 +145,7 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     // connect( receiptsPrinter, &lcReceiptsPrinter::ErrorOccurred, this, &lcReceiptsHandler::DisplayMessageBox );
 
     // Clean up
-    texFile->close();
-    delete texFile;
+    texFile.close();
 }
 
 void ellReceiptsCreator::DeleteReceiptsPrinterInstance() {
@@ -163,12 +157,13 @@ void ellReceiptsCreator::DeleteReceiptsPrinterInstance() {
     emit PrintingFinished();
 }
 
-QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( double &argOverallPayoff, QVector<QString> *argRawData ) {
+QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( double &argOverallPayoff,
+                                                                            QList< QString > *& argRawData ) {
     /* The tab separated fields in the payment file are:
      * SUBJECT  COMPUTER    INTERESTED  NAME    PROFIT  SIGNATURE
      */
     QVector< ellPaymentEntry_t* > *participants = new QVector< ellPaymentEntry_t* >;
-    for ( QVector<QString>::const_iterator cit = argRawData->cbegin(); cit != argRawData->cend() - 1; ++cit ) {
+    for ( QList< QString >::const_iterator cit = argRawData->cbegin(); cit != argRawData->cend(); ++cit ) {
         // Split the lines containing the participants' data into their inidivual parts
         QStringList tempParticipantData = cit->split( '\t', QString::KeepEmptyParts );
         // Create a new struct instance for the participant's data and fill it
@@ -180,16 +175,18 @@ QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( doub
         participants->append( participant );
     }
 
+    delete argRawData;
+    argRawData = nullptr;
     return participants;
 }
 
-QVector<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
+QList<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
     // Create the vector to store the single lines of the file
-    QVector<QString> *participantsData = nullptr;
+    QList<QString> *participantsData = nullptr;
 
     // Open the payment file for reading and create a QTextStream
     if ( paymentFile.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-        participantsData = new QVector< QString >;
+        participantsData = new QList< QString >;
     } else {
         return participantsData;
     }
@@ -205,8 +202,9 @@ QVector<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
         participantsData->append( line );
     }
 
-    // Remove the first line, since it is not needed
+    // Remove the first and the last line, since they are not needed
     participantsData->erase( participantsData->begin() );
+    participantsData->erase( participantsData->end() - 1 );
 
     // Close the file afterwards
     paymentFile.close();
