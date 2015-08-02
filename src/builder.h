@@ -48,7 +48,6 @@ public:
     QStringList *installedzTreeVersions = nullptr;
     QString *killallCommand = nullptr;
     QString *latexCommand = nullptr;
-    QString *localzLeafName = nullptr;
     QString *lprCommand = nullptr;
     QString *networkBroadcastAddress = nullptr;
     QString *orseeURL = nullptr;

@@ -26,59 +26,66 @@
 
 #include <memory>
 
+//! Stores all settings of 'EcoLabLib'
+/*!
+  This class stores all settings needed by any part of 'EcoLabLib' or 'Labcontrol'. Those are
+  owned by this, const and can be publicly accessed for a low overhead.
+ */
 class ellSettingsStorage : public QObject
 {
     Q_OBJECT
 public:
+    //! 'ellSettingsStorage's constructor which will be called by 'EcoLabLib'
+    /*!
+       This constructor initializes all settings using the pointers passed through 'argBuilder'.
+       Any settings who failed to load properly will be set to 'nullptr'.
+       \param argBuilder    The builder used to get the const variables values
+       \param argParent     'ellSettingsStorage's parent object
+     */
     explicit ellSettingsStorage( const ellBuilder &argBuilder, QObject *argParent = nullptr );
     ellSettingsStorage( const ellSettingsStorage &argSettingsStorage ) = delete;
-    ~ellSettingsStorage();
 
-    const std::unique_ptr< const QStringList > adminUsers = nullptr;
-    const std::unique_ptr< const QString > browserCommand = nullptr;
-    const std::unique_ptr< const quint16 > defaultReceiptIndex = nullptr;
-    const std::unique_ptr< const QString > dvipsCommand = nullptr;
-    const std::unique_ptr< const QString > ecolablibInstallationDirectory = nullptr;
-    const std::unique_ptr< const QString > fileManager = nullptr;
-    const std::unique_ptr< const quint16 > initialzTreePort = nullptr;
-    const std::unique_ptr< const QStringList > installedLaTeXHeaders = nullptr;
-    const std::unique_ptr< const QStringList > installedzTreeVersions = nullptr;
-    const std::unique_ptr< const QString > killallCommand = nullptr;
-    const std::unique_ptr< const QString > latexCommand = nullptr;
-    const std::unique_ptr< const QString > lprCommand = nullptr;
-    const std::unique_ptr< const QString > networkBroadcastAddress = nullptr;
-    const std::unique_ptr< const QString > orseeURL = nullptr;
-    const std::unique_ptr< const QString > postscriptViewer = nullptr;
-    const std::unique_ptr< const QProcessEnvironment > processEnvironment = nullptr;
-    const std::unique_ptr< const QString > ps2pdfCommand = nullptr;
-    const std::unique_ptr< const QString > publicKeyPathRoot = nullptr;
-    const std::unique_ptr< const QString > publicKeyPathUser = nullptr;
-    const std::unique_ptr< const QString > rcpCommand = nullptr;
-    const std::unique_ptr< const QString > rmCommand = nullptr;
-    const std::unique_ptr< const QString > serverIP = nullptr;
-    const std::unique_ptr< const quint16 > serverPort = nullptr;
-    const std::unique_ptr< const QString > sshCommand = nullptr;
-    const std::unique_ptr< const QString > terminalEmulatorCommand = nullptr;
-    const std::unique_ptr< const QString > userNameOnClients = nullptr;
-    const std::unique_ptr< const QString > vncViewer = nullptr;
-    const std::unique_ptr< const QString > wakeonlanCommand = nullptr;
-    const std::unique_ptr< const QString > webcamDisplayCommand = nullptr;
-    const std::unique_ptr< const QStringList > webcamNames = nullptr;
-    const std::unique_ptr< const QStringList > webcamURLs = nullptr;
-    const std::unique_ptr< const QString > wineCommand = nullptr;
-    const std::unique_ptr< const QString > wmctrlCommand = nullptr;
-    const std::unique_ptr< const QString > xsetCommand = nullptr;
-    const std::unique_ptr< const QString > zTreeInstallationDirectory = nullptr;
-
-    QString *GetLocalzLeafName() const { return localzLeafName; }
-    void SetLocalzLeafName( QString *argLocalzLeafName ) { localzLeafName = argLocalzLeafName; }
+    const std::unique_ptr< const QStringList > adminUsers = nullptr;    //! Stores all users having administrative rights
+    const std::unique_ptr< const QString > browserCommand = nullptr;    //! Stores the path to open a browser
+    const std::unique_ptr< const quint16 > defaultReceiptIndex = nullptr;   //! Stores the index (counting from 0) of the default receipt to use
+    const std::unique_ptr< const QString > dvipsCommand = nullptr;  //! The path to convert a dvi file to postscript
+    const std::unique_ptr< const QString > ecolablibInstallationDirectory = nullptr;    //! The directory where 'EcolabLib's data will be stored (e.g. receipt headers, preprints etc.)
+    const std::unique_ptr< const QString > fileManager = nullptr;   //! The path to open a file manager
+    const std::unique_ptr< const quint16 > initialzTreePort = nullptr;  //! The default port which shall be set for new z-Tree instances
+    const std::unique_ptr< const QStringList > installedLaTeXHeaders = nullptr; //! Stores all detected LaTeX headers
+    const std::unique_ptr< const QStringList > installedzTreeVersions = nullptr;    //! Stores all detected z-Tree versions
+    const std::unique_ptr< const QString > killallCommand = nullptr;    //! The path used to kill running z-Leaf instances
+    const std::unique_ptr< const QString > latexCommand = nullptr;  //! The path to compile a LaTeX file
+    const std::unique_ptr< const QString > lprCommand = nullptr;    //! The path to automatically print a postscript file
+    const std::unique_ptr< const QString > networkBroadcastAddress = nullptr;   //! The network broadcast address of the laboratory (used for wake-on-lan)
+    const std::unique_ptr< const QString > orseeURL = nullptr;  //! The URL to the laboratory's ORSEE page
+    const std::unique_ptr< const QString > postscriptViewer = nullptr;  //! The path to a postscript viewer
+    const std::unique_ptr< const QProcessEnvironment > processEnvironment = nullptr;    //! Stores a process environment for newly created processes
+    const std::unique_ptr< const QString > ps2pdfCommand = nullptr; //! The path to convert postscript files to pdf
+    const std::unique_ptr< const QString > publicKeyPathRoot = nullptr; //! The path to the public key file used for root access to the clients
+    const std::unique_ptr< const QString > publicKeyPathUser = nullptr;//! The path to the public key file used for user access to the clients
+    const std::unique_ptr< const QString > rcpCommand = nullptr;    //! The path to rcp to copy files to the clients
+    const std::unique_ptr< const QString > rmCommand = nullptr; //! The path to rm to remove surplus files after receipts creation
+    const std::unique_ptr< const QString > serverIP = nullptr;  //! The IP z-Tree and 'EcoLabLib' shall listen on
+    const std::unique_ptr< const quint16 > serverPort = nullptr;    //! The port 'EcoLabLib' shall listen on for client connections
+    const std::unique_ptr< const QString > sshCommand = nullptr;    //! The path to ssh
+    const std::unique_ptr< const QString > terminalEmulatorCommand = nullptr;   //! The path to a terminal emulator
+    const std::unique_ptr< const QString > userNameOnClients = nullptr; //! The name of the user used for experiments on the clients
+    const std::unique_ptr< const QString > vncViewer = nullptr; //! The path to a vnc viewer
+    const std::unique_ptr< const QString > wakeonlanCommand = nullptr;  //! The path to a wakeonlan command
+    const std::unique_ptr< const QString > webcamDisplayCommand = nullptr;  //! The path to a program to show webcams by URLs to a jpeg export
+    const std::unique_ptr< const QStringList > webcamNames = nullptr;   //! An array of the names of the webcams
+    const std::unique_ptr< const QStringList > webcamURLs = nullptr;    //! An array of the corresponding URLs (should be in the same order)
+    const std::unique_ptr< const QString > wineCommand = nullptr;   //! The path of wine (only relevant for UNIX systems)
+    const std::unique_ptr< const QString > wmctrlCommand = nullptr; //! The path of the wmctrl command to change window names on UNIX systems
+    const std::unique_ptr< const QString > xsetCommand = nullptr; //! The path of the xset command to deactivate screensavers on UNIX systems
+    const std::unique_ptr< const QString > zTreeInstallationDirectory = nullptr; //! The directory where all z-Tree executables are stored (in subfolders 'zTree_X.Y.Z' or 'zTree_X.Y.ZZ')
 
 signals:
 
 public slots:
 
 private:
-    QString *localzLeafName = nullptr;
 };
 
 #endif // SETTINGSSTORAGE_H

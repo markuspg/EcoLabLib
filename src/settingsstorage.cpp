@@ -55,11 +55,6 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     wineCommand{ argBuilder.wineCommand },
     wmctrlCommand{ argBuilder.wmctrlCommand },
     xsetCommand{ argBuilder.xsetCommand },
-    zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory },
-    localzLeafName{ argBuilder.localzLeafName }
+    zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory }
 {
-}
-
-ellSettingsStorage::~ellSettingsStorage() {
-    delete localzLeafName;
 }

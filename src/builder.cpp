@@ -93,7 +93,6 @@ void ellBuilder::ReadSettings() {
     QString *tempInitialzTreePort = ReadSettingsItem( "initial_ztree_port", false );
     killallCommand = ReadSettingsItem( "killall_command", true );
     latexCommand = ReadSettingsItem( "latex_command", true );
-    localzLeafName = ReadSettingsItem( "localzLeafName", false );
     lprCommand = ReadSettingsItem( "lpr_command", true );
     networkBroadcastAddress = ReadSettingsItem( "network_broadcast_address", false );
     orseeURL = ReadSettingsItem( "orsee_url", false );
@@ -117,11 +116,6 @@ void ellBuilder::ReadSettings() {
     wmctrlCommand = ReadSettingsItem( "wmctrl_command", true );
     xsetCommand = ReadSettingsItem( "xset_command", true );
     zTreeInstallationDirectory = ReadSettingsItem( "ztree_installation_directory", true );
-
-    // Let the local zLeaf name default to 'local' if no valid value was given in the settings
-    if ( !localzLeafName ) {
-        localzLeafName = new QString{ "local" };
-    }
 
     // Create the QStringLists by splitting
     adminUsers = SplitStringListsToStrings( '|', tempAdminUsers );
