@@ -19,13 +19,14 @@
 
 #include "receiptscreator.h"
 
-ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder,
+ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
                                         const QString &argDateString, const QString * const argLaTeXHeaderName,
                                         const QString &argPaymentFilePath, const QString &argPort,
                                         const ellSettingsStorage * const argSettingsStorage,
                                         const QString * const argzTreeDataTargetPath,
                                         QObject *argParent ) :
     QObject{ argParent },
+    anonymousReceipts{ argAnonReceipts },
     anonymousReceiptsPlaceholder{ argAnonymousReceiptsPlaceholder },
     dateString{ new QString{ argDateString } },
     fileCheckTimer{ this },

@@ -31,45 +31,68 @@
 #include <QVariant>
 
 
+//! Represents a session conducted in the laboratory
+/*!
+  This class represents a session conducted in the laboratory. It stores all settings relevant for this
+  session and consists of a 'ellzTree' instance and optional receipts printing facilities.
+ */
 class ellSession : public QObject
 {
     Q_OBJECT
 public:
+    //! 'ellSession's constructor which will be called by 'EcoLabLib'
+    /*!
+       This constructor creates a new session. The target path for z-Tree's data will be created and afterwards
+       z-Tree will be started. If all required components are available, also a 'ellReceiptsCreator' instance
+       for automatic receipts creation and printing will be initialized.
+       \param argAnonymousReceiptsPlaceholder Placeholder which shall be inserted for participant names if anonymous printing is required
+       \param argAssociatedClients This vector contains all clients belonging to this session
+       \param argLatexHeaderName The name of the for this session chosen LaTeX header
+       \param argAnonReceipts True, if anonymous receipts are required
+       \param argSettingsStorage The 'ellSettingsStorage' containing all settings
+       \param argzTreeDataTargetPath The path were z-Tree shall store its data (e.g. the gamesafe file)
+       \param argzTreePort The port this session's z-Tree shall listen on
+       \param argzTreeVersionString The version this session's z-Tree shall use
+       \param argParent 'ellSession's parent object
+     */
     explicit ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector< ellClient* > * const argAssociatedClients,
                          const QString &argLatexHeaderName, const bool &argAnonReceipts,
                          const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
-                         const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent = nullptr );
+                         const int argzTreePort, const QString &argzTreeVersionString, QObject *argParent = nullptr );
     ~ellSession();
 
     /*! Returns the data item with the given index
      *
-     * @param argIndex      The index of the desired item
+     * @param argIndex The index of the desired item
      */
     QVariant GetDataItem( int argIndex );
 signals:
+    /*!
+       This signal gets emitted if this session's z-Tree closed. After this the session requests its own cleanup.
+       \param argSession The session passes a pointer to itself, so that 'ellSessionsModel' deletes the correct session
+     */
     void SessionFinished( ellSession *argSession );
 
 public slots:
 
 private:
-    const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
-    QVector< ellClient* > *associatedClients = nullptr;             //! This vector stores all clients belonging to this session
-    const QString * const latexHeaderName;                          //! The name of the chosen LaTeX header
-    const bool printAnonymousReceipts = false;
-    ellReceiptsCreator *receiptsCreator = nullptr;
-    const ellSettingsStorage * const settingsStorage = nullptr;
-    QString * const zTreeDataTargetPath = nullptr;                  //! The path were the data of this zTree instance's session will be saved
-    ellzTree *zTreeInstance= nullptr;                            //! The session's zTree instance
-    const int zTreePort = 7000;
-    const QString zTreeVersionPath;                             //! The path to the version of zTree used by this session's instance
+    const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is required
+    std::unique_ptr< QVector< ellClient* > > associatedClients = nullptr; //! This vector stores all clients belonging to this session
+    const QString * const latexHeaderName;              //! The name of the chosen LaTeX header
+    const bool printAnonymousReceipts = false;          //! True, if anonymous receipts are required
+    ellReceiptsCreator *receiptsCreator = nullptr;      //! Is used to create and print the receipts
+    const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
+    QString * const zTreeDataTargetPath = nullptr;      //! The path were the data of this session's zTree instance shall be saved
+    ellzTree *zTreeInstance= nullptr;                   //! The session's zTree instance
+    const int zTreePort = 7000;         //! The port this session's z-Tree instance shall listen on
+    const QString zTreeVersionString;   //! The string of the version of zTree used by this session's instance
 
 private slots:
-    /*! Starts the session by creating instances of the relevant classes
-     */
+    //! Starts the session by creating instances of the relevant classes
     void InitializeClasses();
-    /*! Changes zTree's window title to contain its port number to make zTree windows distinguishable
-     */
+    //! Changes zTree's window title to contain its port number to make z-Tree windows distinguishable
     void RenameWindow();
+    //! This slot is called on finish of z-Tree and emits the 'SessionFinished' signal
     void zTreeClosed();
 };
 

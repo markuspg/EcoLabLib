@@ -38,7 +38,7 @@ struct ellPaymentEntry_t { QString computer; QString name; double payoff; };
 class ellReceiptsCreator : public QObject {
     Q_OBJECT
 public:
-    explicit ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder,
+    explicit ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
                                  const QString &argDateString, const QString * const argLaTeXHeaderName,
                                  const QString &argPaymentFilePath, const QString &argPort,
                                  const ellSettingsStorage * const argSettingsStorage,
@@ -52,6 +52,7 @@ signals:
 public slots:
 
 private:
+    const bool anonymousReceipts = true;                            //! If anymouse receipts shall be printed (true) or not (false)
     const QString * const anonymousReceiptsPlaceholder = nullptr;   //! Placeholder which shall be inserted for participant names if anonymous printing is desired (QString != "")
     const QString * const dateString = nullptr;                     //! The date string of the session to be printed ("YYMMDD_hhmm")
     ellReceiptsPrinter *receiptsPrinter = nullptr;                  //! Prints the created receipts in another thread

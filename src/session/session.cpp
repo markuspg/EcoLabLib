@@ -22,7 +22,7 @@
 ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector< ellClient* > * const argAssociatedClients,
                         const QString &argLatexHeaderName, const bool &argAnonReceipts,
                         const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
-                        const int argzTreePort, const QString &argzTreeVersionPath, QObject *argParent ) :
+                        const int argzTreePort, const QString &argzTreeVersionString, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceiptsPlaceholder{ new QString { argAnonymousReceiptsPlaceholder } },
     associatedClients{ argAssociatedClients },
@@ -31,22 +31,21 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector<
     settingsStorage{ argSettingsStorage },
     zTreeDataTargetPath{ new QString{ argzTreeDataTargetPath } },
     zTreePort{ argzTreePort },
-    zTreeVersionPath{ argzTreeVersionPath }
+    zTreeVersionString{ argzTreeVersionString }
 {
-    // This part ensures, that both class instances are created in the same minute, so that the payment file name can be guessed correctly
-    QDateTime current_time;
-    current_time  = QDateTime::currentDateTime();
-
-    // If in the last three seconds of a minute, wait for the next one to start
+    // If in the last three seconds of a minute, wait for the next one to start,
+    // so that z-Tree and the receipts printer have surely the same minute of start
     if ( QTime::currentTime().second() > 56 ) {
         QTimer::singleShot( 5000, this, SLOT( InitializeClasses() ) );
     } else {
         InitializeClasses();
     }
 
+#ifdef Q_OS_LINUX
     if ( settingsStorage->wmctrlCommand ) {
         QTimer::singleShot( 5000, this, SLOT( RenameWindow() ) );
     }
+#endif
 }
 
 ellSession::~ellSession() {
@@ -55,7 +54,6 @@ ellSession::~ellSession() {
         s->SetSessionPort();
         s->SetzLeafVersion();
     }
-    delete associatedClients;
     delete latexHeaderName;
     delete zTreeDataTargetPath;
 }
@@ -63,7 +61,7 @@ ellSession::~ellSession() {
 QVariant ellSession::GetDataItem( int argIndex ) {
     switch ( argIndex ) {
     case 0:
-        return QVariant{ zTreeVersionPath.split( '_', QString::KeepEmptyParts, Qt::CaseInsensitive )[ 1 ] };
+        return QVariant{ zTreeVersionString.split( '_', QString::KeepEmptyParts, Qt::CaseInsensitive )[ 1 ] };
     case 1:
         return QVariant{ zTreePort };
     default:
@@ -74,19 +72,19 @@ QVariant ellSession::GetDataItem( int argIndex ) {
 void ellSession::InitializeClasses() {
     // Create the new data directory
     QDir dir{ *zTreeDataTargetPath };
-    QString date_string( QDateTime::currentDateTime().toString( "yyMMdd_hhmm" ) );
-    if ( !dir.mkpath( *zTreeDataTargetPath + "/" + date_string + "-" + QString::number( zTreePort ) ) ) {
+    QString dateString( QDateTime::currentDateTime().toString( "yyMMdd_hhmm" ) );
+    zTreeDataTargetPath->append( "/" + dateString + "-" + QString::number( zTreePort ) );
+    if ( !dir.mkpath( *zTreeDataTargetPath ) ) {
         true;
     }
-    zTreeDataTargetPath->append( "/" + date_string + "-" + QString::number( zTreePort ) );
 
-    zTreeInstance = new ellzTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionPath, this };
+    zTreeInstance = new ellzTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionString, this };
     connect( zTreeInstance, SIGNAL( zTreeClosed( int,QProcess::ExitStatus ) ),
              this, SLOT( zTreeClosed() ) );
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
     if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
-        receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, date_string, latexHeaderName,
-                                                  QString{ *zTreeDataTargetPath + "/" + date_string + ".pay" },
+        receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, printAnonymousReceipts, dateString, latexHeaderName,
+                                                  QString{ *zTreeDataTargetPath + "/" + dateString + ".pay" },
                                                   QString::number( zTreePort ), settingsStorage,
                                                   zTreeDataTargetPath, this };
         true;
