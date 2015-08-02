@@ -44,7 +44,10 @@ unix {
 }
 
 OTHER_FILES += \
-    data/EcoLabLib.conf
+    data/EcoLabLib.conf \
+    doc/doc.md \
+    LICENSE \
+    data/example_header.tex
 
 DISTFILES += \
     LICENSE \
