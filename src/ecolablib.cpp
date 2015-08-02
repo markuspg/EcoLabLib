@@ -28,15 +28,15 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
 {
 }
 
-EcoLabLib::~EcoLabLib() {
-    delete settingsStorage;
-}
-
 void EcoLabLib::KillLocalzLeaves() {
     QProcess killzLeavesProcess;
     killzLeavesProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
 #ifdef Q_OS_UNIX
     killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
+#endif
+#ifdef Q_OS_WIN
+    killzLeafProcess.startDetached( "taskkill",
+                                    QStringList{} << "/IM" << "zleaf.exe" );
 #endif
 }
 
@@ -61,14 +61,6 @@ bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
     return showWebcamProcess.startDetached( *settingsStorage->webcamDisplayCommand, arguments );
 }
 
-void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
-                                 const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
-                                 const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion ) {
-    sessionsModel->push_back( new ellSession{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
-                                              argPrintAnonymousReceipts, settingsStorage, argzTreeDataTargetPath, argzTreePort,
-                                              argzTreeVersion, this } );
-}
-
 void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort ) {
     QProcess startLocalzLeafProcess;
     startLocalzLeafProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
@@ -79,7 +71,8 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
     program = *settingsStorage->wineCommand;
     arguments.append( *settingsStorage->zTreeInstallationDirectory
                       + "/zTree_" + argzLeafVersion + "/zleaf.exe" );
-#else
+#endif
+#ifdef Q_OS_WIN
     program = QString{ *settingsStorage->zTreeInstallationDirectory
                        + "/zTree_" + argzLeafVersion + "/zleaf.exe" };
 #endif
@@ -87,4 +80,12 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
               << "/channel" << QString::number( argzTreePort - 7000 )
               << "/name" << argzLeafName;
     startLocalzLeafProcess.startDetached( program, arguments );
+}
+
+void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
+                                 const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
+                                 const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion ) {
+    sessionsModel->push_back( new ellSession{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
+                                              argPrintAnonymousReceipts, settingsStorage, argzTreeDataTargetPath, argzTreePort,
+                                              argzTreeVersion, this } );
 }
