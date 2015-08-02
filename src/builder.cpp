@@ -38,7 +38,7 @@ bool ellBuilder::CheckPath( const QString * const argPath ) {
     return true;
 }
 
-quint16 *ellBuilder::ConvertToNumber( const QString * const argValueString ) {
+quint16 *ellBuilder::ConvertToNumber( QString *& argValueString ) {
     quint16 *tempNumber = nullptr;
     if ( argValueString ) {
         bool conversionSuccessful = false;
@@ -49,12 +49,14 @@ quint16 *ellBuilder::ConvertToNumber( const QString * const argValueString ) {
         }
     }
     delete argValueString;
+    argValueString = nullptr;
     return tempNumber;
 }
 
 void ellBuilder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
     // Detect the installed LaTeX headers
     if ( ecolablibInstallationDirectory ) {
+        // Get all files ending with '_header.tex'
         QDir latexDirectory{ *ecolablibInstallationDirectory,
                     "*_header.tex", QDir::Name, QDir::CaseSensitive | QDir::Files | QDir::Readable };
         if ( !latexDirectory.exists() || latexDirectory.entryList().isEmpty() ) {
@@ -68,6 +70,7 @@ void ellBuilder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
 
     // Detect the installed zTree versions
     if ( zTreeInstallationDirectory ) {
+        // Get all directories beginning with 'zTree_'
         QDir zTreeDirectory{ *zTreeInstallationDirectory, "zTree_*", QDir::Name,
                     QDir::NoDotAndDotDot | QDir::Dirs | QDir::Readable | QDir::CaseSensitive };
         if ( zTreeDirectory.entryList().isEmpty() ) {
@@ -124,7 +127,8 @@ void ellBuilder::ReadSettings() {
     adminUsers = SplitStringListsToStrings( '|', tempAdminUsers );
     webcamNames = SplitStringListsToStrings( '|', tempWebcamNames );
     webcamURLs = SplitStringListsToStrings( '|', tempWebcamURLs );
-    if ( webcamNames && webcamURLs && !( webcamNames->length() == webcamURLs->length() ) ) {
+    // If the names or URLs are missing or their lengths do not match, delete them
+    if ( !webcamNames || !webcamURLs || !( webcamNames->length() == webcamURLs->length() ) ) {
         delete webcamNames;
         webcamNames = nullptr;
         delete webcamURLs;
@@ -138,12 +142,14 @@ void ellBuilder::ReadSettings() {
 }
 
 QString *ellBuilder::ReadSettingsItem(const QString &argVariableName, const bool &argIsFile) {
+    // If setting variable is not available, return 'nullptr'
     if ( !settings.contains( argVariableName ) ) {
         true;
 
         return nullptr;
     } else {
         QString *tempString = new QString{ settings.value( argVariableName ).toString() };
+        // If the variable is a file, check for existance and set to 'nullptr' on failure
         if ( argIsFile && !CheckPath( tempString ) ) {
             delete tempString;
             tempString = nullptr;
@@ -158,11 +164,12 @@ QString *ellBuilder::ReadSettingsItem(const QString &argVariableName, const bool
     return nullptr;
 }
 
-QStringList *ellBuilder::SplitStringListsToStrings( const QChar &argSep, const QString * const argListString ) {
+QStringList *ellBuilder::SplitStringListsToStrings( const QChar &argSep, QString *& argListString ) {
     QStringList *tempList = nullptr;
     if ( argListString ) {
         tempList = new QStringList{ argListString->split( argSep, QString::SkipEmptyParts ) };
         delete argListString;
+        argListString = nullptr;
     }
     return tempList;
 }

@@ -47,7 +47,8 @@ OTHER_FILES += \
     data/EcoLabLib.conf \
     doc/doc.md \
     LICENSE \
-    data/example_header.tex
+    data/example_header.tex \
+    Doxyfile
 
 DISTFILES += \
     LICENSE \

@@ -26,6 +26,12 @@
 #include <QProcessEnvironment>
 #include <QSettings>
 
+//! This class is only used for the creation of the 'ellSettingsStorage' of 'EcoLabLib'
+/*!
+  'ellBuilder' loads all settings for 'EcoLabLib' which will be stored in 'EcoLabLib's
+  'settingsStorage' variable. Values which failed to load will be set to 'nullptr'
+  to signal this failure to higher level code using those values.
+ */
 class ellBuilder : public QObject {
     Q_OBJECT
 public:
@@ -86,7 +92,7 @@ private:
      * @param argValueString    The string which shall be converted to a numeric value
      * @return                  A pointer to the quint16 on success, otherwise nullptr
      */
-    quint16 *ConvertToNumber( const QString * const argValueString );
+    quint16 *ConvertToNumber( QString *& argValueString );
     //! Detects installed zTree versions and LaTeX headers and initializes the respective QStringLists (settings must be read before!)
     void DetectInstalledZTreeVersionsAndLaTeXHeaders();
     //! Reads all settings from QSettings
@@ -104,7 +110,7 @@ private:
      * @param argListString     The QString which shall be split
      * @return                  The QStringList on success, nullptr otherwise
      */
-    QStringList *SplitStringListsToStrings( const QChar &argSep, const QString * const argListString );
+    QStringList *SplitStringListsToStrings( const QChar &argSep, QString *& argListString );
 };
 
 #endif // BUILDER_H
