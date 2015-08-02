@@ -52,8 +52,8 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector<
 ellSession::~ellSession() {
     delete anonymousReceiptsPlaceholder;
     for ( auto s : *associatedClients ) {
-        s->SetSessionPort( nullptr );
-        s->SetzLeafVersion( nullptr );
+        s->SetSessionPort();
+        s->SetzLeafVersion();
     }
     delete associatedClients;
     delete latexHeaderName;

@@ -72,7 +72,7 @@ void ellClient::ReadMessage() {
     in.setVersion( QDataStream::Qt_5_2 );
 
     quint16 messageID = 0;
-    blockSize = 0;
+    quint16 blockSize = 0;
     if ( blockSize == 0 ) {
         if ( socket->bytesAvailable() < ( int )sizeof( quint16 ) ) {
             return;

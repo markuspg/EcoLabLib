@@ -33,47 +33,91 @@ enum class ellClientState_t : unsigned short int {
     ZLEAF_RUNNING
 };
 
+//! Represents a client in the laboratory
+/*!
+  This class represents a client in the laboratory. Each client has to be specified in 'EcoLabLib's settings file.
+  A client consists of its fixed attributes, its changing state and some executable functions
+ */
 class ellClient : public QObject
 {
     Q_OBJECT
 public:
+    //! 'ellClient's constructor which will be called by 'ellClientManager'
+    /*!
+       The constructor initializes the 'ellClient's const attributes. The default state is 'disconnected'.
+       \param argHostName The hostname the client has
+       \param argIP Its IP address
+       \param argMAC Ist MAC address
+       \param argWebcamAvailable If a webcam is attached to the client
+       \param argXPosition The client's x coordinate in the laboratory
+       \param argYPosition The client's y coordinate in the laboratory
+       \param argSettingsStorage The 'ellSettingsStorage' containing all settings
+       \param argParent 'ellClient's parent object
+     */
     explicit ellClient( const QString &argHostName, const QString &argIP, const QString &argMAC,
                         const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
                         const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     ellClient( const ellClient &argClient ) = delete;
 
-    const QString hostName;
-    const QString ip;
-    const QString mac;
-    const bool webcamAvailable = 0;
-    const unsigned int xPosition = 1;
-    const unsigned int yPosition = 1;
+    const QString hostName;             //! The hostname of the client
+    const QString ip;                   //! Its IP address
+    const QString mac;                  //! Its MAC address
+    const bool webcamAvailable = 0;     //! If a webcam is attached to the client
+    const unsigned int xPosition = 1;   //! The client's x coordinate in the laboratory
+    const unsigned int yPosition = 1;   //! The client's y coordinate in the laboratory
 
-    //! This function gets frequently polled by Labcontrol to update the table view showing the clients
-    ellClientState_t GetClientState() const { return state; }
-
+    //! Tries to boot the client using wakeonlan
     void Boot();
+    /*!
+       \brief This function gets frequently polled by Labcontrol to update the table view showing the clients
+       \return The client's current state
+     */
+    ellClientState_t GetClientState() const { return state; }
+    /*!
+       \brief This function is used by 'Labcontrol' to add port information to the table views
+       \return A pointer to a QString containing the port of the session the client belongs to ('nullptr' if the client belongs to no session)
+     */
     const QString *GetSessionPort() const { return sessionPort.get(); }
+    //! Kills any z-Leaves on the clients
     void KillzLeaf();
-    void SetSessionPort( QString * const argSessionPort );
-    void SetzLeafVersion( QString * const argzLeafVersion );
+    /*!
+       \brief This function updates the stored session port and is used by 'lcSessionStarter' or 'ellSession's destructor
+       \param argSessionPort The new 'ellSession' port or nothing, if the client shall be freed
+     */
+    void SetSessionPort( QString * const argSessionPort = nullptr );
+    /*!
+       \brief This function updates the stored z-Leaf version and is used by 'lcMainWindow' and 'lcSessionStarter' or 'ellSession's destructor
+       \param argzLeafVersion The new 'ellSession' z-Leaf version or nothing, if the client shall be freed
+     */
+    void SetzLeafVersion( QString * const argzLeafVersion = nullptr );
+    /*!
+       \brief This function gets called by 'ellClientManager' to update the socket of this client on new connection attempts
+       \param argSocket The new socket
+     */
     void SetSocket( QTcpSocket *argSocket );
+    //! Shows locally the desktop of the client using a vnc viewer
     void ShowDesktop();
+    //! Shuts down the client
     void Shutdown();
+    /*!
+     * \brief This function starts a z-Leaf on the client
+     * \param fakeName An optional fake name, if the client shall not connect to z-Tree using its hostname
+     */
     void StartzLeaf( const QString * const fakeName = nullptr );
 
 signals:
 
 public slots:
+    //! This slot gets called if the client's socket disconnected and cleans it up, also changing the client's status
     void Disconnected();
+    //! This slot gets called if new messages where received, reads them and starts necessary actions
     void ReadMessage();
 
 private:
-    quint16 blockSize = 0;
     std::unique_ptr < const QString > sessionPort = nullptr;    //! The port the z-Leaf on this client uses (for the 'TVClients')
-    const ellSettingsStorage * const settingsStorage = nullptr;
-    QTcpSocket *socket = nullptr;
-    ellClientState_t state = ellClientState_t::DISCONNECTED;
+    const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
+    QTcpSocket *socket = nullptr;   //! The socket this client is currently connected on
+    ellClientState_t state = ellClientState_t::DISCONNECTED;    //! The client's state
     std::unique_ptr < const QString > zleafVersion = nullptr;   //! The z-Leaf version this client shall use
 
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
