@@ -41,6 +41,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         throw 20;
     }
     bool conversionSuccess = false;
+    int clientQuantity = 0;
     clientQuantity = clientData.value( "client_quantity", "0" ).toInt( &conversionSuccess );
     if ( !conversionSuccess ) {
         throw 20;
@@ -85,7 +86,6 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
 }
 
 ellClientManager::~ellClientManager() {
-    delete clientIPsToClientsMap;
     delete clients;
 }
 

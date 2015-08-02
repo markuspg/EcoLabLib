@@ -32,13 +32,32 @@
 
 class ellSettingsStorage;
 
+//! Contains and manages all known clients
+/*!
+  This class does the client management part of 'EcoLabLib'. It receives connection attempts
+  of clients, accepts valid ones and updates the 'ellClient's statuses and sockets.
+ */
 class ellClientManager : public QTcpServer
 {
     Q_OBJECT
 public:
+    //! 'ellClientManager's constructor which will be called by 'EcoLabLib'
+    /*!
+       The constructor creates the QMap linking client IPs to the actual 'ellClient' instances,
+       initializes and starts the listening of the TCP server and creates all 'ellClient' instances.
+       \param argSettingsStorage The 'ellSettingsStorage' containing all settings
+       \param argParent 'ellClientManager's parent object
+     */
     explicit ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
+    //! This destructor cleans up all data on the heap
     ~ellClientManager();
 
+    //! Returns the managed clients
+    /*!
+       This function returns the managed clients which are used by
+       'Labcontrol' to initialize the table views displaying the clients.
+       \return A QVector containing all managed (=existing) clients
+     */
     QVector< ellClient* > *GetClients() const { return clients; }
 
 signals:
@@ -46,12 +65,15 @@ signals:
 public slots:
 
 private:
-    QMap< QString, ellClient* > * clientIPsToClientsMap = nullptr;
-    QVector< ellClient* > *clients = nullptr;
-    int clientQuantity = 0;
-    const ellSettingsStorage * const settingsStorage;
+    std::unique_ptr< QMap< QString, ellClient* > > clientIPsToClientsMap = nullptr; //! This QMap is used to find the 'ellClient' instances corresponding to IP addresses. This is used to treat client connection attempts correctly
+    QVector< ellClient* > *clients = nullptr; //! This QVector stores all 'ellClient' instances
+    const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
 
 private slots:
+    //! Handles incoming connections
+    /*!
+       This slot handles incoming connections. The address of the peer is searched for in the 'clientIPsToClientsMap'. If it is found, the old connection of the corresponding client will be replaced with the new one. If the peer's IP is not found in the map, the connection will be aborted.
+     */
     void HandleIncomingConnection();
 };
 

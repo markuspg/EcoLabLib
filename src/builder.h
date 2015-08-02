@@ -35,6 +35,12 @@
 class ellBuilder : public QObject {
     Q_OBJECT
 public:
+    //! 'ellBuilder's constructor which will be called in 'main.cpp' of 'Labcontrol'
+    /*!
+       This constructor loads all settings from QSettings and does some postprocessing
+       on the loaded values if required.
+       \param argParent 'ellBuilder's parent object
+     */
     explicit ellBuilder( QObject *argParent = nullptr );
 
     QStringList *adminUsers = nullptr;
