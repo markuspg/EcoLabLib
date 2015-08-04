@@ -24,13 +24,13 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
     QObject{ argParent },
     sessionsModel{ new ellSessionsModel{ this } },
     settingsStorage{ new ellSettingsStorage{ argBuilder, this } },
-#ifdef Q_OS_UNIX
-    userName{ settingsStorage->processEnvironment->value( "USER", "" ) },
-#endif
-#ifdef Q_OS_WIN
-    userName{ settingsStorage->processEnvironment->value( "USERNAME", "" ) },
-#endif
-    clientManager{ settingsStorage, this }
+    clientManager{ settingsStorage, this },
+  #ifdef Q_OS_UNIX
+      userName{ settingsStorage->processEnvironment->value( "USER", "" ) }
+  #endif
+  #ifdef Q_OS_WIN
+      userName{ settingsStorage->processEnvironment->value( "USERNAME", "" ) }
+  #endif
 {
     CheckIfUserIsAdmin();
 }

@@ -117,10 +117,12 @@ private:
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
     ellClientManager clientManager;             //! Stores and manages all clients
     bool userIsAdmin = false;       //! This is true, if the user has administrative rights, otherwise false
-    const QString userName = "";    //! The name of the user running 'Labcontrol'
 
     //! Checks if the user running 'Labcontrol' has administrative rights and sets 'userIsAdmin' accordingly
     void CheckIfUserIsAdmin();
+
+public:
+    const QString userName = "";    //! The name of the user running 'Labcontrol'
 };
 
 #endif // ECOLABLIB_H
