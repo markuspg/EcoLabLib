@@ -47,6 +47,7 @@ public:
 
     const std::unique_ptr< const QStringList > adminUsers = nullptr;    //! Stores all users having administrative rights
     const std::unique_ptr< const QString > browserCommand = nullptr;    //! Stores the path to open a browser
+    const std::unique_ptr< const QString > certFile = nullptr;  //! The path to the certificate for the websockets server in 'ellClientManager'
     const std::unique_ptr< const quint16 > defaultReceiptIndex = nullptr;   //! Stores the index (counting from 0) of the default receipt to use
     const std::unique_ptr< const QString > dvipsCommand = nullptr;  //! The path to convert a dvi file to postscript
     const std::unique_ptr< const QString > ecolablibInstallationDirectory = nullptr;    //! The directory where 'EcolabLib's data will be stored (e.g. receipt headers, preprints etc.)
@@ -55,6 +56,7 @@ public:
     const std::unique_ptr< const quint16 > initialzTreePort = nullptr;  //! The default port which shall be set for new z-Tree instances
     const std::unique_ptr< const QStringList > installedLaTeXHeaders = nullptr; //! Stores all detected LaTeX headers
     const std::unique_ptr< const QStringList > installedzTreeVersions = nullptr;    //! Stores all detected z-Tree versions
+    const std::unique_ptr< const QString > keyFile = nullptr;  //! The path to the private key for the websockets server in 'ellClientManager'
     const std::unique_ptr< const QString > killallCommand = nullptr;    //! The path used to kill running z-Leaf instances
     const std::unique_ptr< const QString > latexCommand = nullptr;  //! The path to compile a LaTeX file
     const std::unique_ptr< const QString > lprCommand = nullptr;    //! The path to automatically print a postscript file

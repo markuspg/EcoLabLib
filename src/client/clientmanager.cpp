@@ -22,8 +22,55 @@
 ellClientManager::ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
     QTcpServer{ argParent },
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
-    settingsStorage{ argSettingsStorage }
+    settingsStorage{ argSettingsStorage },
+    websocketServer{ new QWebSocketServer{ QStringLiteral( "ellClientManager" ),
+                     QWebSocketServer::SecureMode, this } }
 {
+    QSslConfiguration sslConfiguration;
+    QFile certFile{ *settingsStorage->certFile };
+    QFile keyFile{ *settingsStorage->keyFile };
+    certFile.open( QIODevice::ReadOnly );
+    keyFile.open( QIODevice::ReadOnly );
+    QSslCertificate certificate{ &certFile, QSsl::Pem };
+    QSslKey sslKey{ &keyFile, QSsl::Rsa, QSsl::Pem };
+    certFile.close();
+    keyFile.close();
+    sslConfiguration.setPeerVerifyMode( QSslSocket::VerifyNone );
+    sslConfiguration.setLocalCertificate( certificate );
+    sslConfiguration.setPrivateKey( sslKey );
+    sslConfiguration.setProtocol( QSsl::TlsV1SslV3 );
+    websocketServer->setSslConfiguration( sslConfiguration );
+
+    bool successfullyStarted = false;
+    // Listening is only possible, if the server port was set correctly
+    if ( settingsStorage->serverPort ) {
+        // Listen on every available network device
+        if ( *settingsStorage->globalListening ) {
+            if ( !websocketServer->listen( QHostAddress::Any, *settingsStorage->serverPort + 2 ) ) {
+                throw "Listening failed";
+            } else {
+                successfullyStarted = true;
+            }
+        // Just listen on the network device specified by its IP
+        } else {
+            if ( settingsStorage->serverIP ) {
+                if ( !websocketServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort + 2 ) ) {
+                    throw "Listening failed";
+                } else {
+                    successfullyStarted = true;
+                }
+            } else {
+                throw "The mandatory server ip was not set";
+            }
+        }
+    } else {
+        throw "The mandatory server port was not set";
+    }
+    if ( successfullyStarted ) {
+        connect( websocketServer, &QWebSocketServer::newConnection,
+                 this, &ellClientManager::HandleIncomingWebSocketConnection );
+    }
+
     // Listening is only possible, if the server port was set correctly
     if ( settingsStorage->serverPort ) {
         // Listen on every available network device
@@ -99,6 +146,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
 }
 
 ellClientManager::~ellClientManager() {
+    websocketServer->close();
     delete clients;
 }
 
@@ -115,6 +163,26 @@ void ellClientManager::HandleIncomingConnection() {
                      connectingClient, &ellClient::ReadMessage );
             connect( incConnection, &QTcpSocket::disconnected,
                      incConnection, &QTcpSocket::deleteLater );
+        } else {
+            incConnection->abort();
+            delete incConnection;
+        }
+    }
+}
+
+void ellClientManager::HandleIncomingWebSocketConnection() {
+    while ( websocketServer->hasPendingConnections() ) {
+        QWebSocket *incConnection = websocketServer->nextPendingConnection();
+        QString peerAddress = incConnection->peerAddress().toString();
+        if ( clientIPsToClientsMap->contains( peerAddress ) ) {
+            ellClient *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
+            connectingClient->SetWebSocket( incConnection );
+            connect( incConnection, &QWebSocket::disconnected,
+                     connectingClient, &ellClient::WebSocketDisconnected );
+            // connect( incConnection, &QTcpSocket::readyRead,
+            //          connectingClient, &ellClient::ReadMessage );
+            connect( incConnection, &QWebSocket::disconnected,
+                     incConnection, &QWebSocket::deleteLater );
         } else {
             incConnection->abort();
             delete incConnection;

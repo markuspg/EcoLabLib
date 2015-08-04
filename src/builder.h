@@ -45,6 +45,7 @@ public:
 
     QStringList *adminUsers = nullptr;
     QString *browserCommand = nullptr;
+    QString *certFile = nullptr;
     quint16 *defaultReceiptIndex = nullptr;
     QString *dvipsCommand = nullptr;
     QString *ecolablibInstallationDirectory = nullptr;
@@ -53,6 +54,7 @@ public:
     quint16 *initialzTreePort = nullptr;
     QStringList *installedLaTeXHeaders = nullptr;
     QStringList *installedzTreeVersions = nullptr;
+    QString *keyFile = nullptr;
     QString *killallCommand = nullptr;
     QString *latexCommand = nullptr;
     QString *lprCommand = nullptr;

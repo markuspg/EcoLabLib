@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QWebSocket>
 
 enum class ellClientState_t : unsigned short int {
     BOOTING,
@@ -101,6 +102,7 @@ public:
        \param argSocket The new socket
      */
     void SetSocket( QTcpSocket *argSocket );
+    void SetWebSocket( QWebSocket *argWebSocket );
     //! Shows locally the desktop of the client using a vnc viewer
     void ShowDesktop();
     //! Shuts down the client
@@ -118,12 +120,14 @@ public slots:
     void Disconnected();
     //! This slot gets called if new messages where received, reads them and starts necessary actions
     void ReadMessage();
+    void WebSocketDisconnected();
 
 private:
     std::unique_ptr < const QString > sessionPort = nullptr;    //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
     QTcpSocket *socket = nullptr;   //! The socket this client is currently connected on
     ellClientState_t state = ellClientState_t::DISCONNECTED;    //! The client's state
+    QWebSocket *webSocket = nullptr;    //! The websocket this client is currently connected on
     std::unique_ptr < const QString > zleafVersion = nullptr;   //! The z-Leaf version this client shall use
 
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );

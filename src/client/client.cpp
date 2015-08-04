@@ -165,6 +165,18 @@ void ellClient::SetSocket( QTcpSocket *argSocket ) {
     }
 }
 
+void ellClient::SetWebSocket( QWebSocket *argWebSocket ) {
+    if ( webSocket ) {
+        webSocket->abort();
+        delete webSocket;
+    }
+    webSocket = argWebSocket;
+    webSocket->setParent( this );
+    if ( webSocket->isValid() ) {
+        state = ellClientState_t::CONNECTED;
+    }
+}
+
 void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
     zleafVersion.reset( argzLeafVersion );
 }
@@ -197,4 +209,10 @@ void ellClient::StartzLeaf( const QString * const fakeName ) {
                                      + "|" + *sessionPort + "|" + *fakeName } );
         delete fakeName;
     }
+}
+
+void ellClient::WebSocketDisconnected() {
+    delete webSocket;
+    webSocket = nullptr;
+    state = ellClientState_t::DISCONNECTED;
 }

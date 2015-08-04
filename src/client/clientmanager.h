@@ -25,10 +25,13 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QSslError>
+#include <QSslKey>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QTextStream>
 #include <QVector>
+#include <QWebSocketServer>
 
 class ellSettingsStorage;
 
@@ -68,6 +71,7 @@ private:
     std::unique_ptr< QMap< QString, ellClient* > > clientIPsToClientsMap = nullptr; //! This QMap is used to find the 'ellClient' instances corresponding to IP addresses. This is used to treat client connection attempts correctly
     QVector< ellClient* > *clients = nullptr; //! This QVector stores all 'ellClient' instances
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
+    QWebSocketServer *websocketServer = nullptr;
 
 private slots:
     //! Handles incoming connections
@@ -75,6 +79,7 @@ private slots:
        This slot handles incoming connections. The address of the peer is searched for in the 'clientIPsToClientsMap'. If it is found, the old connection of the corresponding client will be replaced with the new one. If the peer's IP is not found in the map, the connection will be aborted.
      */
     void HandleIncomingConnection();
+    void HandleIncomingWebSocketConnection();
 };
 
 #endif // CLIENTMANAGER_H
