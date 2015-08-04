@@ -38,6 +38,17 @@ bool ellBuilder::CheckPath( const QString * const argPath ) {
     return true;
 }
 
+bool *ellBuilder::ConvertToBool( QString *& argValueString ) {
+    bool *tempBool = nullptr;
+    if ( argValueString ) {
+        QVariant temp{ *argValueString };
+        tempBool = new bool{ temp.toBool() };
+    }
+    delete argValueString;
+    argValueString = nullptr;
+    return tempBool;
+}
+
 quint16 *ellBuilder::ConvertToNumber( QString *& argValueString ) {
     quint16 *tempNumber = nullptr;
     if ( argValueString ) {
@@ -90,6 +101,7 @@ void ellBuilder::ReadSettings() {
     dvipsCommand = ReadSettingsItem( "dvips_command", true );
     ecolablibInstallationDirectory = ReadSettingsItem( "ecolablib_installation_directory", true );
     fileManager = ReadSettingsItem( "file_manager", true );
+    QString *tempGlobalListening = ReadSettingsItem( "global_listening", false );
     QString *tempInitialzTreePort = ReadSettingsItem( "initial_ztree_port", false );
     killallCommand = ReadSettingsItem( "killall_command", true );
     latexCommand = ReadSettingsItem( "latex_command", true );
@@ -128,6 +140,9 @@ void ellBuilder::ReadSettings() {
         delete webcamURLs;
         webcamURLs = nullptr;
     }
+
+    // Convert the boolean values
+    globalListening = ConvertToBool( tempGlobalListening );
 
     // Convert the numeric values
     defaultReceiptIndex = ConvertToNumber( tempDefaultReceiptIndex );

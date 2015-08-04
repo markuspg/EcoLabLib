@@ -49,6 +49,7 @@ public:
     QString *dvipsCommand = nullptr;
     QString *ecolablibInstallationDirectory = nullptr;
     QString *fileManager = nullptr;
+    bool *globalListening = nullptr;
     quint16 *initialzTreePort = nullptr;
     QStringList *installedLaTeXHeaders = nullptr;
     QStringList *installedzTreeVersions = nullptr;
@@ -92,6 +93,12 @@ private:
      * @return          True, if the path could be found, false otherwise
      */
     bool CheckPath( const QString * const argPath );
+    //! Tries to convert the given string to a boolean value
+    /**
+     * @param argValueString    The string which shall be converted to a boolean value
+     * @return                  A pointer to the bool on success, otherwise nullptr
+     */
+    bool *ConvertToBool( QString *& argValueString );
     //! Tries to convert the given string to a quint16
     /**
      * @param argValueString    The string which shall be converted to a numeric value

@@ -27,6 +27,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     dvipsCommand{ argBuilder.dvipsCommand },
     ecolablibInstallationDirectory{ argBuilder.ecolablibInstallationDirectory },
     fileManager{ argBuilder.fileManager },
+    globalListening{ argBuilder.globalListening },
     initialzTreePort{ argBuilder.initialzTreePort },
     installedLaTeXHeaders{ argBuilder.installedLaTeXHeaders },
     installedzTreeVersions{ argBuilder.installedzTreeVersions },

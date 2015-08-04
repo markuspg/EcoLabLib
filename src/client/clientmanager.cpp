@@ -24,12 +24,25 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
     settingsStorage{ argSettingsStorage }
 {
-    if ( settingsStorage->serverIP && settingsStorage->serverPort ) {
-        if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
-            throw 20;
+    // Listening is only possible, if the server port was set correctly
+    if ( settingsStorage->serverPort ) {
+        // Listen on every available network device
+        if ( *settingsStorage->globalListening ) {
+            if ( !listen( QHostAddress::Any, *settingsStorage->serverPort ) ) {
+                throw "Listening failed";
+            }
+        // Just listen on the network device specified by its IP
+        } else {
+            if ( settingsStorage->serverIP ) {
+                if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
+                    throw "Listening failed";
+                }
+            } else {
+                throw "The mandatory server ip was not set";
+            }
         }
     } else {
-        throw 20;
+        throw "The mandatory server port was not set";
     }
 
     connect( this, &ellClientManager::newConnection, this, &ellClientManager::HandleIncomingConnection );
