@@ -80,6 +80,12 @@ public:
     const QString *GetSessionPort() const { return sessionPort.get(); }
     //! Kills any z-Leaves on the clients
     void KillzLeaf();
+    //! This command opens the client's file system in a file manager
+    /*!
+     * \param argAsRoot True, if the file system shall be opened with root rights; false, otherwise
+     * \param argRunLocally True, if the file manager shall be opened locally; false, otherwise
+     */
+    void OpenFileSystem( const bool &argAsRoot, const bool &argRunLocally ) const;
     /*!
        \brief This function updates the stored session port and is used by 'lcSessionStarter' or 'ellSession's destructor
        \param argSessionPort The new 'ellSession' port or nothing, if the client shall be freed

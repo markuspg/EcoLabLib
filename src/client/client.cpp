@@ -67,6 +67,32 @@ void ellClient::KillzLeaf() {
     SendMessage( 2 );
 }
 
+void ellClient::OpenFileSystem( const bool &argAsRoot, const bool &argRunLocally ) const {
+    Q_UNUSED( argRunLocally );
+
+    // Do nothing, if the client is not in an applicable state
+    if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
+        return;
+    }
+
+    QString userToBeUsed;
+    if ( argAsRoot ) {
+        userToBeUsed = "root";
+    } else {
+        if ( settingsStorage->userNameOnClients ) {
+            userToBeUsed = *settingsStorage->userNameOnClients;
+        } else {
+            return;
+        }
+    }
+
+    QStringList arguments = QStringList{} << QString{ "sftp://" + userToBeUsed + "@" + ip };
+
+    QProcess openFilesystemProcess;
+    openFilesystemProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    openFilesystemProcess.startDetached( *settingsStorage->fileManager, arguments );
+}
+
 void ellClient::ReadMessage() {
     QDataStream in( socket );
     in.setVersion( QDataStream::Qt_5_2 );
