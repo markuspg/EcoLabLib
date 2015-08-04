@@ -71,6 +71,7 @@ public:
     const std::unique_ptr< const quint16 > serverPort = nullptr;    //! The port 'EcoLabLib' shall listen on for client connections
     const std::unique_ptr< const QString > sshCommand = nullptr;    //! The path to ssh
     const std::unique_ptr< const QString > terminalEmulatorCommand = nullptr;   //! The path to a terminal emulator
+    const std::unique_ptr< const bool > useSSH = nullptr;  //! True, if the server shall use SSH to send commands to the clients, otherwise false
     const std::unique_ptr< const QString > userNameOnClients = nullptr; //! The name of the user used for experiments on the clients
     const std::unique_ptr< const QString > vncViewer = nullptr; //! The path to a vnc viewer
     const std::unique_ptr< const QString > wakeonlanCommand = nullptr;  //! The path to a wakeonlan command

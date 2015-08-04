@@ -47,6 +47,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     serverPort{ argBuilder.serverPort },
     sshCommand{ argBuilder.sshCommand },
     terminalEmulatorCommand{ argBuilder.terminalEmulatorCommand },
+    useSSH{ argBuilder.useSSH },
     userNameOnClients{ argBuilder.userNameOnClients },
     vncViewer{ argBuilder.vncViewer },
     wakeonlanCommand{ argBuilder.wakeonlanCommand },

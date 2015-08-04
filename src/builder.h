@@ -69,6 +69,7 @@ public:
     quint16 *serverPort = nullptr;
     QString *sshCommand = nullptr;
     QString *terminalEmulatorCommand = nullptr;
+    bool *useSSH = nullptr;
     QString *userNameOnClients = nullptr;
     QString *vncViewer = nullptr;
     QString *wakeonlanCommand = nullptr;

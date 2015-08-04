@@ -118,6 +118,7 @@ void ellBuilder::ReadSettings() {
     QString *tempServerPort = ReadSettingsItem( "server_port", false );
     sshCommand = ReadSettingsItem( "ssh_command", true );
     terminalEmulatorCommand = ReadSettingsItem( "terminal_emulator_command", true );
+    QString *tempUseSSH = ReadSettingsItem( "use_ssh", false );
     userNameOnClients = ReadSettingsItem( "user_name_on_clients", false );
     vncViewer = ReadSettingsItem( "vnc_viewer", true );
     wakeonlanCommand = ReadSettingsItem( "wakeonlan_command", true );
@@ -143,6 +144,7 @@ void ellBuilder::ReadSettings() {
 
     // Convert the boolean values
     globalListening = ConvertToBool( tempGlobalListening );
+    useSSH = ConvertToBool( tempUseSSH );
 
     // Convert the numeric values
     defaultReceiptIndex = ConvertToNumber( tempDefaultReceiptIndex );
