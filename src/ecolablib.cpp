@@ -26,6 +26,34 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
     settingsStorage{ new ellSettingsStorage{ argBuilder, this } },
     clientManager{ settingsStorage, this }
 {
+    CheckIfUserIsAdmin();
+}
+
+void EcoLabLib::CheckIfUserIsAdmin() {
+    // Query the current user's name
+    QString userName{ "" };
+#ifdef Q_OS_UNIX
+    userName = settingsStorage->processEnvironment->value( "USER", "" );
+#endif
+#ifdef Q_OS_WIN
+    userName = settingsStorage->processEnvironment->value( "USERNAME", "" );
+#endif
+    if ( userName == "" ) {
+        true;
+        userIsAdmin = false;
+        return;
+    }
+
+    if ( !( settingsStorage->adminUsers == nullptr ) ) {
+        for ( auto s : *settingsStorage->adminUsers ) {
+            if ( s == userName ) {
+                userIsAdmin = true;
+                return;
+            }
+        }
+    }
+
+    userIsAdmin = false;
 }
 
 void EcoLabLib::KillLocalzLeaves() {

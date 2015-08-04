@@ -56,6 +56,12 @@ public:
        \return A QVector containing all managed (=existing) clients
      */
     const QVector< ellClient* > *GetClients() const { return clientManager.GetClients(); }
+    /*!
+       This function returns true, if the user running 'Labcontrol' has
+       administrative rights, otherwise it returns false.
+       \return True, if the user has administrative rights, otherwise false
+     */
+    bool GetIfUserIsAdmin() const { return userIsAdmin; }
     //! Returns the 'ellSettingsStorage'
     /*!
        This function returns the 'ellSettingsStorage' of 'EcoLabLib' which is also
@@ -110,6 +116,10 @@ private:
     ellSessionsModel *sessionsModel = nullptr;  //! Stores all started sessions
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
     ellClientManager clientManager;             //! Stores and manages all clients
+    bool userIsAdmin = false;       //! This is true, if the user has administrative rights, otherwise false
+
+    //! Checks if the user running 'Labcontrol' has administrative rights and sets 'userIsAdmin' accordingly
+    void CheckIfUserIsAdmin();
 };
 
 #endif // ECOLABLIB_H
