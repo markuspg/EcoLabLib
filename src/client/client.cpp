@@ -132,20 +132,10 @@ void ellClient::ReadMessage() {
 }
 
 void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
-    QByteArray block;
-    QDataStream out{ &block, QIODevice::WriteOnly };
-    out.setVersion( QDataStream::Qt_5_2 );
-    out << ( quint16 )0;
-    out << ( quint16 )argMessageID;
     if ( argMessage ) {
-        out << *argMessage;
+        webSocket->sendTextMessage( QString::number( argMessageID ) + "|"
+                                    + *argMessage );
         delete argMessage;
-    }
-    out.device()->seek( 0 );
-    out << ( quint16 )( block.size() - sizeof( quint16 ) * 2 );
-
-    if ( socket ) {
-        socket->write( block );
     }
 }
 
