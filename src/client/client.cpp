@@ -67,9 +67,7 @@ void ellClient::KillzLeaf() {
     SendMessage( 2 );
 }
 
-void ellClient::OpenFileSystem( const bool &argAsRoot, const bool &argRunLocally ) const {
-    Q_UNUSED( argRunLocally );
-
+void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
     // Do nothing, if the client is not in an applicable state
     if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
         return;
