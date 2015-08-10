@@ -86,6 +86,7 @@ public:
      * \param argAsRoot True, if the file system shall be opened with root rights; false, otherwise
      */
     void OpenFileSystem( const bool &argAsRoot ) const;
+    void OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot );
     /*!
        \brief This function updates the stored session port and is used by 'lcSessionStarter' or 'ellSession's destructor
        \param argSessionPort The new 'ellSession' port or nothing, if the client shall be freed

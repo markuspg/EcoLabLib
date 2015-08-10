@@ -91,6 +91,42 @@ void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
     openFilesystemProcess.startDetached( *settingsStorage->fileManager, arguments );
 }
 
+void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot ) {
+    if ( settingsStorage->terminalEmulatorCommand ) {
+        // Do nothing, if the client is not in an applicable state
+        if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
+            return;
+        }
+
+        QStringList arguments;
+        if ( !argOpenAsRoot ) {
+            arguments << "--title" << hostName << "-e"
+                      << QString{ *settingsStorage->sshCommand + " -i " + *settingsStorage->publicKeyPathUser
+                                  + " " + *settingsStorage->userNameOnClients + "@" + ip };
+        } else {
+            arguments << "--title" << hostName << "-e"
+                      << QString{ *settingsStorage->sshCommand + " -i " + *settingsStorage->publicKeyPathRoot + " " + "root@" + ip };
+        }
+
+        if ( settingsStorage->terminalEmulatorCommand->contains( "konsole" ) ) {
+            arguments.prepend( "--new-tab" );
+            arguments.prepend( "--show-tabbar" );
+        } else {
+            if ( settingsStorage->terminalEmulatorCommand->contains( "gnome-terminal" ) ) {
+                arguments.prepend( "--tab" );
+            }
+        }
+
+        if ( !argCommand.isEmpty() ) {
+            arguments.append( " '" + argCommand + "'" );
+        }
+
+        QProcess openTerminalProcess;
+        openTerminalProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+        openTerminalProcess.startDetached( *settingsStorage->terminalEmulatorCommand, arguments );
+    }
+}
+
 void ellClient::ReadMessage() {
     QDataStream in( socket );
     in.setVersion( QDataStream::Qt_5_2 );
