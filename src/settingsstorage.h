@@ -48,6 +48,7 @@ public:
     const std::unique_ptr< const QStringList > adminUsers = nullptr;    //! Stores all users having administrative rights
     const std::unique_ptr< const QString > browserCommand = nullptr;    //! Stores the path to open a browser
     const std::unique_ptr< const QString > certFile = nullptr;  //! The path to the certificate for the websockets server in 'ellClientManager'
+    const std::unique_ptr< const QString > clientConnectionPassword = nullptr;    //! Stores the path to open a browser
     const std::unique_ptr< const quint16 > defaultReceiptIndex = nullptr;   //! Stores the index (counting from 0) of the default receipt to use
     const std::unique_ptr< const QString > dvipsCommand = nullptr;  //! The path to convert a dvi file to postscript
     const std::unique_ptr< const QString > ecolablibInstallationDirectory = nullptr;    //! The directory where 'EcolabLib's data will be stored (e.g. receipt headers, preprints etc.)

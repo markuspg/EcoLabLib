@@ -46,6 +46,7 @@ public:
     QStringList *adminUsers = nullptr;
     QString *browserCommand = nullptr;
     QString *certFile = nullptr;
+    QString *clientConnectionPassword = nullptr;
     quint16 *defaultReceiptIndex = nullptr;
     QString *dvipsCommand = nullptr;
     QString *ecolablibInstallationDirectory = nullptr;

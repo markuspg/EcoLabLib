@@ -98,6 +98,7 @@ void ellBuilder::ReadSettings() {
     QString *tempAdminUsers = ReadSettingsItem( "admin_users", false );
     browserCommand = ReadSettingsItem( "browser_command", true );
     certFile = ReadSettingsItem( "cert_file_path", true );
+    clientConnectionPassword = ReadSettingsItem( "client_connection_password", false );
     QString *tempDefaultReceiptIndex = ReadSettingsItem( "default_receipt_index", false );
     dvipsCommand = ReadSettingsItem( "dvips_command", true );
     ecolablibInstallationDirectory = ReadSettingsItem( "ecolablib_installation_directory", true );

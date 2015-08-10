@@ -134,6 +134,8 @@ void ellClientManager::HandleIncomingWebSocketConnection() {
         if ( clientIPsToClientsMap->contains( peerAddress ) ) {
             ellClient *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
             connectingClient->SetWebSocket( incConnection );
+            connect( incConnection, SIGNAL( textMessageReceived( QString ) ),
+                     connectingClient, SLOT( PasswordReceived( QString ) ) );
             connect( incConnection, &QWebSocket::disconnected,
                      connectingClient, &ellClient::WebSocketDisconnected );
             // connect( incConnection, &QTcpSocket::readyRead,

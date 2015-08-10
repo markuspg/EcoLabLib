@@ -121,6 +121,15 @@ void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRo
     }
 }
 
+void ellClient::PasswordReceived( QString argMessage ) {
+    if ( argMessage != *settingsStorage->clientConnectionPassword ) {
+        webSocket->close( QWebSocketProtocol::CloseCodePolicyViolated, "Wrong password given" );
+    } else {
+        disconnect( webSocket, SIGNAL( textMessageReceived( QString ) ),
+                    this, SLOT( PasswordReceived( QString ) ) );
+    }
+}
+
 void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
     if ( argMessage ) {
         webSocket->sendTextMessage( QString::number( argMessageID ) + "|"

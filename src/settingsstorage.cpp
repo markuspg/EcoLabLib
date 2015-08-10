@@ -24,6 +24,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     adminUsers{ argBuilder.adminUsers },
     browserCommand{ argBuilder.browserCommand },
     certFile{ argBuilder.certFile },
+    clientConnectionPassword{ argBuilder.clientConnectionPassword },
     defaultReceiptIndex{ argBuilder.defaultReceiptIndex },
     dvipsCommand{ argBuilder.dvipsCommand },
     ecolablibInstallationDirectory{ argBuilder.ecolablibInstallationDirectory },
