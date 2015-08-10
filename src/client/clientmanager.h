@@ -27,8 +27,6 @@
 #include <QSettings>
 #include <QSslError>
 #include <QSslKey>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QTextStream>
 #include <QVector>
 #include <QWebSocketServer>
@@ -40,7 +38,7 @@ class ellSettingsStorage;
   This class does the client management part of 'EcoLabLib'. It receives connection attempts
   of clients, accepts valid ones and updates the 'ellClient's statuses and sockets.
  */
-class ellClientManager : public QTcpServer
+class ellClientManager : public QObject
 {
     Q_OBJECT
 public:
@@ -78,7 +76,6 @@ private slots:
     /*!
        This slot handles incoming connections. The address of the peer is searched for in the 'clientIPsToClientsMap'. If it is found, the old connection of the corresponding client will be replaced with the new one. If the peer's IP is not found in the map, the connection will be aborted.
      */
-    void HandleIncomingConnection();
     void HandleIncomingWebSocketConnection();
 };
 

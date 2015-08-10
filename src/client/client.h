@@ -23,7 +23,6 @@
 #include "../settingsstorage.h"
 
 #include <QObject>
-#include <QTcpSocket>
 #include <QWebSocket>
 
 enum class ellClientState_t : unsigned short int {
@@ -86,6 +85,11 @@ public:
      * \param argAsRoot True, if the file system shall be opened with root rights; false, otherwise
      */
     void OpenFileSystem( const bool &argAsRoot ) const;
+    //! This command opens a SSH session connected to the client in a terminal emulator on the server
+    /*!
+     * \param argCommand An optional command to be executed (pass an empty string, if no command shall be run)
+     * \param argOpenAsRoot True, if the command shall be run as root, otherwise false)
+     */
     void OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot );
     /*!
        \brief This function updates the stored session port and is used by 'lcSessionStarter' or 'ellSession's destructor
@@ -101,7 +105,6 @@ public:
        \brief This function gets called by 'ellClientManager' to update the socket of this client on new connection attempts
        \param argSocket The new socket
      */
-    void SetSocket( QTcpSocket *argSocket );
     void SetWebSocket( QWebSocket *argWebSocket );
     //! Shows locally the desktop of the client using a vnc viewer
     void ShowDesktop();
@@ -117,15 +120,11 @@ signals:
 
 public slots:
     //! This slot gets called if the client's socket disconnected and cleans it up, also changing the client's status
-    void Disconnected();
-    //! This slot gets called if new messages where received, reads them and starts necessary actions
-    void ReadMessage();
     void WebSocketDisconnected();
 
 private:
     std::unique_ptr < const QString > sessionPort = nullptr;    //! The port the z-Leaf on this client uses (for the 'TVClients')
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
-    QTcpSocket *socket = nullptr;   //! The socket this client is currently connected on
     ellClientState_t state = ellClientState_t::DISCONNECTED;    //! The client's state
     QWebSocket *webSocket = nullptr;    //! The websocket this client is currently connected on
     std::unique_ptr < const QString > zleafVersion = nullptr;   //! The z-Leaf version this client shall use

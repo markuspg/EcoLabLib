@@ -57,12 +57,6 @@ void ellClient::Boot() {
     state = ellClientState_t::BOOTING;
 }
 
-void ellClient::Disconnected() {
-    delete socket;
-    socket = nullptr;
-    state = ellClientState_t::DISCONNECTED;
-}
-
 void ellClient::KillzLeaf() {
     SendMessage( 2 );
 }
@@ -127,66 +121,18 @@ void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRo
     }
 }
 
-void ellClient::ReadMessage() {
-    QDataStream in( socket );
-    in.setVersion( QDataStream::Qt_5_2 );
-
-    quint16 messageID = 0;
-    quint16 blockSize = 0;
-    if ( blockSize == 0 ) {
-        if ( socket->bytesAvailable() < ( int )sizeof( quint16 ) ) {
-            return;
-        }
-        in >> blockSize;
-        in >> messageID;
-    }
-
-    if ( socket->bytesAvailable() < blockSize ) {
-        return;
-    }
-
-    qDebug() << QString::number( blockSize );
-    qDebug() << QString::number( messageID );
-
-    QString serverAnswer;
-    in >> serverAnswer;
-
-    qDebug() << serverAnswer;
-
-    switch ( messageID ) {
-    case 0:
-        state = ellClientState_t::ZLEAF_RUNNING;
-        break;
-    case 1:
-        state = ellClientState_t::CONNECTED;
-        break;
-    default:
-        true;
-    }
-}
-
 void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
     if ( argMessage ) {
         webSocket->sendTextMessage( QString::number( argMessageID ) + "|"
                                     + *argMessage );
         delete argMessage;
+    } else {
+        webSocket->sendTextMessage( QString::number( argMessageID ) );
     }
 }
 
 void ellClient::SetSessionPort( QString * const argSessionPort ) {
     sessionPort.reset( argSessionPort );
-}
-
-void ellClient::SetSocket( QTcpSocket *argSocket ) {
-    if ( socket ) {
-        socket->abort();
-        delete socket;
-    }
-    socket = argSocket;
-    socket->setParent( this );
-    if ( socket->isValid() ) {
-        state = ellClientState_t::CONNECTED;
-    }
 }
 
 void ellClient::SetWebSocket( QWebSocket *argWebSocket ) {

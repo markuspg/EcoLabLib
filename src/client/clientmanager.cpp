@@ -20,7 +20,7 @@
 #include "clientmanager.h"
 
 ellClientManager::ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
-    QTcpServer{ argParent },
+    QObject{ argParent },
     clientIPsToClientsMap{ new QMap< QString, ellClient* > },
     settingsStorage{ argSettingsStorage },
     websocketServer{ new QWebSocketServer{ QStringLiteral( "ellClientManager" ),
@@ -46,7 +46,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     if ( settingsStorage->serverPort ) {
         // Listen on every available network device
         if ( *settingsStorage->globalListening ) {
-            if ( !websocketServer->listen( QHostAddress::Any, *settingsStorage->serverPort + 2 ) ) {
+            if ( !websocketServer->listen( QHostAddress::Any, *settingsStorage->serverPort ) ) {
                 throw "Listening failed";
             } else {
                 successfullyStarted = true;
@@ -54,7 +54,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         // Just listen on the network device specified by its IP
         } else {
             if ( settingsStorage->serverIP ) {
-                if ( !websocketServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort + 2 ) ) {
+                if ( !websocketServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
                     throw "Listening failed";
                 } else {
                     successfullyStarted = true;
@@ -70,29 +70,6 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         connect( websocketServer, &QWebSocketServer::newConnection,
                  this, &ellClientManager::HandleIncomingWebSocketConnection );
     }
-
-    // Listening is only possible, if the server port was set correctly
-    if ( settingsStorage->serverPort ) {
-        // Listen on every available network device
-        if ( *settingsStorage->globalListening ) {
-            if ( !listen( QHostAddress::Any, *settingsStorage->serverPort ) ) {
-                throw "Listening failed";
-            }
-        // Just listen on the network device specified by its IP
-        } else {
-            if ( settingsStorage->serverIP ) {
-                if ( !listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
-                    throw "Listening failed";
-                }
-            } else {
-                throw "The mandatory server ip was not set";
-            }
-        }
-    } else {
-        throw "The mandatory server port was not set";
-    }
-
-    connect( this, &ellClientManager::newConnection, this, &ellClientManager::HandleIncomingConnection );
 
     QSettings clientData{ "Economic Laboratory", "EcoLabLib" };
 
@@ -148,26 +125,6 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
 ellClientManager::~ellClientManager() {
     websocketServer->close();
     delete clients;
-}
-
-void ellClientManager::HandleIncomingConnection() {
-    while ( this->hasPendingConnections() ) {
-        QTcpSocket *incConnection = this->nextPendingConnection();
-        QString peerAddress = incConnection->peerAddress().toString();
-        if ( clientIPsToClientsMap->contains( peerAddress ) ) {
-            ellClient *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
-            connectingClient->SetSocket( incConnection );
-            connect( incConnection, &QTcpSocket::disconnected,
-                     connectingClient, &ellClient::Disconnected );
-            connect( incConnection, &QTcpSocket::readyRead,
-                     connectingClient, &ellClient::ReadMessage );
-            connect( incConnection, &QTcpSocket::disconnected,
-                     incConnection, &QTcpSocket::deleteLater );
-        } else {
-            incConnection->abort();
-            delete incConnection;
-        }
-    }
 }
 
 void ellClientManager::HandleIncomingWebSocketConnection() {
