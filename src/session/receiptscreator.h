@@ -82,8 +82,6 @@ private:
     const ellSettingsStorage * const settingsStorage;               //! Contains all external settings
     const QString * const zTreeDataTargetPath = nullptr;            //! The path were the data of this zTree instance's session will be saved
 
-    //! This function creates a LaTeX receipts file from the appeared payment file
-    void CreateReceiptsFromPaymentFile();
     //! Extracts the data of the participants whose receipts shall be printed
     /*!
        This function parses the payment file and extracts and returns all data relevant for the receipts.
@@ -107,6 +105,8 @@ private:
     void MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, QVector< ellPaymentEntry_t* > *argDataVector );
 
 private slots:
+    //! This function creates a LaTeX receipts file from the appeared payment file
+    void CreateReceiptsFromPaymentFile();
     //! Deletes the ellReceiptsPrinter instance after successful printing
     void DeleteReceiptsPrinterInstance();
     //! Prints the receipts, if the payment file exists

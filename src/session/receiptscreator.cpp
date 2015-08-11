@@ -246,6 +246,7 @@ void ellReceiptsCreator::PrintReceipts() {
     // If the payment file exists, print it
     if ( paymentFile.exists() ) {
         fileCheckTimer.stop();
-        CreateReceiptsFromPaymentFile();
+        // This delay shall ensure, that the payment file is completely written by z-Tree
+        QTimer::singleShot( 5000, this, SLOT( CreateReceiptsFromPaymentFile() ) );
     }
 }
