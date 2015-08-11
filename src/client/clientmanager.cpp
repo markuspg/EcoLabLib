@@ -140,8 +140,6 @@ void ellClientManager::HandleIncomingWebSocketConnection() {
                      connectingClient, &ellClient::WebSocketDisconnected );
             // connect( incConnection, &QTcpSocket::readyRead,
             //          connectingClient, &ellClient::ReadMessage );
-            connect( incConnection, &QWebSocket::disconnected,
-                     incConnection, &QWebSocket::deleteLater );
         } else {
             incConnection->abort();
             delete incConnection;

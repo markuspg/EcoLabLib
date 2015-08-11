@@ -134,6 +134,8 @@ private:
     void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
 
 private slots:
+    //! This slot is called on new text messages arriving at the websocket. It processes those and undertakes needed actions.
+    void TextMessageReceived( QString argMessage );
 };
 
 #endif // CLIENT_H

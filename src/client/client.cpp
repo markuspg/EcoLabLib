@@ -127,6 +127,8 @@ void ellClient::PasswordReceived( QString argMessage ) {
     } else {
         disconnect( webSocket, SIGNAL( textMessageReceived( QString ) ),
                     this, SLOT( PasswordReceived( QString ) ) );
+        connect( webSocket, SIGNAL( textMessageReceived( QString ) ),
+                 this, SLOT( TextMessageReceived( QString ) ) );
     }
 }
 
@@ -190,8 +192,29 @@ void ellClient::StartzLeaf( const QString * const fakeName ) {
     }
 }
 
+void ellClient::TextMessageReceived( QString argMessage ) {
+    QStringList tempMessageSplit = argMessage.split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
+
+    bool conversionSucceeded = false;
+    int messageID = tempMessageSplit[ 0 ].toInt( &conversionSucceeded );
+    if ( !conversionSucceeded ) {
+        throw "Conversion to int failed";
+    }
+
+    switch ( messageID ) {
+    case 0:
+        state = ellClientState_t::ZLEAF_RUNNING;
+        break;
+    case 1:
+        state = ellClientState_t::CONNECTED;
+        break;
+    default:
+        true;
+    }
+}
+
 void ellClient::WebSocketDisconnected() {
-    delete webSocket;
+    webSocket->deleteLater();
     webSocket = nullptr;
     state = ellClientState_t::DISCONNECTED;
 }
