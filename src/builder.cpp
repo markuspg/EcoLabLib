@@ -49,12 +49,13 @@ bool *ellBuilder::ConvertToBool( QString *& argValueString ) {
     return tempBool;
 }
 
-quint16 *ellBuilder::ConvertToNumber( QString *& argValueString ) {
+quint16 *ellBuilder::ConvertToNumber( const QString &argVariableName, QString *& argValueString ) {
     quint16 *tempNumber = nullptr;
     if ( argValueString ) {
         bool conversionSuccessful = false;
         tempNumber = new quint16{ argValueString->toUShort( &conversionSuccessful ) };
         if ( !conversionSuccessful ) {
+            SaveInvalidSettings( argVariableName );
             delete tempNumber;
             tempNumber = nullptr;
         }
@@ -139,6 +140,7 @@ void ellBuilder::ReadSettings() {
     webcamURLs = SplitStringListsToStrings( '|', tempWebcamURLs );
     // If the names or URLs are missing or their lengths do not match, delete them
     if ( !webcamNames || !webcamURLs || !( webcamNames->length() == webcamURLs->length() ) ) {
+        SaveInvalidSettings( "general webcam settings" );
         delete webcamNames;
         webcamNames = nullptr;
         delete webcamURLs;
@@ -150,32 +152,42 @@ void ellBuilder::ReadSettings() {
     useSSH = ConvertToBool( tempUseSSH );
 
     // Convert the numeric values
-    defaultReceiptIndex = ConvertToNumber( tempDefaultReceiptIndex );
-    initialzTreePort = ConvertToNumber( tempInitialzTreePort );
-    serverPort = ConvertToNumber( tempServerPort );
+    defaultReceiptIndex = ConvertToNumber( "default_receipt_index", tempDefaultReceiptIndex );
+    initialzTreePort = ConvertToNumber( "initial_ztree_port", tempInitialzTreePort );
+    serverPort = ConvertToNumber( "server_port", tempServerPort );
 }
 
 QString *ellBuilder::ReadSettingsItem(const QString &argVariableName, const bool &argIsFile) {
     // If setting variable is not available, return 'nullptr'
     if ( !settings.contains( argVariableName ) ) {
         true;
+        SaveInvalidSettings( argVariableName );
 
         return nullptr;
     } else {
         QString *tempString = new QString{ settings.value( argVariableName ).toString() };
         // If the variable is a file, check for existance and set to 'nullptr' on failure
         if ( argIsFile && !CheckPath( tempString ) ) {
+            SaveInvalidSettings( argVariableName );
             delete tempString;
             tempString = nullptr;
         }
         // Empty strings count as not set, so delete them for correct error handling
         if ( tempString && tempString->isEmpty() ) {
+            SaveInvalidSettings( argVariableName );
             delete tempString;
             tempString = nullptr;
         }
         return tempString;
     }
     return nullptr;
+}
+
+void ellBuilder::SaveInvalidSettings( const QString &argVariableName ) {
+    if ( !notProperlySetVariables ) {
+        notProperlySetVariables = new QStringList{};
+    }
+    notProperlySetVariables->append( argVariableName );
 }
 
 QStringList *ellBuilder::SplitStringListsToStrings( const QChar &argSep, QString *& argListString ) {

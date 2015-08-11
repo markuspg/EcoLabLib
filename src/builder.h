@@ -60,6 +60,7 @@ public:
     QString *latexCommand = nullptr;
     QString *lprCommand = nullptr;
     QString *networkBroadcastAddress = nullptr;
+    QStringList *notProperlySetVariables = nullptr;
     QString *orseeURL = nullptr;
     QString *postscriptViewer = nullptr;
     const QProcessEnvironment * const processEnvironment = nullptr;
@@ -105,10 +106,11 @@ private:
     bool *ConvertToBool( QString *& argValueString );
     //! Tries to convert the given string to a quint16
     /**
+     * @param argVariableName   The name of the variable which shall be converted
      * @param argValueString    The string which shall be converted to a numeric value
      * @return                  A pointer to the quint16 on success, otherwise nullptr
      */
-    quint16 *ConvertToNumber( QString *& argValueString );
+    quint16 *ConvertToNumber( const QString &argVariableName, QString *& argValueString );
     //! Detects installed zTree versions and LaTeX headers and initializes the respective QStringLists (settings must be read before!)
     void DetectInstalledZTreeVersionsAndLaTeXHeaders();
     //! Reads all settings from QSettings
@@ -120,6 +122,11 @@ private:
      * @return                  The represented value, if reading was successful, otherwise 'nullptr'
      */
     QString *ReadSettingsItem( const QString &argVariableName, const bool &argIsFile );
+    //! Saves settings which failed to load properly into the 'notProperlySetVariables' QStringList
+    /**
+     * \param argVariableName The name of the variable which failed to be loaded properly
+     */
+    void SaveInvalidSettings( const QString &argVariableName );
     //! Tries to convert the given QString to a QStringList by splitting at argSep
     /**
      * @param argSep            The seperator character, at whom shall be split

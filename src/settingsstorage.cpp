@@ -38,6 +38,7 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     latexCommand{ argBuilder.latexCommand },
     lprCommand{ argBuilder.lprCommand },
     networkBroadcastAddress{ argBuilder.networkBroadcastAddress },
+    notProperlySetVariables{ argBuilder.notProperlySetVariables },
     orseeURL{ argBuilder.orseeURL },
     postscriptViewer{ argBuilder.postscriptViewer },
     processEnvironment{ argBuilder.processEnvironment },
@@ -62,4 +63,8 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
     xsetCommand{ argBuilder.xsetCommand },
     zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory }
 {
+}
+
+ellSettingsStorage::~ellSettingsStorage() {
+    delete notProperlySetVariables;
 }

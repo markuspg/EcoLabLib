@@ -44,6 +44,7 @@ public:
      */
     explicit ellSettingsStorage( const ellBuilder &argBuilder, QObject *argParent = nullptr );
     ellSettingsStorage( const ellSettingsStorage &argSettingsStorage ) = delete;
+    ~ellSettingsStorage();
 
     const std::unique_ptr< const QStringList > adminUsers = nullptr;    //! Stores all users having administrative rights
     const std::unique_ptr< const QString > browserCommand = nullptr;    //! Stores the path to open a browser
@@ -62,6 +63,7 @@ public:
     const std::unique_ptr< const QString > latexCommand = nullptr;  //! The path to compile a LaTeX file
     const std::unique_ptr< const QString > lprCommand = nullptr;    //! The path to automatically print a postscript file
     const std::unique_ptr< const QString > networkBroadcastAddress = nullptr;   //! The network broadcast address of the laboratory (used for wake-on-lan)
+    const QStringList * const notProperlySetVariables = nullptr;    //! This list stores all variables whose loading or initialization failed
     const std::unique_ptr< const QString > orseeURL = nullptr;  //! The URL to the laboratory's ORSEE page
     const std::unique_ptr< const QString > postscriptViewer = nullptr;  //! The path to a postscript viewer
     const std::unique_ptr< const QProcessEnvironment > processEnvironment = nullptr;    //! Stores a process environment for newly created processes
