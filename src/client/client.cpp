@@ -133,12 +133,14 @@ void ellClient::PasswordReceived( QString argMessage ) {
 }
 
 void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
-    if ( argMessage ) {
-        webSocket->sendTextMessage( QString::number( argMessageID ) + "|"
-                                    + *argMessage );
-        delete argMessage;
-    } else {
-        webSocket->sendTextMessage( QString::number( argMessageID ) );
+    if ( webSocket ) {
+        if ( argMessage ) {
+            webSocket->sendTextMessage( QString::number( argMessageID ) + "|"
+                                        + *argMessage );
+            delete argMessage;
+        } else {
+            webSocket->sendTextMessage( QString::number( argMessageID ) );
+        }
     }
 }
 
