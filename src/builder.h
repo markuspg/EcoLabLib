@@ -67,8 +67,8 @@ public:
     QString *ps2pdfCommand = nullptr;
     QString *publicKeyPathRoot = nullptr;
     QString *publicKeyPathUser = nullptr;
-    QString *rcpCommand = nullptr;
     QString *rmCommand = nullptr;
+    QString *scpCommand = nullptr;
     QString *serverIP = nullptr;
     quint16 *serverPort = nullptr;
     QString *sshCommand = nullptr;

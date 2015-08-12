@@ -45,7 +45,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     // Listening is only possible, if the server port was set correctly
     if ( settingsStorage->serverPort ) {
         // Listen on every available network device
-        if ( *settingsStorage->globalListening ) {
+        if ( settingsStorage->globalListening && *settingsStorage->globalListening ) {
             if ( !websocketServer->listen( QHostAddress::Any, *settingsStorage->serverPort ) ) {
                 throw "Listening failed";
             } else {

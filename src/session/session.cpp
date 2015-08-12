@@ -82,7 +82,8 @@ void ellSession::InitializeClasses() {
     connect( zTreeInstance, SIGNAL( zTreeClosed( int,QProcess::ExitStatus ) ),
              this, SLOT( zTreeClosed() ) );
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
-    if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand && settingsStorage->latexCommand ) {
+    if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand
+         && settingsStorage->ecolablibInstallationDirectory && settingsStorage->latexCommand ) {
         receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, printAnonymousReceipts, dateString, latexHeaderName,
                                                   QString{ *zTreeDataTargetPath + "/" + dateString + ".pay" },
                                                   settingsStorage, zTreeDataTargetPath, this };

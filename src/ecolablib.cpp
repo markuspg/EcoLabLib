@@ -42,7 +42,7 @@ void EcoLabLib::CheckIfUserIsAdmin() {
         return;
     }
 
-    if ( !( settingsStorage->adminUsers == nullptr ) ) {
+    if ( settingsStorage->adminUsers ) {
         for ( auto s : *settingsStorage->adminUsers ) {
             if ( s == userName ) {
                 userIsAdmin = true;
@@ -55,6 +55,10 @@ void EcoLabLib::CheckIfUserIsAdmin() {
 }
 
 void EcoLabLib::KillLocalzLeaves() {
+    if ( !settingsStorage->killallCommand ) {
+        return;
+    }
+
     QProcess killzLeavesProcess;
     killzLeavesProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
 #ifdef Q_OS_UNIX
@@ -67,20 +71,28 @@ void EcoLabLib::KillLocalzLeaves() {
 }
 
 bool EcoLabLib::ShowORSEE() {
-    QProcess showORSEEProcess;
-    showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
-    return showORSEEProcess.startDetached( *settingsStorage->browserCommand,
-                                           QStringList{ *settingsStorage->orseeURL } );
+    if ( settingsStorage->browserCommand && settingsStorage->orseeURL ) {
+        QProcess showORSEEProcess;
+        showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+        return showORSEEProcess.startDetached( *settingsStorage->browserCommand,
+                                               QStringList{ *settingsStorage->orseeURL } );
+    }
 }
 
 bool EcoLabLib::ShowPreprints() {
-    QProcess showPreprintsProcess;
-    showPreprintsProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
-    QStringList arguments{ QStringList{} << *settingsStorage->ecolablibInstallationDirectory +  "/preprints" };
-    return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
+    if ( settingsStorage->fileManager && settingsStorage->ecolablibInstallationDirectory ) {
+        QProcess showPreprintsProcess;
+        showPreprintsProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+        QStringList arguments{ QStringList{} << *settingsStorage->ecolablibInstallationDirectory +  "/preprints" };
+        return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
+    }
 }
 
 bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
+    if ( !settingsStorage->webcamDisplayCommand ) {
+        return false;
+    }
+
     QProcess showWebcamProcess;
     showWebcamProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
     QStringList arguments{ QStringList{} << argWebcamURL };
@@ -94,6 +106,10 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
     QString program;
     QStringList arguments;
 #ifdef Q_OS_UNIX
+    if ( !settingsStorage->wineCommand || !settingsStorage->zTreeInstallationDirectory ) {
+        return;
+    }
+
     program = *settingsStorage->wineCommand;
     arguments.append( *settingsStorage->zTreeInstallationDirectory
                       + "/zTree_" + argzLeafVersion + "/zleaf.exe" );

@@ -34,6 +34,10 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 }
 
 void ellClient::Boot() {
+    if ( !settingsStorage->networkBroadcastAddress || !settingsStorage->serverIP
+         || !settingsStorage->wakeonlanCommand ) {
+        return;
+    }
     if ( state == ellClientState_t::CONNECTED || state == ellClientState_t::SHUTTING_DOWN ) {
         return;
     }
@@ -62,6 +66,10 @@ void ellClient::KillzLeaf() {
 }
 
 void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
+    if ( !settingsStorage->fileManager ) {
+        return;
+    }
+
     // Do nothing, if the client is not in an applicable state
     if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
         return;
@@ -86,7 +94,7 @@ void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
 }
 
 void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot ) {
-    if ( settingsStorage->terminalEmulatorCommand ) {
+    if ( settingsStorage->terminalEmulatorCommand && settingsStorage->sshCommand ) {
         // Do nothing, if the client is not in an applicable state
         if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
             return;
@@ -94,10 +102,16 @@ void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRo
 
         QStringList arguments;
         if ( !argOpenAsRoot ) {
+            if ( !settingsStorage->publicKeyPathUser || !settingsStorage->userNameOnClients ) {
+                return;
+            }
             arguments << "--title" << hostName << "-e"
                       << QString{ *settingsStorage->sshCommand + " -i " + *settingsStorage->publicKeyPathUser
                                   + " " + *settingsStorage->userNameOnClients + "@" + ip };
         } else {
+            if ( !settingsStorage->publicKeyPathRoot ) {
+                return;
+            }
             arguments << "--title" << hostName << "-e"
                       << QString{ *settingsStorage->sshCommand + " -i " + *settingsStorage->publicKeyPathRoot + " " + "root@" + ip };
         }
@@ -165,6 +179,10 @@ void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
 }
 
 void ellClient::ShowDesktop() {
+    if ( !settingsStorage->vncViewer ) {
+        return;
+    }
+
     QStringList arguments{ ip };
 
     QProcess showDesktopProcess;
@@ -178,7 +196,7 @@ void ellClient::Shutdown() {
 
 void ellClient::StartzLeaf( const QString * const fakeName ) {
     // Don't crash if the port or version for z-Leaf are not set yet
-    if ( !sessionPort || !zleafVersion ) {
+    if ( !sessionPort || !settingsStorage->serverIP || !zleafVersion ) {
         return;
         if ( fakeName ) {
             delete fakeName;

@@ -116,8 +116,8 @@ void ellBuilder::ReadSettings() {
     ps2pdfCommand = ReadSettingsItem( "ps2pdf_command", true );
     publicKeyPathRoot = ReadSettingsItem( "public_key_path_root", true );
     publicKeyPathUser = ReadSettingsItem( "public_key_path_user", true );
-    rcpCommand = ReadSettingsItem( "rcp_command", true );
     rmCommand = ReadSettingsItem( "rm_command", true );
+    scpCommand = ReadSettingsItem( "rcp_command", true );
     serverIP = ReadSettingsItem( "server_ip", false );
     QString *tempServerPort = ReadSettingsItem( "server_port", false );
     sshCommand = ReadSettingsItem( "ssh_command", true );

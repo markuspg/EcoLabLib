@@ -10,6 +10,9 @@ ellReceiptsPrinter::ellReceiptsPrinter( const QString * const argDateString, con
 }
 
 void ellReceiptsPrinter::run() {
+    if ( !settingsStorage->latexCommand ) {
+        return;
+    }
     // Compile the TeX file to dvi
     QStringList arguments;
     arguments << "-interaction" << "batchmode" << QString{ *dateString + ".tex" };
@@ -23,6 +26,9 @@ void ellReceiptsPrinter::run() {
         return;
     }
 
+    if ( !settingsStorage->dvipsCommand ) {
+        return;
+    }
     process.reset( new QProcess{} );
     // Convert the dvi file to postscript
     arguments.clear();

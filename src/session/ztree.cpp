@@ -28,6 +28,9 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
     QString program;
     QStringList arguments;
 #ifdef Q_OS_UNIX
+    if ( !argSettingsStorage->wineCommand || !argSettingsStorage->zTreeInstallationDirectory ) {
+        throw 20;
+    }
     program = *argSettingsStorage->wineCommand;
     arguments.append( QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" } );
 #else
