@@ -77,6 +77,8 @@ bool EcoLabLib::ShowORSEE() {
         return showORSEEProcess.startDetached( *settingsStorage->browserCommand,
                                                QStringList{ *settingsStorage->orseeURL } );
     }
+
+    return false;
 }
 
 bool EcoLabLib::ShowPreprints() {
@@ -86,6 +88,8 @@ bool EcoLabLib::ShowPreprints() {
         QStringList arguments{ QStringList{} << *settingsStorage->ecolablibInstallationDirectory +  "/preprints" };
         return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
     }
+
+    return false;
 }
 
 bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
