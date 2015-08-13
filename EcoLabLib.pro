@@ -48,7 +48,8 @@ OTHER_FILES += \
     doc/doc.md \
     LICENSE \
     data/example_header.tex \
-    Doxyfile
+    Doxyfile \
+    README.md
 
 DISTFILES += \
     LICENSE \
