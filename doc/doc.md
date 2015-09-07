@@ -11,3 +11,5 @@ Automatic receipts creation relies on prefabricated LaTeX headers of a specific 
 Some laboratories need some repeatedly printed files, e.g. language tests or blank receipts. Such files can be stored in a sub directory *preprints* in the EcoLabLib installation directory. For full functionality this folder should also be created.
 
 On Linux it is sufficient to build this project from *Qt Creator* and afterwards run *make install* as root in the build directory. Afterwards 'Labcontrol' can be built.
+
+Since *EcoLabLib* listens on the port configured via the *server_port* variable for incoming client connections, it should be verified, that this port is not blocked by a firewall on the network device used for client connections.
