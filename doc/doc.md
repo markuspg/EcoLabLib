@@ -13,3 +13,9 @@ Some laboratories need some repeatedly printed files, e.g. language tests or bla
 On Linux it is sufficient to build this project from *Qt Creator* and afterwards run *make install* as root in the build directory. Afterwards 'Labcontrol' can be built.
 
 Since *EcoLabLib* listens on the port configured via the *server_port* variable for incoming client connections, it should be verified, that this port is not blocked by a firewall on the network device used for client connections.
+
+## Known Issues
+
+If for *EcoLabLib* *force_encrypted_client_connections=false* and for *ClientClient* *prohibit_unencrypted_connection=false* the *ClientClient* daemon on the clients should try to create encrypted or unencrypted connections to the server, depending on which ones work out first. This alternating connection approach unfortunately does not work right now.
+
+So either set both variables to *false* and don't deliver the needed certificates or set them both to *true* supplying the certificates on the *EcoLabLib* side.
