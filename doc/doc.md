@@ -14,6 +14,10 @@ On Linux it is sufficient to build this project from *Qt Creator* and afterwards
 
 Since *EcoLabLib* listens on the port configured via the *server_port* variable for incoming client connections, it should be verified, that this port is not blocked by a firewall on the network device used for client connections.
 
+## Creating the SSL Certificate and Key Files
+
+To create SSL certificate and key files for your laboratory run *openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ecolablib.key -out ecolablib.cert* on an arbitrary Linux. This will create both needed files. As *Common Name* please enter the fully qualified domain name of your laboratory's server.
+
 ## Known Issues
 
 If for *EcoLabLib* *force_encrypted_client_connections=false* and for *ClientClient* *prohibit_unencrypted_connection=false* the *ClientClient* daemon on the clients should try to create encrypted or unencrypted connections to the server, depending on which ones work out first. This alternating connection approach unfortunately does not work right now.
