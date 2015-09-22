@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QSslError>
 #include <QSslKey>
+#include <QTcpServer>
 #include <QTextStream>
 #include <QVector>
 #include <QWebSocketServer>
@@ -62,14 +63,16 @@ public:
     QVector< ellClient* > *GetClients() const { return clients; }
 
 signals:
+    void HelpRequestRetrieved( QStringList *argHelpRequestMessage );
 
 public slots:
 
 private:
     std::unique_ptr< QMap< QString, ellClient* > > clientIPsToClientsMap = nullptr; //! This QMap is used to find the 'ellClient' instances corresponding to IP addresses. This is used to treat client connection attempts correctly
-    QVector< ellClient* > *clients = nullptr; //! This QVector stores all 'ellClient' instances
+    QVector< ellClient* > *clients = nullptr;       //! This QVector stores all 'ellClient' instances
+    QTcpServer *helpMessageServer = nullptr;       //! A TCP server to retrieve clients' help requests
     const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
-    QWebSocketServer *websocketServer = nullptr;
+    QWebSocketServer *websocketServer = nullptr;    //! A WebSocket server to handle the clients' ClientClient connections
 
 private slots:
     //! Handles incoming connections
@@ -77,6 +80,8 @@ private slots:
        This slot handles incoming connections. The address of the peer is searched for in the 'clientIPsToClientsMap'. If it is found, the old connection of the corresponding client will be replaced with the new one. If the peer's IP is not found in the map, the connection will be aborted.
      */
     void HandleIncomingWebSocketConnection();
+    void OpenHelpRequestServer();
+    void SendHelpRequestReply();
 };
 
 #endif // CLIENTMANAGER_H

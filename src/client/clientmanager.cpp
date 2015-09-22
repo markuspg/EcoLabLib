@@ -134,6 +134,8 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         ( *clientIPsToClientsMap )[ clients->last()->ip ] = clients->last();
     }
     clients->squeeze();
+
+    OpenHelpRequestServer();
 }
 
 ellClientManager::~ellClientManager() {
@@ -161,4 +163,74 @@ void ellClientManager::HandleIncomingWebSocketConnection() {
             delete incConnection;
         }
     }
+}
+
+void ellClientManager::OpenHelpRequestServer() {
+    helpMessageServer = new QTcpServer{ this };
+
+    bool successfullyStarted = false;
+    // Listening is only possible, if the server port was set correctly
+    if ( settingsStorage->serverPort ) {
+        // Listen on every available network device
+        if ( settingsStorage->globalListening && *settingsStorage->globalListening ) {
+            if ( !helpMessageServer->listen( QHostAddress::Any, *settingsStorage->serverPort + 1 ) ) {
+                throw "Listening failed";
+            } else {
+                successfullyStarted = true;
+            }
+            // Just listen on the network device specified by its IP
+        } else {
+            if ( settingsStorage->serverIP ) {
+                if ( !helpMessageServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort + 1 ) ) {
+                    throw "Listening failed";
+                } else {
+                    successfullyStarted = true;
+                }
+            } else {
+                throw "The mandatory server ip was not set";
+            }
+        }
+    } else {
+        throw "The mandatory server port was not set";
+    }
+
+    if ( successfullyStarted ) {
+        connect( helpMessageServer, &QTcpServer::newConnection,
+                 this, &ellClientManager::SendHelpRequestReply );
+    }
+}
+
+void ellClientManager::SendHelpRequestReply() {
+    QByteArray block;
+    QDataStream out{ &block, QIODevice::WriteOnly };
+    out.setVersion( QDataStream::Qt_5_2 );
+    out << ( quint16 )0;
+    out << QString{ "Help demand retrieved." };
+    out.device()->seek( 0 );
+    out << ( quint16 )( block.size() - sizeof( quint16 ) );
+
+    QTcpSocket *clientConnection = helpMessageServer->nextPendingConnection();
+    QString peerAddress = clientConnection->peerAddress().toString();
+    QString peerName;
+    bool unknownClient = false;
+    if ( clientIPsToClientsMap->contains( peerAddress ) ) {
+        peerName = ( *clientIPsToClientsMap )[ peerAddress ]->hostName;
+    } else {
+        unknownClient = true;
+    }
+
+    connect( clientConnection, &QTcpSocket::disconnected, clientConnection, &QTcpSocket::deleteLater );
+    clientConnection->write( block );
+    clientConnection->disconnectFromHost();
+
+    QStringList *helpRequestMessage = new QStringList;
+    if ( unknownClient ) {
+        helpRequestMessage->append( tr( "Unknown client asked for help.") );
+        helpRequestMessage->append( tr( "An unknown client with IP '%1' asked for help.").arg( peerAddress ) );
+    } else {
+        helpRequestMessage->append( tr( "'%1' asked for help.").arg( peerName ) );
+        helpRequestMessage->append( tr( "'%1' asked for help.").arg( peerName ) );
+    }
+
+    emit HelpRequestRetrieved( helpRequestMessage );
 }
