@@ -65,7 +65,7 @@ void EcoLabLib::KillLocalzLeaves() {
     killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
 #endif
 #ifdef Q_OS_WIN
-    killzLeafProcess.startDetached( "taskkill",
+    killzLeavesProcess.startDetached( "taskkill",
                                     QStringList{} << "/IM" << "zleaf.exe" );
 #endif
 }
