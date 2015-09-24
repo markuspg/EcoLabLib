@@ -20,6 +20,8 @@
 #ifndef BUILDER_H
 #define BUILDER_H
 
+#include "ecolablib_global.h"
+
 #include <QDir>
 #include <QFile>
 #include <QObject>
@@ -32,7 +34,7 @@
   'settingsStorage' variable. Values which failed to load will be set to 'nullptr'
   to signal this failure to higher level code using those values.
  */
-class ellBuilder : public QObject {
+class ECOLABLIBSHARED_EXPORT ellBuilder : public QObject {
     Q_OBJECT
 public:
     //! 'ellBuilder's constructor which will be called in 'main.cpp' of 'Labcontrol'

@@ -20,6 +20,7 @@
 #ifndef CLIENTMANAGER_H
 #define CLIENTMANAGER_H
 
+#include "../ecolablib_global.h"
 #include "client.h"
 #include "../settingsstorage.h"
 
@@ -39,7 +40,7 @@ class ellSettingsStorage;
   This class does the client management part of 'EcoLabLib'. It receives connection attempts
   of clients, accepts valid ones and updates the 'ellClient's statuses and sockets.
  */
-class ellClientManager : public QObject
+class ECOLABLIBSHARED_EXPORT ellClientManager : public QObject
 {
     Q_OBJECT
 public:
@@ -50,7 +51,7 @@ public:
        \param argSettingsStorage The 'ellSettingsStorage' containing all settings
        \param argParent 'ellClientManager's parent object
      */
-    explicit ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
+    explicit ECOLABLIBSHARED_EXPORT ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     //! This destructor cleans up all data on the heap
     ~ellClientManager();
 

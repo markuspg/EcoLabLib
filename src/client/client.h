@@ -20,6 +20,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "../ecolablib_global.h"
 #include "../settingsstorage.h"
 
 #include <QObject>
@@ -38,7 +39,7 @@ enum class ellClientState_t : unsigned short int {
   This class represents a client in the laboratory. Each client has to be specified in 'EcoLabLib's settings file.
   A client consists of its fixed attributes, its changing state and some executable functions
  */
-class ellClient : public QObject
+class ECOLABLIBSHARED_EXPORT ellClient : public QObject
 {
     Q_OBJECT
 public:
