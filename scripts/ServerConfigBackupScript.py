@@ -36,6 +36,7 @@ def main():
     # Lists of all directories and files which shall be backed up
     dirList = [ "/etc/postfix", "/etc/ssh" ]
     fileList = [ "/etc/apt/apt.conf.d/02periodic",
+            "/etc/aliases",
             "/etc/apt/apt.conf.d/20auto-upgrades",
             "/etc/dhcp/dhcpd.conf",
             "/etc/fstab",
