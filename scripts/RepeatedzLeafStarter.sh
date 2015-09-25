@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/bin/bash
 
 ##############################################################################
 ##
@@ -21,9 +21,11 @@
 ##
 ##############################################################################
 
-import subprocess
-
-clientNumbers = [ "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18" ]
-
-for number in clientNumbers:
-	subprocess.call( "ssh ewfuser@client" + number + " DISPLAY=:0.0 cvlc -f `PATH_TO_VIDEO_FILE_ON_THE_CLIENT` & exit", shell = True )
+for i in {1..100}
+do
+	/usr/bin/wine /opt/zTree_3.5.1/zleaf.exe /server 127.0.0.1 /channel 0 /name testzLeaf
+        sleep 3
+        killall zleaf.exe
+        sleep 1
+        echo $i
+done
