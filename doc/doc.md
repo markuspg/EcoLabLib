@@ -23,3 +23,21 @@ To create SSL certificate and key files for your laboratory run *openssl req -x5
 If for *EcoLabLib* *force_encrypted_client_connections=false* and for *ClientClient* *prohibit_unencrypted_connection=false* the *ClientClient* daemon on the clients should try to create encrypted or unencrypted connections to the server, depending on which ones work out first. This alternating connection approach unfortunately does not work right now.
 
 So either set both variables to *false* and don't deliver the needed certificates or set them both to *true* supplying the certificates on the *EcoLabLib* side.
+
+## Building and Installing on Windows
+
+Install a recent *MinGW* version of *Qt* on your computer. Afterwards open the project file of *EcoLabLib* and build it in *Debug* mode (which is the default). Then copy the created *EcoLabLib2.dll* dll to *C:\\EcoLabLib*. At runtime the following files will also be needed, so copy them from the *Qt* installation directory (e.g. C:\Qt\Qt5.4.2\5.4\mingw491\_32\bin):
+
+icudt53.dll
+icuin53.dll
+icuuc53.dll
+libgcc\_s\_dw2-1.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+Qt5Cored.dll
+Qt5Guid.dll
+Qt5Networkd.dll
+Qt5WebSocketsd.dll
+Qt5Widgetsd.dll
+
+The *d* at the end of the *Qt* dlls marks them as debug versions. If disk space and resources shall be saved, *EcoLabLib* can be built in *Release* mode. In this case, use the *Qt* files without the attached *d* (e.g. *Qt5Core.dll* instead of *Qt5Cored.dll*).
