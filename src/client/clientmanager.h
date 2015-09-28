@@ -24,6 +24,7 @@
 #include "client.h"
 #include "../settingsstorage.h"
 
+#include <QDataStream>
 #include <QObject>
 #include <QSettings>
 #include <QSslError>
