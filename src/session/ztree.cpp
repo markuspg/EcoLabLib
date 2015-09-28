@@ -33,12 +33,16 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
     }
     program = *argSettingsStorage->wineCommand;
     arguments.append( QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" } );
-#else
-    program = QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" };
-#endif
     arguments << "/datadir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/privdir" << QString{ "Z:/" + argZTreeDataTargetPath }
               << "/gsfdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/tempdir" << QString{ "Z:/" + argZTreeDataTargetPath }
-              << "/leafdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/channel" << QString::number( argZTreePort - 7000 );
+              << "/leafdir" << QString{ "Z:/" + argZTreeDataTargetPath };
+#else
+    program = QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" };
+    arguments << "/datadir" << QString{ argZTreeDataTargetPath } << "/privdir" << QString{ argZTreeDataTargetPath }
+              << "/gsfdir" << QString{ argZTreeDataTargetPath } << "/tempdir" << QString{ argZTreeDataTargetPath }
+              << "/leafdir" << QString{ argZTreeDataTargetPath };
+#endif
+    arguments << "/channel" << QString::number( argZTreePort - 7000 );
 
     ztreeInstance.setProcessEnvironment( *argSettingsStorage->processEnvironment );
     ztreeInstance.setWorkingDirectory( QDir::currentPath() );
