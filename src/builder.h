@@ -53,7 +53,6 @@ public:
     QString *dvipsCommand = nullptr;
     QString *ecolablibInstallationDirectory = nullptr;
     QString *fileManager = nullptr;
-    bool *forceEncryptedClientConnections = nullptr;
     bool *globalListening = nullptr;
     quint16 *initialzTreePort = nullptr;
     QStringList *installedLaTeXHeaders = nullptr;

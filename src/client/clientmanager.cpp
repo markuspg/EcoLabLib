@@ -42,10 +42,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         sslConfiguration.setProtocol( QSsl::TlsV1SslV3 );
         websocketServer->setSslConfiguration( sslConfiguration );
     } else {
-        if ( settingsStorage->forceEncryptedClientConnections && !( *settingsStorage->forceEncryptedClientConnections ) ) {
-            websocketServer = new QWebSocketServer{ QStringLiteral( "ellClientManager" ),
-                    QWebSocketServer::NonSecureMode, this };
-        }
+        throw std::runtime_error{ "The client manager could not be started due to missing certificate and key files" };
     }
 
     if ( websocketServer ) {
