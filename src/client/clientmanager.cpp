@@ -171,7 +171,7 @@ void ellClientManager::OpenHelpRequestServer() {
         // Listen on every available network device
         if ( settingsStorage->globalListening && *settingsStorage->globalListening ) {
             if ( !helpMessageServer->listen( QHostAddress::Any, *settingsStorage->serverPort + 1 ) ) {
-                throw "Listening failed";
+                throw std::runtime_error{ "The server for help request notifications was not able to start listening" };
             } else {
                 successfullyStarted = true;
             }
@@ -179,16 +179,16 @@ void ellClientManager::OpenHelpRequestServer() {
         } else {
             if ( settingsStorage->serverIP ) {
                 if ( !helpMessageServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort + 1 ) ) {
-                    throw "Listening failed";
+                    throw std::runtime_error{ "The server for help request notifications was not able to start listening" };
                 } else {
                     successfullyStarted = true;
                 }
             } else {
-                throw "The mandatory server ip was not set";
+                throw std::runtime_error{ "The mandatory server ip was not set" };
             }
         }
     } else {
-        throw "The mandatory server port was not set";
+        throw std::runtime_error{ "The mandatory server port was not set" };
     }
 
     if ( successfullyStarted ) {

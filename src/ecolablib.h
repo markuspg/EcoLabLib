@@ -96,6 +96,13 @@ public:
      */
     void StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort );
 
+signals:
+    //! Notifies the Labcontrol GUI of received help request messages
+    /*!
+     * \param argHelpRequestMessage The first element is the short information message, the second and last element the long version
+     */
+    void HelpRequestRetrieved( QStringList *argHelpRequestMessage );
+
 public slots:
     //! Starts a new session with the specified parameters
     /*!

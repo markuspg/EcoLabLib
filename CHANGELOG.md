@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 ### Added
 ### Changed
+- Proper passing of received help request messages to the Labcontrol GUI
 ### Fixed
 ### Removed
 
@@ -12,4 +13,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initially started keeping a change log
 
-[unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v2.99.1...HEAD
+[unreleased]: https://github.com/markuspg/EcoLabLib/compare/v2.99.1...HEAD

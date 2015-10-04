@@ -33,6 +33,8 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
   #endif
 {
     CheckIfUserIsAdmin();
+    connect( &clientManager, SIGNAL( HelpRequestRetrieved( QStringList* ) ),
+             this, SIGNAL( HelpRequestRetrieved( QStringList* ) ) );
 }
 
 void EcoLabLib::CheckIfUserIsAdmin() {
