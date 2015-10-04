@@ -45,12 +45,13 @@ unix {
 }
 
 OTHER_FILES += \
-    data/EcoLabLib.conf \
-    doc/doc.md \
-    LICENSE \
-    data/example_header.tex \
+    CHANGELOG.md \
     Doxyfile \
-    README.md
+    LICENSE \
+    README.md \
+    data/EcoLabLib.conf \
+    data/example_header.tex \
+    doc/doc.md
 
 DISTFILES += \
     LICENSE \
