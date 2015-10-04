@@ -20,6 +20,8 @@
 #ifndef ZTREE_H
 #define ZTREE_H
 
+#include <stdexcept>
+
 #include "../settingsstorage.h"
 
 #include <QObject>

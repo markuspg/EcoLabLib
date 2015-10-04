@@ -55,7 +55,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
             // Listen on every available network device
             if ( settingsStorage->globalListening && *settingsStorage->globalListening ) {
                 if ( !websocketServer->listen( QHostAddress::Any, *settingsStorage->serverPort ) ) {
-                    throw "Listening failed";
+                    throw std::runtime_error{ "Listening failed" };
                 } else {
                     successfullyStarted = true;
                 }
@@ -63,16 +63,16 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
             } else {
                 if ( settingsStorage->serverIP ) {
                     if ( !websocketServer->listen( QHostAddress{ *settingsStorage->serverIP }, *settingsStorage->serverPort ) ) {
-                        throw "Listening failed";
+                        throw std::runtime_error{ "Listening failed" };
                     } else {
                         successfullyStarted = true;
                     }
                 } else {
-                    throw "The mandatory server ip was not set";
+                    throw std::runtime_error{ "The mandatory server ip was not set" };
                 }
             }
         } else {
-            throw "The mandatory server port was not set";
+            throw std::runtime_error{ "The mandatory server port was not set" };
         }
         if ( successfullyStarted ) {
             connect( websocketServer, &QWebSocketServer::newConnection,
@@ -89,39 +89,39 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
 
     // Get the client quantity to check the value lists for clients creation for correct length
     if ( !clientData.contains( "client_quantity" ) ) {
-        throw 20;
+        throw std::runtime_error{ "The mandatory client quantity (variable 'client_quantity') was not set" };
     }
     bool conversionSuccess = false;
     int clientQuantity = 0;
     clientQuantity = clientData.value( "client_quantity", "0" ).toInt( &conversionSuccess );
     if ( !conversionSuccess ) {
-        throw 20;
+        throw std::runtime_error{ "It was not possible to convert the set mandatory client quantity (variable 'client_quantity') to an integer value" };
     }
 
     // Create all the clients in the lab
     QStringList clientHostNames = clientData.value( "client_hostnames" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientHostNames.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client hostnames (variable 'client_hostnames') does not match the set client quantity" };
     }
     QStringList clientIPs = clientData.value( "client_ips" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientIPs.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client ips (variable 'client_ips') does not match the set client quantity" };
     }
     QStringList clientMACs = clientData.value( "client_macs" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientMACs.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client macs (variable 'client_macs') does not match the set client quantity" };
     }
     QStringList clientWebcams = clientData.value( "client_webcams" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientWebcams.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client webcam (variable 'client_webcams') indicators does not match the set client quantity" };
     }
     QStringList clientXPositions = clientData.value( "client_xpos" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientXPositions.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client x positions (variable 'client_xpos') does not match the set client quantity" };
     }
     QStringList clientYPositions = clientData.value( "client_ypos" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientYPositions.length() != clientQuantity ) {
-        throw 20;
+        throw std::runtime_error{ "The quantity of client y positions (variable 'client_ypos') does not match the set client quantity" };
     }
 
     // If all preparations where successful, create the 'clients' QVector and add the ellClient instances to it

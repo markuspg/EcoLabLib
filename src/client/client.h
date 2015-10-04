@@ -20,6 +20,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <stdexcept>
+
 #include "../ecolablib_global.h"
 #include "../settingsstorage.h"
 

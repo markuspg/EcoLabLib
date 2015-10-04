@@ -218,7 +218,7 @@ void ellClient::TextMessageReceived( QString argMessage ) {
     bool conversionSucceeded = false;
     int messageID = tempMessageSplit[ 0 ].toInt( &conversionSucceeded );
     if ( !conversionSucceeded ) {
-        throw "Conversion to int failed";
+        throw std::runtime_error{ "Conversion of sent message index to int failed" };
     }
 
     switch ( messageID ) {
