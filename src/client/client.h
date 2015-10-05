@@ -69,6 +69,11 @@ public:
     const unsigned int xPosition = 1;   //! The client's x coordinate in the laboratory
     const unsigned int yPosition = 1;   //! The client's y coordinate in the laboratory
 
+    //! This functions beams the specified directory to the folder 'media4ztree' in the client experimenter user's home directory
+    /*!
+     * \param argDirectoryToBeam    The directory which (including all its contents and even links) shall be beamed
+     */
+    void BeamFile( const QString &argDirectoryToBeam ) const;
     //! Tries to boot the client using wakeonlan
     void Boot();
     /*!

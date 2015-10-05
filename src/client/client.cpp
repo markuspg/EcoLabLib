@@ -33,6 +33,23 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 {
 }
 
+void ellClient::BeamFile( const QString &argDirectoryToBeam ) const {
+    // Break, if the client is neither connected nor running a z-Leaf
+    if ( state != ellClientState_t::CONNECTED && state != ellClientState_t::ZLEAF_RUNNING ) {
+        return;
+    }
+
+    QStringList arguments;
+    arguments << "-2" << "-B" << "-i" << *settingsStorage->publicKeyPathUser << "-l" << "65536"
+              << "-r" << argDirectoryToBeam
+              << QString{ *settingsStorage->userNameOnClients + "@" + ip + ":media4ztree" };
+
+    // Start the process
+    QProcess beamFileProcess;
+    beamFileProcess.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
+    beamFileProcess.startDetached( *settingsStorage->scpCommand, arguments );
+}
+
 void ellClient::Boot() {
     if ( !settingsStorage->networkBroadcastAddress || !settingsStorage->serverIP
          || !settingsStorage->wakeonlanCommand ) {

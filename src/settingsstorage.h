@@ -71,7 +71,7 @@ public:
     const std::unique_ptr< const QString > publicKeyPathRoot = nullptr; //! The path to the public key file used for root access to the clients
     const std::unique_ptr< const QString > publicKeyPathUser = nullptr;//! The path to the public key file used for user access to the clients
     const std::unique_ptr< const QString > rmCommand = nullptr; //! The path to rm to remove surplus files after receipts creation
-    const std::unique_ptr< const QString > scpCommand = nullptr;    //! The path to rcp to copy files to the clients
+    const std::unique_ptr< const QString > scpCommand = nullptr;    //! The path to scp to copy files to the clients
     const std::unique_ptr< const QString > serverIP = nullptr;  //! The IP z-Tree and 'EcoLabLib' shall listen on
     const std::unique_ptr< const quint16 > serverPort = nullptr;    //! The port 'EcoLabLib' shall listen on for client connections
     const std::unique_ptr< const QString > sshCommand = nullptr;    //! The path to ssh
