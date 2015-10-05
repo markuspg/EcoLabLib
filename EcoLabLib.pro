@@ -10,7 +10,7 @@ QT       -= gui
 
 TARGET = EcoLabLib
 TEMPLATE = lib
-VERSION = 2.99.1
+VERSION = 3.0.0
 
 DEFINES += ECOLABLIB_LIBRARY
 
