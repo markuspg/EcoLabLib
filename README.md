@@ -1,4 +1,7 @@
 # EcoLabLib
+
+## Purpose
+
 *EcoLabLib* is a library doing all work for *Labcontrol*, which functions just as graphical user interface to *EcoLabLib*. Together they shall support and simplify the conduction of economic experiments. *EcoLabLib* offers the following functionality:
 
 * Booting and shutting down clients
@@ -9,7 +12,18 @@
 * Displaying the laboratory's webcams
 * Opening *ORSEE*
 * Displaying the clients' file systems in a file manager
+* Beaming media files to the clients
+* Receiving help messages from the clients
 
-To work properly *EcoLabLib* and *Labcontrol* have to be installed and configured on the server and *ClientClient* on the clients. To be able to show the laboratory's webcams *WebcamDisplay* should also be installed.
+## Other tools and programs
 
-Currently *EcoLabLib* and the supporting programs are only known to work on Linux. A Linux server with Windows clients was already tested and worked fine. If you try to install *EcoLabLib* and its supporting programs on Windows contact us and we will gladly try to support you.
+* *Labcontrol* is the graphical user interface for *EcoLabLib*
+* *ClientClient* runs in the graphical session of the clients and tries to connect to *Labcontrol* to receive its commands
+* *HelpMessageSender* can be used by the experiment's participants to send help requests to the experimenter using *Labcontrol*
+* *WebcamDisplay* is used by *Labcontrol* to display the webcams of the laboratory
+
+## Further acknowledgements
+
+For full functionality all of the above mentioned programs should be installed and configured in the laboratory. Installation and configuration are described in detail in every tool's *doc* folder.
+
+Currently *EcoLabLib* and the supporting programs are only known to work properly on Linux. Setups with a Linux server and Windows clients and vice versa were also tested, but only to a minimum amount. Additions and fixes (especially for the build procedure) for Windows systems are very welcome.

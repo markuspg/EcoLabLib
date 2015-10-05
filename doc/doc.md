@@ -18,13 +18,9 @@ Since *EcoLabLib* listens on the port configured via the *server_port* variable 
 
 To create SSL certificate and key files for your laboratory run *openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ecolablib.key -out ecolablib.cert* on an arbitrary Linux. This will create both needed files. As *Common Name* please enter the fully qualified domain name of your laboratory's server.
 
-## Known Issues
-
-If for *EcoLabLib* *force_encrypted_client_connections=false* and for *ClientClient* *prohibit_unencrypted_connection=false* the *ClientClient* daemon on the clients should try to create encrypted or unencrypted connections to the server, depending on which ones work out first. This alternating connection approach unfortunately does not work right now.
-
-So either set both variables to *false* and don't deliver the needed certificates or set them both to *true* supplying the certificates on the *EcoLabLib* side.
-
 ## Building and Installing on Windows
+
+*Labcontrol* depends on *EcoLabLib* for installation and compilation. So ensure that both source directories are in the same directory and are named according to their programs with no attached stuff (e.g. the *Labcontrol* directory really being named *Labcontrol* and not *Labcontrol-1.0.0*).
 
 Install a recent *MinGW* version of *Qt* on your computer. Afterwards open the project file of *EcoLabLib* and build it in *Debug* mode (which is the default). Then copy the created *EcoLabLib2.dll* dll to *C:\\EcoLabLib*. At runtime the following files will also be needed, so copy them from the *Qt* installation directory (e.g. C:\Qt\Qt5.4.2\5.4\mingw491\_32\bin):
 
