@@ -17,10 +17,10 @@
 
 ## Other tools and programs
 
-* *Labcontrol* is the graphical user interface for *EcoLabLib*
-* *ClientClient* runs in the graphical session of the clients and tries to connect to *Labcontrol* to receive its commands
-* *HelpMessageSender* can be used by the experiment's participants to send help requests to the experimenter using *Labcontrol*
-* *WebcamDisplay* is used by *Labcontrol* to display the webcams of the laboratory
+* [Labcontrol](https://github.com/markuspg/Labcontrol) is the graphical user interface for *EcoLabLib*
+* [ClientClient](https://github.com/markuspg/ClientClient) runs in the graphical session of the clients and tries to connect to *Labcontrol* to receive its commands
+* [HelpMessageSender](https://github.com/markuspg/HelpMessageSender) can be used by the experiment's participants to send help requests to the experimenter using *Labcontrol*
+* [WebcamDisplay](https://github.com/markuspg/WebcamDisplay) is used by *Labcontrol* to display the webcams of the laboratory
 
 ## Further acknowledgements
 
