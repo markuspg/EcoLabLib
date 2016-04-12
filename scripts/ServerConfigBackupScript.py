@@ -2,7 +2,7 @@
 
 ##############################################################################
 ##
-## Copyright 2015 Markus Prasser
+## Copyright 2015-2016 Markus Prasser
 ##
 ## This file is part of the EcoLabLib.
 ##
