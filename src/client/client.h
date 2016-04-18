@@ -139,7 +139,7 @@ private:
     QWebSocket *webSocket = nullptr;    //! The websocket this client is currently connected on
     std::unique_ptr < const QString > zleafVersion = nullptr;   //! The z-Leaf version this client shall use
 
-    void SendMessage( const quint16 &argMessageID, QString *argMessage = nullptr );
+    void SendMessage( const QString &argMessage );
 
 private slots:
     //! This slot is called on new text messages arriving at the websocket. It processes those and undertakes needed actions.

@@ -79,7 +79,7 @@ void ellClient::Boot() {
 }
 
 void ellClient::KillzLeaf() {
-    SendMessage( 2 );
+    SendMessage( "KillzLeaf" );
 }
 
 void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
@@ -163,15 +163,9 @@ void ellClient::PasswordReceived( QString argMessage ) {
     }
 }
 
-void ellClient::SendMessage( const quint16 &argMessageID, QString *argMessage ) {
+void ellClient::SendMessage( const QString &argMessage ) {
     if ( webSocket ) {
-        if ( argMessage ) {
-            webSocket->sendTextMessage( QString::number( argMessageID ) + "|"
-                                        + *argMessage );
-            delete argMessage;
-        } else {
-            webSocket->sendTextMessage( QString::number( argMessageID ) );
-        }
+        webSocket->sendTextMessage( argMessage );
     }
 }
 
@@ -182,7 +176,7 @@ void ellClient::SetSessionPort( QString * const argSessionPort ) {
 void ellClient::SetWebSocket( QWebSocket *argWebSocket ) {
     if ( webSocket ) {
         webSocket->abort();
-        delete webSocket;
+        webSocket->deleteLater();
     }
     webSocket = argWebSocket;
     webSocket->setParent( this );
@@ -208,7 +202,7 @@ void ellClient::ShowDesktop() {
 }
 
 void ellClient::Shutdown() {
-    SendMessage( 0 );
+    SendMessage( "Shutdown" );
 }
 
 void ellClient::StartzLeaf( const QString * const fakeName ) {
@@ -221,10 +215,12 @@ void ellClient::StartzLeaf( const QString * const fakeName ) {
     }
 
     if ( !fakeName ) {
-        SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP + "|" + *sessionPort } );
+        SendMessage( QString{ "StartzLeaf|" + *zleafVersion + "|"
+                              + *settingsStorage->serverIP + "|" + *sessionPort } );
     } else {
-        SendMessage( 1, new QString{ *zleafVersion + "|" + *settingsStorage->serverIP
-                                     + "|" + *sessionPort + "|" + *fakeName } );
+        SendMessage( QString{ "StartzLeaf|" + *zleafVersion + "|"
+                              + *settingsStorage->serverIP
+                              + "|" + *sessionPort + "|" + *fakeName } );
         delete fakeName;
     }
 }
