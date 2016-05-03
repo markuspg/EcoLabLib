@@ -17,23 +17,3 @@ Since *EcoLabLib* listens on the port configured via the *server_port* variable 
 ## Creating the SSL Certificate and Key Files
 
 To create SSL certificate and key files for your laboratory run *openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ecolablib.key -out ecolablib.cert* on an arbitrary Linux. This will create both needed files. As *Common Name* please enter the fully qualified domain name of your laboratory's server.
-
-## Building and Installing on Windows
-
-*Labcontrol* depends on *EcoLabLib* for installation and compilation. So ensure that both source directories are in the same directory and are named according to their programs with no attached stuff (e.g. the *Labcontrol* directory really being named *Labcontrol* and not *Labcontrol-1.0.0*).
-
-Install a recent *MinGW* version of *Qt* on your computer. Afterwards open the project file of *EcoLabLib* and build it in *Debug* mode (which is the default). Then copy the created *EcoLabLib2.dll* dll to *C:\\EcoLabLib*. At runtime the following files will also be needed, so copy them from the *Qt* installation directory (e.g. C:\Qt\Qt5.4.2\5.4\mingw491\_32\bin):
-
-icudt53.dll
-icuin53.dll
-icuuc53.dll
-libgcc\_s\_dw2-1.dll
-libstdc++-6.dll
-libwinpthread-1.dll
-Qt5Cored.dll
-Qt5Guid.dll
-Qt5Networkd.dll
-Qt5WebSocketsd.dll
-Qt5Widgetsd.dll
-
-The *d* at the end of the *Qt* dlls marks them as debug versions. If disk space and resources shall be saved, *EcoLabLib* can be built in *Release* mode. In this case, use the *Qt* files without the attached *d* (e.g. *Qt5Core.dll* instead of *Qt5Cored.dll*).

@@ -77,12 +77,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         }
     }
 
-#ifdef Q_OS_UNIX
     QSettings clientData{ "Economic Laboratory", "EcoLabLib", this };
-#endif
-#ifdef Q_OS_WIN
-    QSettings clientData{ "C:\\EcoLabLib\\EcoLabLib.conf", QSettings::IniFormat, this };
-#endif
 
     // Get the client quantity to check the value lists for clients creation for correct length
     if ( !clientData.contains( "client_quantity" ) ) {

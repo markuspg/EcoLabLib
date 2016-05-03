@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Removed
 - The ability of unencrypted client connections
+- Microsoft Windows support
 
 ## [2.99.1] - 2015-02-17
 ### Added

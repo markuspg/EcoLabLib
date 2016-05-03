@@ -22,12 +22,7 @@
 ellBuilder::ellBuilder( QObject *argParent ) :
     QObject{ argParent },
     processEnvironment{ new QProcessEnvironment{ QProcessEnvironment::systemEnvironment() } },
-#ifdef Q_OS_UNIX
     settings{ "Economic Laboratory", "EcoLabLib", this }
-#endif
-#ifdef Q_OS_WIN
-    settings{ "C:\\EcoLabLib\\EcoLabLib.conf", QSettings::IniFormat, this }
-#endif
 {
     ReadSettings();
 

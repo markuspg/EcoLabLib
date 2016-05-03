@@ -25,12 +25,7 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
     sessionsModel{ new ellSessionsModel{ this } },
     settingsStorage{ new ellSettingsStorage{ argBuilder, this } },
     clientManager{ settingsStorage, this },
-  #ifdef Q_OS_UNIX
       userName{ settingsStorage->processEnvironment->value( "USER", "" ) }
-  #endif
-  #ifdef Q_OS_WIN
-      userName{ settingsStorage->processEnvironment->value( "USERNAME", "" ) }
-  #endif
 {
     CheckIfUserIsAdmin();
     connect( &clientManager, SIGNAL( HelpRequestRetrieved( QStringList* ) ),
@@ -63,13 +58,7 @@ void EcoLabLib::KillLocalzLeaves() {
 
     QProcess killzLeavesProcess;
     killzLeavesProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
-#ifdef Q_OS_UNIX
     killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
-#endif
-#ifdef Q_OS_WIN
-    killzLeavesProcess.startDetached( "taskkill",
-                                    QStringList{} << "/IM" << "zleaf.exe" );
-#endif
 }
 
 bool EcoLabLib::ShowORSEE() {
@@ -111,7 +100,7 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
 
     QString program;
     QStringList arguments;
-#ifdef Q_OS_UNIX
+
     if ( !settingsStorage->wineCommand || !settingsStorage->zTreeInstallationDirectory ) {
         return;
     }
@@ -119,11 +108,6 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
     program = *settingsStorage->wineCommand;
     arguments.append( *settingsStorage->zTreeInstallationDirectory
                       + "/zTree_" + argzLeafVersion + "/zleaf.exe" );
-#endif
-#ifdef Q_OS_WIN
-    program = QString{ *settingsStorage->zTreeInstallationDirectory
-                       + "/zTree_" + argzLeafVersion + "/zleaf.exe" };
-#endif
     arguments << "/server" << "127.0.0.1"
               << "/channel" << QString::number( argzTreePort - 7000 )
               << "/name" << argzLeafName;

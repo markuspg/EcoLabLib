@@ -27,7 +27,7 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
              this, SIGNAL( zTreeClosed( int, QProcess::ExitStatus ) ) );
     QString program;
     QStringList arguments;
-#ifdef Q_OS_UNIX
+
     if ( !argSettingsStorage->wineCommand || !argSettingsStorage->zTreeInstallationDirectory ) {
         throw std::runtime_error{ "Either the 'wine_command' or the 'ztree_installation_directory' variable were not set."
                                   " Both are mandatory to start z-Tree" };
@@ -37,12 +37,6 @@ ellzTree::ellzTree( const ellSettingsStorage * const argSettingsStorage, const Q
     arguments << "/datadir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/privdir" << QString{ "Z:/" + argZTreeDataTargetPath }
               << "/gsfdir" << QString{ "Z:/" + argZTreeDataTargetPath } << "/tempdir" << QString{ "Z:/" + argZTreeDataTargetPath }
               << "/leafdir" << QString{ "Z:/" + argZTreeDataTargetPath };
-#else
-    program = QString{ *argSettingsStorage->zTreeInstallationDirectory + "/zTree_" + argZTreeVersionPath + "/ztree.exe" };
-    arguments << "/datadir" << QString{ argZTreeDataTargetPath } << "/privdir" << QString{ argZTreeDataTargetPath }
-              << "/gsfdir" << QString{ argZTreeDataTargetPath } << "/tempdir" << QString{ argZTreeDataTargetPath }
-              << "/leafdir" << QString{ argZTreeDataTargetPath };
-#endif
     arguments << "/channel" << QString::number( argZTreePort - 7000 );
 
     ztreeInstance.setProcessEnvironment( *argSettingsStorage->processEnvironment );

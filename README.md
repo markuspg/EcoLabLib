@@ -25,5 +25,3 @@
 ## Further acknowledgements
 
 For full functionality all of the above mentioned programs should be installed and configured in the laboratory. Installation and configuration are described in detail in every tool's *doc* folder.
-
-Currently *EcoLabLib* and the supporting programs are only known to work properly on Linux. Setups with a Linux server and Windows clients and vice versa were also tested, but only to a minimum amount. Additions and fixes (especially for the build procedure) for Windows systems are very welcome.

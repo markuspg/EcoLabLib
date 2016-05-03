@@ -59,7 +59,6 @@ void ellClient::Boot() {
         return;
     }
     QStringList arguments;
-#ifdef Q_OS_UNIX
     // For Debian based UNIXes shipping the 'wakeonlan' program
     if ( settingsStorage->wakeonlanCommand->contains( "wakeonlan" ) ) {
         arguments << "-i" << *settingsStorage->networkBroadcastAddress << mac;
@@ -68,7 +67,6 @@ void ellClient::Boot() {
     if ( settingsStorage->wakeonlanCommand->contains( "wol" ) ) {
         arguments << "-i" << *settingsStorage->serverIP << mac;
     }
-#endif
 
     // Start the process
     QProcess wakeonlanProcess;

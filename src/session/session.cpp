@@ -41,11 +41,9 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector<
         InitializeClasses();
     }
 
-#ifdef Q_OS_LINUX
     if ( settingsStorage->wmctrlCommand ) {
         QTimer::singleShot( 5000, this, SLOT( RenameWindow() ) );
     }
-#endif
 }
 
 ellSession::~ellSession() {
