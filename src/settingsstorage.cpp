@@ -19,7 +19,7 @@
 
 #include "settingsstorage.h"
 
-ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *argParent ) :
+ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argParent ) :
     QObject{ argParent },
     adminUsers{ argBuilder.adminUsers },
     browserCommand{ argBuilder.browserCommand },
@@ -65,6 +65,6 @@ ellSettingsStorage::ellSettingsStorage( const ellBuilder &argBuilder, QObject *a
 {
 }
 
-ellSettingsStorage::~ellSettingsStorage() {
+ell::SettingsStorage::~SettingsStorage() {
     delete notProperlySetVariables;
 }

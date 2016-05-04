@@ -19,9 +19,9 @@
 
 #include "client.h"
 
-ellClient::ellClient( const QString &argHostName, const QString &argIP, const QString &argMAC,
+ell::Client::Client( const QString &argHostName, const QString &argIP, const QString &argMAC,
                       const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
-                      const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
+                      const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
     QObject{ argParent },
     hostName{ argHostName },
     ip{ argIP },
@@ -33,9 +33,9 @@ ellClient::ellClient( const QString &argHostName, const QString &argIP, const QS
 {
 }
 
-void ellClient::BeamFile( const QString &argDirectoryToBeam ) const {
+void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {
     // Break, if the client is neither connected nor running a z-Leaf
-    if ( state != ellClientState_t::CONNECTED && state != ellClientState_t::ZLEAF_RUNNING ) {
+    if ( state != ClientState_t::CONNECTED && state != ClientState_t::ZLEAF_RUNNING ) {
         return;
     }
 
@@ -50,12 +50,12 @@ void ellClient::BeamFile( const QString &argDirectoryToBeam ) const {
     beamFileProcess.startDetached( *settingsStorage->scpCommand, arguments );
 }
 
-void ellClient::Boot() {
+void ell::Client::Boot() {
     if ( !settingsStorage->networkBroadcastAddress || !settingsStorage->serverIP
          || !settingsStorage->wakeonlanCommand ) {
         return;
     }
-    if ( state == ellClientState_t::CONNECTED || state == ellClientState_t::SHUTTING_DOWN ) {
+    if ( state == ClientState_t::CONNECTED || state == ClientState_t::SHUTTING_DOWN ) {
         return;
     }
     QStringList arguments;
@@ -73,20 +73,20 @@ void ellClient::Boot() {
     wakeonlanProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
     wakeonlanProcess.startDetached( *settingsStorage->wakeonlanCommand, arguments );
 
-    state = ellClientState_t::BOOTING;
+    state = ClientState_t::BOOTING;
 }
 
-void ellClient::KillzLeaf() {
+void ell::Client::KillzLeaf() {
     SendMessage( "KillzLeaf" );
 }
 
-void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
+void ell::Client::OpenFileSystem( const bool &argAsRoot ) const {
     if ( !settingsStorage->fileManager ) {
         return;
     }
 
     // Do nothing, if the client is not in an applicable state
-    if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
+    if ( !( state == ClientState_t::CONNECTED || state == ClientState_t::ZLEAF_RUNNING ) ) {
         return;
     }
 
@@ -108,10 +108,10 @@ void ellClient::OpenFileSystem( const bool &argAsRoot ) const {
     openFilesystemProcess.startDetached( *settingsStorage->fileManager, arguments );
 }
 
-void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot ) {
+void ell::Client::OpenTerminal( const QString &argCommand, const bool &argOpenAsRoot ) {
     if ( settingsStorage->terminalEmulatorCommand && settingsStorage->sshCommand ) {
         // Do nothing, if the client is not in an applicable state
-        if ( !( state == ellClientState_t::CONNECTED || state == ellClientState_t::ZLEAF_RUNNING ) ) {
+        if ( !( state == ClientState_t::CONNECTED || state == ClientState_t::ZLEAF_RUNNING ) ) {
             return;
         }
 
@@ -150,7 +150,7 @@ void ellClient::OpenTerminal( const QString &argCommand, const bool &argOpenAsRo
     }
 }
 
-void ellClient::PasswordReceived( QString argMessage ) {
+void ell::Client::PasswordReceived( QString argMessage ) {
     if ( argMessage != *settingsStorage->clientConnectionPassword ) {
         webSocket->close( QWebSocketProtocol::CloseCodePolicyViolated, "Wrong password given" );
     } else {
@@ -161,17 +161,17 @@ void ellClient::PasswordReceived( QString argMessage ) {
     }
 }
 
-void ellClient::SendMessage( const QString &argMessage ) {
+void ell::Client::SendMessage( const QString &argMessage ) {
     if ( webSocket ) {
         webSocket->sendTextMessage( argMessage );
     }
 }
 
-void ellClient::SetSessionPort( QString * const argSessionPort ) {
+void ell::Client::SetSessionPort( QString * const argSessionPort ) {
     sessionPort.reset( argSessionPort );
 }
 
-void ellClient::SetWebSocket( QWebSocket *argWebSocket ) {
+void ell::Client::SetWebSocket( QWebSocket *argWebSocket ) {
     if ( webSocket ) {
         webSocket->abort();
         webSocket->deleteLater();
@@ -179,15 +179,15 @@ void ellClient::SetWebSocket( QWebSocket *argWebSocket ) {
     webSocket = argWebSocket;
     webSocket->setParent( this );
     if ( webSocket->isValid() ) {
-        state = ellClientState_t::CONNECTED;
+        state = ClientState_t::CONNECTED;
     }
 }
 
-void ellClient::SetzLeafVersion( QString * const argzLeafVersion ) {
+void ell::Client::SetzLeafVersion( QString * const argzLeafVersion ) {
     zleafVersion.reset( argzLeafVersion );
 }
 
-void ellClient::ShowDesktop() {
+void ell::Client::ShowDesktop() {
     if ( !settingsStorage->vncViewer ) {
         return;
     }
@@ -199,11 +199,11 @@ void ellClient::ShowDesktop() {
     showDesktopProcess.startDetached( *settingsStorage->vncViewer, arguments );
 }
 
-void ellClient::Shutdown() {
+void ell::Client::Shutdown() {
     SendMessage( "Shutdown" );
 }
 
-void ellClient::StartzLeaf( const QString * const fakeName ) {
+void ell::Client::StartzLeaf( const QString * const fakeName ) {
     // Don't crash if the port or version for z-Leaf are not set yet
     if ( !sessionPort || !settingsStorage->serverIP || !zleafVersion ) {
         return;
@@ -223,7 +223,7 @@ void ellClient::StartzLeaf( const QString * const fakeName ) {
     }
 }
 
-void ellClient::TextMessageReceived( QString argMessage ) {
+void ell::Client::TextMessageReceived( QString argMessage ) {
     QStringList tempMessageSplit = argMessage.split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
 
     bool conversionSucceeded = false;
@@ -234,18 +234,18 @@ void ellClient::TextMessageReceived( QString argMessage ) {
 
     switch ( messageID ) {
     case 0:
-        state = ellClientState_t::ZLEAF_RUNNING;
+        state = ClientState_t::ZLEAF_RUNNING;
         break;
     case 1:
-        state = ellClientState_t::CONNECTED;
+        state = ClientState_t::CONNECTED;
         break;
     default:
         true;
     }
 }
 
-void ellClient::WebSocketDisconnected() {
+void ell::Client::WebSocketDisconnected() {
     webSocket->deleteLater();
     webSocket = nullptr;
-    state = ellClientState_t::DISCONNECTED;
+    state = ClientState_t::DISCONNECTED;
 }

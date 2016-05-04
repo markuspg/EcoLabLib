@@ -24,18 +24,20 @@
 
 #include <QAbstractTableModel>
 
-class ellSessionsModel : public QAbstractTableModel
+namespace ell {
+
+class SessionsModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit ellSessionsModel( QObject *argParent = nullptr );
-    ~ellSessionsModel();
-    ellSessionsModel( const ellSessionsModel& ) = delete;
-    ellSession *back() const;
+    explicit SessionsModel( QObject *argParent = nullptr );
+    ~SessionsModel();
+    SessionsModel( const SessionsModel& ) = delete;
+    Session *back() const;
     int columnCount( const QModelIndex &argParent ) const;
     QVariant data( const QModelIndex &argIndex, int argRole ) const;
     QVariant headerData( int argSection, Qt::Orientation argOrientation, int argRole ) const;
-    void push_back( ellSession *argSession );
+    void push_back( Session *argSession );
     int rowCount( const QModelIndex &argParent ) const;
 
 
@@ -44,10 +46,12 @@ signals:
 public slots:
 
 private:
-    QVector< ellSession* > *sessionsVector;
+    QVector< Session* > *sessionsVector;
 
 private slots:
-    void CleanupFinishedSession( ellSession *argSession );
+    void CleanupFinishedSession( Session *argSession );
 };
+
+}
 
 #endif // SESSIONSMODEL_H

@@ -28,22 +28,24 @@
 #include <QProcessEnvironment>
 #include <QSettings>
 
-//! This class is only used for the creation of the 'ellSettingsStorage' of 'EcoLabLib'
+namespace ell {
+
+//! This class is only used for the creation of the 'ell::SettingsStorage' of 'EcoLabLib'
 /*!
-  'ellBuilder' loads all settings for 'EcoLabLib' which will be stored in 'EcoLabLib's
+  'ell::Builder' loads all settings for 'ell::EcoLabLib' which will be stored in 'EcoLabLib's
   'settingsStorage' variable. Values which failed to load will be set to 'nullptr'
   to signal this failure to higher level code using those values.
  */
-class ECOLABLIBSHARED_EXPORT ellBuilder : public QObject {
+class ECOLABLIBSHARED_EXPORT Builder : public QObject {
     Q_OBJECT
 public:
-    //! 'ellBuilder's constructor which will be called in 'main.cpp' of 'Labcontrol'
+    //! 'ell::Builder's constructor which will be called in 'main.cpp' of 'Labcontrol'
     /*!
        This constructor loads all settings from QSettings and does some postprocessing
        on the loaded values if required.
-       \param argParent 'ellBuilder's parent object
+       \param argParent 'ell::Builder's parent object
      */
-    explicit ellBuilder( QObject *argParent = nullptr );
+    explicit Builder( QObject *argParent = nullptr );
 
     QStringList *adminUsers = nullptr;
     QString *browserCommand = nullptr;
@@ -137,5 +139,7 @@ private:
      */
     QStringList *SplitStringListsToStrings( const QChar &argSep, QString *& argListString );
 };
+
+}
 
 #endif // BUILDER_H

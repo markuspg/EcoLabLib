@@ -26,26 +26,28 @@
 
 #include <QObject>
 
+namespace ell {
+
 //! Starts and stores a z-Tree instance
 /*!
   This class starts and stores a z-Tree instance. It passes all important options to z-Tree
   and later keeps track of its finish.
  */
-class ellzTree : public QObject
+class zTree : public QObject
 {
     Q_OBJECT
 public:
-    //! 'ellzTree's constructor which will be called by 'ellSession'
+    //! 'ell::zTree's constructor which will be called by 'ell::Session'
     /*!
      * This constructor starts a new z-Tree instance with all given options.
-     * \param argSettingsStorage The 'ellSettingsStorage' containing all settings
+     * \param argSettingsStorage The 'ell::SettingsStorage' containing all settings
      * \param argZTreeDataTargetPath The path were z-Tree shall store all its data
      * \param argZTreePort The port z-Tree shall listen on
      * \param argZTreeVersionPath The path of the z-Tree version which shall be used
-     * \param argParent 'ellzTree's parent object
+     * \param argParent 'ell::zTree's parent object
      */
-    explicit ellzTree( const ellSettingsStorage * const argSettingsStorage, const QString &argZTreeDataTargetPath,
-                       const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent = nullptr );
+    explicit zTree( const SettingsStorage * const argSettingsStorage, const QString &argZTreeDataTargetPath,
+                    const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent = nullptr );
 
 signals:
     /*!
@@ -60,5 +62,7 @@ public slots:
 private:
     QProcess ztreeInstance; //! Stores the actual z-Tree process instance
 };
+
+}
 
 #endif // ZTREE_H

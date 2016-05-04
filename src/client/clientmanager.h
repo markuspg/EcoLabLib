@@ -36,27 +36,29 @@
 #include <QVector>
 #include <QWebSocketServer>
 
-class ellSettingsStorage;
+namespace ell {
+
+class SettingsStorage;
 
 //! Contains and manages all known clients
 /*!
   This class does the client management part of 'EcoLabLib'. It receives connection attempts
-  of clients, accepts valid ones and updates the 'ellClient's statuses and sockets.
+  of clients, accepts valid ones and updates the 'ell::Client's statuses and sockets.
  */
-class ECOLABLIBSHARED_EXPORT ellClientManager : public QObject
+class ECOLABLIBSHARED_EXPORT ClientManager : public QObject
 {
     Q_OBJECT
 public:
-    //! 'ellClientManager's constructor which will be called by 'EcoLabLib'
+    //! 'ell::ClientManager's constructor which will be called by 'EcoLabLib'
     /*!
-       The constructor creates the QMap linking client IPs to the actual 'ellClient' instances,
-       initializes and starts the listening of the TCP server and creates all 'ellClient' instances.
-       \param argSettingsStorage The 'ellSettingsStorage' containing all settings
-       \param argParent 'ellClientManager's parent object
+       The constructor creates the QMap linking client IPs to the actual 'ell::Client' instances,
+       initializes and starts the listening of the TCP server and creates all 'ell::Client' instances.
+       \param argSettingsStorage The 'ell::SettingsStorage' containing all settings
+       \param argParent 'ell::ClientManager's parent object
      */
-    explicit ECOLABLIBSHARED_EXPORT ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
+    explicit ECOLABLIBSHARED_EXPORT ClientManager( const SettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     //! This destructor cleans up all data on the heap
-    ~ellClientManager();
+    ~ClientManager();
 
     //! Returns the managed clients
     /*!
@@ -64,7 +66,7 @@ public:
        'Labcontrol' to initialize the table views displaying the clients.
        \return A QVector containing all managed (=existing) clients
      */
-    QVector< ellClient* > *GetClients() const { return clients; }
+    QVector< Client* > *GetClients() const { return clients; }
 
 signals:
     void HelpRequestRetrieved( QStringList *argHelpRequestMessage );
@@ -72,10 +74,10 @@ signals:
 public slots:
 
 private:
-    std::unique_ptr< QMap< QString, ellClient* > > clientIPsToClientsMap = nullptr; //! This QMap is used to find the 'ellClient' instances corresponding to IP addresses. This is used to treat client connection attempts correctly
-    QVector< ellClient* > *clients = nullptr;       //! This QVector stores all 'ellClient' instances
+    std::unique_ptr< QMap< QString, Client* > > clientIPsToClientsMap = nullptr; //! This QMap is used to find the 'ell::Client' instances corresponding to IP addresses. This is used to treat client connection attempts correctly
+    QVector< Client* > *clients = nullptr;       //! This QVector stores all 'ell::Client' instances
     QTcpServer *helpMessageServer = nullptr;       //! A TCP server to retrieve clients' help requests
-    const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
+    const SettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
     QWebSocketServer *websocketServer = nullptr;    //! A WebSocket server to handle the clients' ClientClient connections
 
 private slots:
@@ -87,5 +89,7 @@ private slots:
     void OpenHelpRequestServer();
     void SendHelpRequestReply();
 };
+
+}
 
 #endif // CLIENTMANAGER_H

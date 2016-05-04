@@ -19,8 +19,8 @@
 
 #include "receiptsprinter.h"
 
-ellReceiptsPrinter::ellReceiptsPrinter( const QString * const argDateString, const QString * const argzTreeDataTargetPath,
-                                        const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
+ell::ReceiptsPrinter::ReceiptsPrinter( const QString * const argDateString, const QString * const argzTreeDataTargetPath,
+                                        const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
     QThread{ argParent },
     dateString{ argDateString },
     settingsStorage{ argSettingsStorage },
@@ -28,7 +28,7 @@ ellReceiptsPrinter::ellReceiptsPrinter( const QString * const argDateString, con
 {
 }
 
-void ellReceiptsPrinter::run() {
+void ell::ReceiptsPrinter::run() {
     if ( !settingsStorage->latexCommand ) {
         return;
     }

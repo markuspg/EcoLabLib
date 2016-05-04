@@ -19,7 +19,7 @@
 
 #include "builder.h"
 
-ellBuilder::ellBuilder( QObject *argParent ) :
+ell::Builder::Builder( QObject *argParent ) :
     QObject{ argParent },
     processEnvironment{ new QProcessEnvironment{ QProcessEnvironment::systemEnvironment() } },
     settings{ "Economic Laboratory", "EcoLabLib", this }
@@ -29,7 +29,7 @@ ellBuilder::ellBuilder( QObject *argParent ) :
     DetectInstalledZTreeVersionsAndLaTeXHeaders();
 }
 
-bool ellBuilder::CheckPath( const QString * const argPath ) {
+bool ell::Builder::CheckPath( const QString * const argPath ) {
     if ( !QFile::exists( *argPath ) ) {
         true;
         return false;
@@ -38,7 +38,7 @@ bool ellBuilder::CheckPath( const QString * const argPath ) {
     return true;
 }
 
-bool *ellBuilder::ConvertToBool( QString *& argValueString ) {
+bool *ell::Builder::ConvertToBool( QString *& argValueString ) {
     bool *tempBool = nullptr;
     if ( argValueString ) {
         QVariant temp{ *argValueString };
@@ -49,7 +49,7 @@ bool *ellBuilder::ConvertToBool( QString *& argValueString ) {
     return tempBool;
 }
 
-quint16 *ellBuilder::ConvertToNumber( const QString &argVariableName, QString *& argValueString ) {
+quint16 *ell::Builder::ConvertToNumber( const QString &argVariableName, QString *& argValueString ) {
     quint16 *tempNumber = nullptr;
     if ( argValueString ) {
         bool conversionSuccessful = false;
@@ -65,7 +65,7 @@ quint16 *ellBuilder::ConvertToNumber( const QString &argVariableName, QString *&
     return tempNumber;
 }
 
-void ellBuilder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
+void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
     // Detect the installed LaTeX headers
     if ( ecolablibInstallationDirectory ) {
         // Get all files ending with '_header.tex'
@@ -95,7 +95,7 @@ void ellBuilder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
     }
 }
 
-void ellBuilder::ReadSettings() {
+void ell::Builder::ReadSettings() {
     QString *tempAdminUsers = ReadSettingsItem( "admin_users", false );
     browserCommand = ReadSettingsItem( "browser_command", true );
     certFile = ReadSettingsItem( "cert_file_path", true );
@@ -157,7 +157,7 @@ void ellBuilder::ReadSettings() {
     serverPort = ConvertToNumber( "server_port", tempServerPort );
 }
 
-QString *ellBuilder::ReadSettingsItem(const QString &argVariableName, const bool &argIsFile) {
+QString *ell::Builder::ReadSettingsItem(const QString &argVariableName, const bool &argIsFile) {
     // If setting variable is not available, return 'nullptr'
     if ( !settings.contains( argVariableName ) ) {
         true;
@@ -183,14 +183,14 @@ QString *ellBuilder::ReadSettingsItem(const QString &argVariableName, const bool
     return nullptr;
 }
 
-void ellBuilder::SaveInvalidSettings( const QString &argVariableName ) {
+void ell::Builder::SaveInvalidSettings( const QString &argVariableName ) {
     if ( !notProperlySetVariables ) {
         notProperlySetVariables = new QStringList{};
     }
     notProperlySetVariables->append( argVariableName );
 }
 
-QStringList *ellBuilder::SplitStringListsToStrings( const QChar &argSep, QString *& argListString ) {
+QStringList *ell::Builder::SplitStringListsToStrings( const QChar &argSep, QString *& argListString ) {
     QStringList *tempList = nullptr;
     if ( argListString ) {
         tempList = new QStringList{ argListString->split( argSep, QString::SkipEmptyParts ) };

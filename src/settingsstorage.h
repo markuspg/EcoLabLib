@@ -26,29 +26,31 @@
 
 #include <memory>
 
+namespace ell {
+
 //! Stores all settings of 'EcoLabLib'
 /*!
   This class stores all settings needed by any part of 'EcoLabLib' or 'Labcontrol'. Those are
   owned by this, const and can be publicly accessed for a low overhead.
  */
-class ellSettingsStorage : public QObject
+class SettingsStorage : public QObject
 {
     Q_OBJECT
 public:
-    //! 'ellSettingsStorage's constructor which will be called by 'EcoLabLib'
+    //! 'ell::SettingsStorage's constructor which will be called by 'EcoLabLib'
     /*!
        This constructor initializes all settings using the pointers passed through 'argBuilder'.
        Any settings who failed to load properly will be set to 'nullptr'.
        \param argBuilder    The builder used to get the const variables values
-       \param argParent     'ellSettingsStorage's parent object
+       \param argParent     'ell::SettingsStorage's parent object
      */
-    explicit ellSettingsStorage( const ellBuilder &argBuilder, QObject *argParent = nullptr );
-    ellSettingsStorage( const ellSettingsStorage &argSettingsStorage ) = delete;
-    ~ellSettingsStorage();
+    explicit SettingsStorage( const Builder &argBuilder, QObject *argParent = nullptr );
+    SettingsStorage( const SettingsStorage &argSettingsStorage ) = delete;
+    ~SettingsStorage();
 
     const std::unique_ptr< const QStringList > adminUsers = nullptr;    //! Stores all users having administrative rights
     const std::unique_ptr< const QString > browserCommand = nullptr;    //! Stores the path to open a browser
-    const std::unique_ptr< const QString > certFile = nullptr;  //! The path to the certificate for the websockets server in 'ellClientManager'
+    const std::unique_ptr< const QString > certFile = nullptr;  //! The path to the certificate for the websockets server in 'ell::ClientManager'
     const std::unique_ptr< const QString > clientConnectionPassword = nullptr;    //! Stores the path to open a browser
     const std::unique_ptr< const quint16 > defaultReceiptIndex = nullptr;   //! Stores the index (counting from 0) of the default receipt to use
     const std::unique_ptr< const QString > dvipsCommand = nullptr;  //! The path to convert a dvi file to postscript
@@ -58,7 +60,7 @@ public:
     const std::unique_ptr< const quint16 > initialzTreePort = nullptr;  //! The default port which shall be set for new z-Tree instances
     const std::unique_ptr< const QStringList > installedLaTeXHeaders = nullptr; //! Stores all detected LaTeX headers
     const std::unique_ptr< const QStringList > installedzTreeVersions = nullptr;    //! Stores all detected z-Tree versions
-    const std::unique_ptr< const QString > keyFile = nullptr;  //! The path to the private key for the websockets server in 'ellClientManager'
+    const std::unique_ptr< const QString > keyFile = nullptr;  //! The path to the private key for the websockets server in 'ell::ClientManager'
     const std::unique_ptr< const QString > killallCommand = nullptr;    //! The path used to kill running z-Leaf instances
     const std::unique_ptr< const QString > latexCommand = nullptr;  //! The path to compile a LaTeX file
     const std::unique_ptr< const QString > lprCommand = nullptr;    //! The path to automatically print a postscript file
@@ -94,5 +96,7 @@ public slots:
 
 private:
 };
+
+}
 
 #endif // SETTINGSSTORAGE_H

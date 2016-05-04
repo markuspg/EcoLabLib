@@ -19,34 +19,34 @@
 
 #include "sessionsmodel.h"
 
-ellSessionsModel::ellSessionsModel( QObject *argParent ) :
+ell::SessionsModel::SessionsModel( QObject *argParent ) :
     QAbstractTableModel{ argParent },
-    sessionsVector{ new QVector< ellSession* > }
+    sessionsVector{ new QVector< Session* > }
 {
 }
 
-ellSessionsModel::~ellSessionsModel() {
+ell::SessionsModel::~SessionsModel() {
     for (auto s: *sessionsVector)
         delete s;
     delete sessionsVector;
 }
 
-ellSession *ellSessionsModel::back() const {
+ell::Session *ell::SessionsModel::back() const {
     return sessionsVector->back();
 }
 
-void ellSessionsModel::CleanupFinishedSession( ellSession *argSession ) {
+void ell::SessionsModel::CleanupFinishedSession( Session *argSession ) {
     int finishedSessionIndex = sessionsVector->indexOf( argSession );
     delete argSession;
     sessionsVector->remove( finishedSessionIndex );
 }
 
-int ellSessionsModel::columnCount( const QModelIndex &argParent ) const {
+int ell::SessionsModel::columnCount( const QModelIndex &argParent ) const {
     Q_UNUSED( argParent );
     return 2;
 }
 
-QVariant ellSessionsModel::data( const QModelIndex &argIndex, int argRole ) const {
+QVariant ell::SessionsModel::data( const QModelIndex &argIndex, int argRole ) const {
     if ( !argIndex.isValid() ) {
         return QVariant{};
     }
@@ -62,7 +62,7 @@ QVariant ellSessionsModel::data( const QModelIndex &argIndex, int argRole ) cons
     return QVariant{};
 }
 
-QVariant ellSessionsModel::headerData( int argSection, Qt::Orientation argOrientation, int argRole ) const {
+QVariant ell::SessionsModel::headerData( int argSection, Qt::Orientation argOrientation, int argRole ) const {
     if ( argOrientation == Qt::Horizontal && argRole == Qt::DisplayRole ) {
         switch(argSection) {
         case 0:
@@ -80,13 +80,13 @@ QVariant ellSessionsModel::headerData( int argSection, Qt::Orientation argOrient
     return QVariant{};
 }
 
-void ellSessionsModel::push_back( ellSession *argSession ) {
-    connect( argSession, SIGNAL( SessionFinished( ellSession* ) ),
-             this, SLOT( CleanupFinishedSession( ellSession* ) ) );
+void ell::SessionsModel::push_back( Session *argSession ) {
+    connect( argSession, SIGNAL( SessionFinished( Session* ) ),
+             this, SLOT( CleanupFinishedSession( Session* ) ) );
     sessionsVector->push_back( argSession );
 }
 
-int ellSessionsModel::rowCount( const QModelIndex &argParent ) const {
+int ell::SessionsModel::rowCount( const QModelIndex &argParent ) const {
     Q_UNUSED( argParent );
     return sessionsVector->length();
 }

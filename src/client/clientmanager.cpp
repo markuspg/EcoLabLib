@@ -19,9 +19,9 @@
 
 #include "clientmanager.h"
 
-ellClientManager::ellClientManager( const ellSettingsStorage * const argSettingsStorage, QObject *argParent ) :
+ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
     QObject{ argParent },
-    clientIPsToClientsMap{ new QMap< QString, ellClient* > },
+    clientIPsToClientsMap{ new QMap< QString, Client* > },
     settingsStorage{ argSettingsStorage }
 {
     if ( settingsStorage->certFile && settingsStorage->keyFile ) {
@@ -73,7 +73,7 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         }
         if ( successfullyStarted ) {
             connect( websocketServer, &QWebSocketServer::newConnection,
-                     this, &ellClientManager::HandleIncomingWebSocketConnection );
+                     this, &ClientManager::HandleIncomingWebSocketConnection );
         }
     }
 
@@ -116,10 +116,10 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
         throw std::runtime_error{ "The quantity of client y positions (variable 'client_ypos') does not match the set client quantity" };
     }
 
-    // If all preparations where successful, create the 'clients' QVector and add the ellClient instances to it
-    clients = new QVector< ellClient* >;
+    // If all preparations where successful, create the 'clients' QVector and add the ell::Client instances to it
+    clients = new QVector< Client* >;
     for ( int i = 0; i < clientQuantity; i++ ) {
-        clients->append( new ellClient{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
+        clients->append( new Client{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
                                         clientYPositions[ i ], settingsStorage, this } );
 
         // Add an corresponding entry to the 'client_ips_to_clients_map' std::map<QString, Client*>
@@ -130,26 +130,26 @@ ellClientManager::ellClientManager( const ellSettingsStorage * const argSettings
     OpenHelpRequestServer();
 }
 
-ellClientManager::~ellClientManager() {
+ell::ClientManager::~ClientManager() {
     if ( websocketServer ) {
         websocketServer->close();
     }
     delete clients;
 }
 
-void ellClientManager::HandleIncomingWebSocketConnection() {
+void ell::ClientManager::HandleIncomingWebSocketConnection() {
     while ( websocketServer->hasPendingConnections() ) {
         QWebSocket *incConnection = websocketServer->nextPendingConnection();
         QString peerAddress = incConnection->peerAddress().toString();
         if ( clientIPsToClientsMap->contains( peerAddress ) ) {
-            ellClient *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
+            Client *connectingClient = ( *clientIPsToClientsMap )[ peerAddress ];
             connectingClient->SetWebSocket( incConnection );
             connect( incConnection, SIGNAL( textMessageReceived( QString ) ),
                      connectingClient, SLOT( PasswordReceived( QString ) ) );
             connect( incConnection, &QWebSocket::disconnected,
-                     connectingClient, &ellClient::WebSocketDisconnected );
+                     connectingClient, &Client::WebSocketDisconnected );
             // connect( incConnection, &QTcpSocket::readyRead,
-            //          connectingClient, &ellClient::ReadMessage );
+            //          connectingClient, &Client::ReadMessage );
         } else {
             incConnection->abort();
             delete incConnection;
@@ -157,7 +157,7 @@ void ellClientManager::HandleIncomingWebSocketConnection() {
     }
 }
 
-void ellClientManager::OpenHelpRequestServer() {
+void ell::ClientManager::OpenHelpRequestServer() {
     helpMessageServer = new QTcpServer{ this };
 
     bool successfullyStarted = false;
@@ -188,11 +188,11 @@ void ellClientManager::OpenHelpRequestServer() {
 
     if ( successfullyStarted ) {
         connect( helpMessageServer, &QTcpServer::newConnection,
-                 this, &ellClientManager::SendHelpRequestReply );
+                 this, &ClientManager::SendHelpRequestReply );
     }
 }
 
-void ellClientManager::SendHelpRequestReply() {
+void ell::ClientManager::SendHelpRequestReply() {
     QByteArray block;
     QDataStream out{ &block, QIODevice::WriteOnly };
     out.setVersion( QDataStream::Qt_5_2 );

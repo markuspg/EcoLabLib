@@ -20,10 +20,10 @@
 #include "ecolablib.h"
 
 
-EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
+ell::EcoLabLib::EcoLabLib( const Builder &argBuilder, QObject *argParent ) :
     QObject{ argParent },
-    sessionsModel{ new ellSessionsModel{ this } },
-    settingsStorage{ new ellSettingsStorage{ argBuilder, this } },
+    sessionsModel{ new SessionsModel{ this } },
+    settingsStorage{ new SettingsStorage{ argBuilder, this } },
     clientManager{ settingsStorage, this },
       userName{ settingsStorage->processEnvironment->value( "USER", "" ) }
 {
@@ -32,7 +32,7 @@ EcoLabLib::EcoLabLib( const ellBuilder &argBuilder, QObject *argParent ) :
              this, SIGNAL( HelpRequestRetrieved( QStringList* ) ) );
 }
 
-void EcoLabLib::CheckIfUserIsAdmin() {
+void ell::EcoLabLib::CheckIfUserIsAdmin() {
     if ( userName == "" ) {
         true;
         userIsAdmin = false;
@@ -51,7 +51,7 @@ void EcoLabLib::CheckIfUserIsAdmin() {
     userIsAdmin = false;
 }
 
-void EcoLabLib::KillLocalzLeaves() {
+void ell::EcoLabLib::KillLocalzLeaves() {
     if ( !settingsStorage->killallCommand ) {
         return;
     }
@@ -61,7 +61,7 @@ void EcoLabLib::KillLocalzLeaves() {
     killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
 }
 
-bool EcoLabLib::ShowORSEE() {
+bool ell::EcoLabLib::ShowORSEE() {
     if ( settingsStorage->browserCommand && settingsStorage->orseeURL ) {
         QProcess showORSEEProcess;
         showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
@@ -72,7 +72,7 @@ bool EcoLabLib::ShowORSEE() {
     return false;
 }
 
-bool EcoLabLib::ShowPreprints() {
+bool ell::EcoLabLib::ShowPreprints() {
     if ( settingsStorage->fileManager && settingsStorage->ecolablibInstallationDirectory ) {
         QProcess showPreprintsProcess;
         showPreprintsProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
@@ -83,7 +83,7 @@ bool EcoLabLib::ShowPreprints() {
     return false;
 }
 
-bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
+bool ell::EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
     if ( !settingsStorage->webcamDisplayCommand ) {
         return false;
     }
@@ -94,7 +94,7 @@ bool EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
     return showWebcamProcess.startDetached( *settingsStorage->webcamDisplayCommand, arguments );
 }
 
-void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort ) {
+void ell::EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort ) {
     QProcess startLocalzLeafProcess;
     startLocalzLeafProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
 
@@ -114,10 +114,10 @@ void EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &arg
     startLocalzLeafProcess.startDetached( program, arguments );
 }
 
-void EcoLabLib::StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
+void ell::EcoLabLib::StartNewSession( QVector< Client* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
                                  const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
                                  const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion ) {
-    sessionsModel->push_back( new ellSession{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
+    sessionsModel->push_back( new Session{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
                                               argPrintAnonymousReceipts, settingsStorage, argzTreeDataTargetPath, argzTreePort,
                                               argzTreeVersion, this } );
 }

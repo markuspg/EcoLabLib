@@ -27,7 +27,9 @@
 
 #include <QObject>
 
-class ellBuilder;
+namespace ell {
+
+class Builder;
 
 //! Merges all facilities together and is the primary interface to 'Labcontrol'
 /*!
@@ -41,34 +43,34 @@ public:
     //! 'EcoLabLib's constructor which will be called by 'Labcontrol'
     /*!
        This constructor initializes 'EcoLabLib's three central components,
-       the 'ellSessionsModel' storing the running sessions, the 'ellSettingsStorage'
-       doing the same for the settings and also the 'ellClientManager' who
+       the 'ell::SessionsModel' storing the running sessions, the 'ell::SettingsStorage'
+       doing the same for the settings and also the 'ell::ClientManager' who
        manages the connetions to the clients and controls them.
-       \param argBuilder    The builder used to construct 'ellSettingsStorage'
+       \param argBuilder    The builder used to construct 'ell::SettingsStorage'
        \param argParent     'EcoLabLib's parent object
      */
-    explicit EcoLabLib( const ellBuilder &argBuilder, QObject *argParent = nullptr );
+    explicit EcoLabLib( const Builder &argBuilder, QObject *argParent = nullptr );
 
-    //! Returns the clients managed by 'ellClientManager'
+    //! Returns the clients managed by 'ell::ClientManager'
     /*!
-       This function returns the clients managed by 'ellClientManager' and is used
+       This function returns the clients managed by 'ell::ClientManager' and is used
        to initialize the table views displaying the clients.
        \return A QVector containing all managed (=existing) clients
      */
-    const QVector< ellClient* > *GetClients() const { return clientManager.GetClients(); }
+    const QVector< Client* > *GetClients() const { return clientManager.GetClients(); }
     /*!
        This function returns true, if the user running 'Labcontrol' has
        administrative rights, otherwise it returns false.
        \return True, if the user has administrative rights, otherwise false
      */
     bool GetIfUserIsAdmin() const { return userIsAdmin; }
-    //! Returns the 'ellSettingsStorage'
+    //! Returns the 'ell::SettingsStorage'
     /*!
-       This function returns the 'ellSettingsStorage' of 'EcoLabLib' which is also
+       This function returns the 'ell::SettingsStorage' of 'EcoLabLib' which is also
        plentiful used by 'Labcontrol'.
-       \return 'EcoLabLib's 'ellSettingsStorage' instance
+       \return 'EcoLabLib's 'ell::SettingsStorage' instance
      */
-    const ellSettingsStorage *GetSettingsStorage() { return settingsStorage; }
+    const SettingsStorage *GetSettingsStorage() { return settingsStorage; }
     //! This function kills all z-Leaves running locally on the server
     void KillLocalzLeaves();
     /*!
@@ -106,7 +108,7 @@ signals:
 public slots:
     //! Starts a new session with the specified parameters
     /*!
-       This slots starts a new session with the specified parameters. The session will afterwards be added to the 'ellSessionsModel' and be terminated and cleaned up on the finish of z-Tree
+       This slots starts a new session with the specified parameters. The session will afterwards be added to the 'ell::SessionsModel' and be terminated and cleaned up on the finish of z-Tree
        \param argAssociatedClients The clients which belong to this session
        \param argParticipiantNameReplacement A replacement for the participant names, if anonymous receipts are required
        \param argPrintAnonymousReceipts True, if anonymous receipts are required
@@ -115,14 +117,14 @@ public slots:
        \param argzTreePort The port on which the z-Tree of this session shall listen
        \param argzTreeVersion The version this session's z-Tree shall use
      */
-    void StartNewSession( QVector< ellClient* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
+    void StartNewSession( QVector< Client* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
                           const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
                           const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion );
 
 private:
-    ellSessionsModel *sessionsModel = nullptr;  //! Stores all started sessions
-    const ellSettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
-    ellClientManager clientManager;             //! Stores and manages all clients
+    SessionsModel *sessionsModel = nullptr;  //! Stores all started sessions
+    const SettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
+    ClientManager clientManager;             //! Stores and manages all clients
     bool userIsAdmin = false;       //! This is true, if the user has administrative rights, otherwise false
 
     //! Checks if the user running 'Labcontrol' has administrative rights and sets 'userIsAdmin' accordingly
@@ -131,5 +133,7 @@ private:
 public:
     const QString userName = "";    //! The name of the user running 'Labcontrol'
 };
+
+}
 
 #endif // ECOLABLIB_H

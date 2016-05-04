@@ -19,9 +19,9 @@
 
 #include "session.h"
 
-ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector< ellClient* > * const argAssociatedClients,
+ell::Session::Session( const QString &argAnonymousReceiptsPlaceholder, QVector< Client* > * const argAssociatedClients,
                         const QString &argLatexHeaderName, const bool &argAnonReceipts,
-                        const ellSettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
+                        const SettingsStorage * const argSettingsStorage, const QString &argzTreeDataTargetPath,
                         const int argzTreePort, const QString &argzTreeVersionString, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceiptsPlaceholder{ new QString { argAnonymousReceiptsPlaceholder } },
@@ -46,7 +46,7 @@ ellSession::ellSession( const QString &argAnonymousReceiptsPlaceholder, QVector<
     }
 }
 
-ellSession::~ellSession() {
+ell::Session::~Session() {
     delete anonymousReceiptsPlaceholder;
     for ( auto s : *associatedClients ) {
         s->SetSessionPort();
@@ -56,7 +56,7 @@ ellSession::~ellSession() {
     delete zTreeDataTargetPath;
 }
 
-QVariant ellSession::GetDataItem( int argIndex ) {
+QVariant ell::Session::GetDataItem( int argIndex ) {
     switch ( argIndex ) {
     case 0:
         return QVariant{ zTreeVersionString.split( '_', QString::KeepEmptyParts, Qt::CaseInsensitive )[ 1 ] };
@@ -67,7 +67,7 @@ QVariant ellSession::GetDataItem( int argIndex ) {
     }
 }
 
-void ellSession::InitializeClasses() {
+void ell::Session::InitializeClasses() {
     // Create the new data directory
     QDir dir{ *zTreeDataTargetPath };
     QString dateString( QDateTime::currentDateTime().toString( "yyMMdd_hhmm" ) );
@@ -76,13 +76,13 @@ void ellSession::InitializeClasses() {
         true;
     }
 
-    zTreeInstance = new ellzTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionString, this };
+    zTreeInstance = new zTree{ settingsStorage, *zTreeDataTargetPath, zTreePort, zTreeVersionString, this };
     connect( zTreeInstance, SIGNAL( zTreeClosed( int,QProcess::ExitStatus ) ),
              this, SLOT( zTreeClosed() ) );
     // Only create a 'Receipts_Handler' instance, if all neccessary variables were set
     if ( *latexHeaderName != "None found" && settingsStorage->dvipsCommand
          && settingsStorage->ecolablibInstallationDirectory && settingsStorage->latexCommand ) {
-        receiptsCreator = new ellReceiptsCreator{ anonymousReceiptsPlaceholder, printAnonymousReceipts, dateString, latexHeaderName,
+        receiptsCreator = new ReceiptsCreator{ anonymousReceiptsPlaceholder, printAnonymousReceipts, dateString, latexHeaderName,
                                                   QString{ *zTreeDataTargetPath + "/" + dateString + ".pay" },
                                                   settingsStorage, zTreeDataTargetPath, this };
         true;
@@ -91,7 +91,7 @@ void ellSession::InitializeClasses() {
     }
 }
 
-void ellSession::RenameWindow() {
+void ell::Session::RenameWindow() {
     // Example: wmctrl -r <window name> -T <new name>
 
     QStringList arguments;
@@ -103,6 +103,6 @@ void ellSession::RenameWindow() {
     renameZTreeWindowProcess.startDetached( *settingsStorage->wmctrlCommand, arguments );
 }
 
-void ellSession::zTreeClosed() {
+void ell::Session::zTreeClosed() {
     emit SessionFinished( this );
 }

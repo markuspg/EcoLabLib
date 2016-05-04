@@ -19,9 +19,9 @@
 
 #include "receiptscreator.h"
 
-ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
+ell::ReceiptsCreator::ReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
                                         const QString &argDateString, const QString * const argLaTeXHeaderName,
-                                        const QString &argPaymentFilePath, const ellSettingsStorage * const argSettingsStorage,
+                                        const QString &argPaymentFilePath, const SettingsStorage * const argSettingsStorage,
                                         const QString * const argzTreeDataTargetPath, QObject *argParent ) :
     QObject{ argParent },
     anonymousReceipts{ argAnonReceipts },
@@ -35,11 +35,11 @@ ellReceiptsCreator::ellReceiptsCreator( const QString * const argAnonymousReceip
 {
     expectedPaymentFileName = paymentFile.fileName().split( '/', QString::KeepEmptyParts ).back();
 
-    connect( &fileCheckTimer, &QTimer::timeout, this, &ellReceiptsCreator::PrintReceipts );
+    connect( &fileCheckTimer, &QTimer::timeout, this, &ReceiptsCreator::PrintReceipts );
     fileCheckTimer.start( 1000 );
 }
 
-ellReceiptsCreator::~ellReceiptsCreator() {
+ell::ReceiptsCreator::~ReceiptsCreator() {
     if ( receiptsPrinter ) {
         receiptsPrinter->quit();
         receiptsPrinter->wait();
@@ -49,13 +49,13 @@ ellReceiptsCreator::~ellReceiptsCreator() {
     delete dateString;
 }
 
-void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
+void ell::ReceiptsCreator::CreateReceiptsFromPaymentFile() {
     // Get the data needed for receipts creation from the payment file
     QList< QString > *rawParticipantsData = nullptr;
     rawParticipantsData = GetParticipantsDataFromPaymentFile();
 
     double overallPayoff = 0.0;
-    QVector< ellPaymentEntry_t* > *participants = ExtractParticipantsData( overallPayoff, rawParticipantsData );
+    QVector< PaymentEntry_t* > *participants = ExtractParticipantsData( overallPayoff, rawParticipantsData );
 
     /* Make receipts overview anonymous if requested
      * (at this stage just names are removed, so that the overview still contains the client names)
@@ -138,17 +138,17 @@ void ellReceiptsCreator::CreateReceiptsFromPaymentFile() {
     delete latexText;
     latexText = nullptr;
 
-    receiptsPrinter = new ellReceiptsPrinter{ dateString, zTreeDataTargetPath, settingsStorage, this };
+    receiptsPrinter = new ReceiptsPrinter{ dateString, zTreeDataTargetPath, settingsStorage, this };
     receiptsPrinter->start();
-    connect( receiptsPrinter, &ellReceiptsPrinter::PrintingFinished,
-             this, &ellReceiptsCreator::DeleteReceiptsPrinterInstance );
+    connect( receiptsPrinter, &ReceiptsPrinter::PrintingFinished,
+             this, &ReceiptsCreator::DeleteReceiptsPrinterInstance );
     // connect( receiptsPrinter, &lcReceiptsPrinter::ErrorOccurred, this, &lcReceiptsHandler::DisplayMessageBox );
 
     // Clean up
     texFile.close();
 }
 
-void ellReceiptsCreator::DeleteReceiptsPrinterInstance() {
+void ell::ReceiptsCreator::DeleteReceiptsPrinterInstance() {
     receiptsPrinter->quit();
     receiptsPrinter->wait();
     delete receiptsPrinter;
@@ -157,17 +157,17 @@ void ellReceiptsCreator::DeleteReceiptsPrinterInstance() {
     emit PrintingFinished();
 }
 
-QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( double &argOverallPayoff,
-                                                                            QList< QString > *& argRawData ) {
+QVector< ell::PaymentEntry_t* > *ell::ReceiptsCreator::ExtractParticipantsData( double &argOverallPayoff,
+                                                                                QList< QString > *& argRawData ) {
     /* The tab separated fields in the payment file are:
      * SUBJECT  COMPUTER    INTERESTED  NAME    PROFIT  SIGNATURE
      */
-    QVector< ellPaymentEntry_t* > *participants = new QVector< ellPaymentEntry_t* >;
+    QVector< PaymentEntry_t* > *participants = new QVector< PaymentEntry_t* >;
     for ( QList< QString >::const_iterator cit = argRawData->cbegin(); cit != argRawData->cend(); ++cit ) {
         // Split the lines containing the participants' data into their inidivual parts
         QStringList tempParticipantData = cit->split( '\t', QString::KeepEmptyParts );
         // Create a new struct instance for the participant's data and fill it
-        ellPaymentEntry_t *participant  = new ellPaymentEntry_t;
+        PaymentEntry_t *participant  = new PaymentEntry_t;
         participant->computer = tempParticipantData.at( 1 );
         participant->name = tempParticipantData.at( 3 );
         participant->payoff = tempParticipantData.at( 4 ).toDouble();
@@ -180,7 +180,7 @@ QVector< ellPaymentEntry_t* > *ellReceiptsCreator::ExtractParticipantsData( doub
     return participants;
 }
 
-QList<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
+QList<QString> *ell::ReceiptsCreator::GetParticipantsDataFromPaymentFile() {
     // Create the vector to store the single lines of the file
     QList<QString> *participantsData = nullptr;
 
@@ -212,7 +212,7 @@ QList<QString> *ellReceiptsCreator::GetParticipantsDataFromPaymentFile() {
     return participantsData;
 }
 
-QString *ellReceiptsCreator::LoadLatexHeader() {
+QString *ell::ReceiptsCreator::LoadLatexHeader() {
     // Prepare all facilities to read the latex header file
     QFile latexHeaderFile( *settingsStorage->ecolablibInstallationDirectory + "/" + *latexHeaderName + "_header.tex" );
     if ( !latexHeaderFile.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
@@ -228,21 +228,21 @@ QString *ellReceiptsCreator::LoadLatexHeader() {
     return header;
 }
 
-void ellReceiptsCreator::MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, QVector< ellPaymentEntry_t* > *argDataVector ) {
+void ell::ReceiptsCreator::MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, QVector< PaymentEntry_t* > *argDataVector ) {
     if ( !argAlsoAnonymizeClients ) {
-        for ( QVector< ellPaymentEntry_t* >::iterator it = argDataVector->begin(); it != argDataVector->end(); ++it ) {
+        for ( QVector< PaymentEntry_t* >::iterator it = argDataVector->begin(); it != argDataVector->end(); ++it ) {
             ( *it )->name = QString{ *anonymousReceiptsPlaceholder };
         }
     }
     else {
-       for ( QVector< ellPaymentEntry_t* >::iterator it = argDataVector->begin(); it != argDataVector->end(); ++it ) {
+       for ( QVector< PaymentEntry_t* >::iterator it = argDataVector->begin(); it != argDataVector->end(); ++it ) {
            ( *it )->name = QString{ *anonymousReceiptsPlaceholder };
            ( *it )->computer = QString{ "\\hspace{1cm}" };
        }
     }
 }
 
-void ellReceiptsCreator::PrintReceipts() {
+void ell::ReceiptsCreator::PrintReceipts() {
     // If the payment file exists, print it
     if ( paymentFile.exists() ) {
         fileCheckTimer.stop();
