@@ -20,6 +20,7 @@
 #ifndef CLIENTPINGER_H
 #define CLIENTPINGER_H
 
+#include <QProcess>
 #include <QThread>
 
 #include "clientenums.h"
@@ -33,6 +34,7 @@ public:
                            QObject *argParent = nullptr );
 
 signals:
+    void stateChanged( ClientState_t newState );
 
 public slots:
 
@@ -42,6 +44,7 @@ protected:
 private:
     const QStringList pingArguments;
     const QString * const pingCommand = nullptr;
+    QProcess * const pingProcess = nullptr;
     ClientState_t state = ClientState_t::DISCONNECTED;
 };
 

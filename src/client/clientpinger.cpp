@@ -24,14 +24,32 @@ ell::ClientPinger::ClientPinger( const QString * const argIP,
                                  QObject *argParent ) :
     QThread{ argParent },
     pingArguments{ QStringList{} << "-c" << "1" << "-w" << "1" << "-q" << *argIP },
-    pingCommand{ argPingCommand }
+    pingCommand{ argPingCommand },
+    pingProcess{ new QProcess{ this } }
 {
+    pingProcess->setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
 }
 
 void ell::ClientPinger::run() {
+    ClientState_t newState = ClientState_t::UNINITIALIZED;
+
     while ( true ) {
         if ( isInterruptionRequested() ) {
             return;
+        } else {
+            pingProcess->start( *pingCommand, pingArguments );
+            if ( !pingProcess->waitForFinished( 4096 ) || pingProcess->exitCode() != 0 ) {
+                newState = ClientState_t::DISCONNECTED;
+            } else {
+                newState = ClientState_t::CONNECTED;
+            }
         }
+
+        if ( newState != state ) {
+            state = newState;
+            emit stateChanged( state );
+        }
+
+        QThread::sleep( 1 );
     }
 }
