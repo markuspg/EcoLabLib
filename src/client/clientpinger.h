@@ -34,7 +34,7 @@ public:
                            QObject *argParent = nullptr );
 
 signals:
-    void stateChanged( ClientState_t newState );
+    void stateChanged( unsigned int newState );
 
 public slots:
 
@@ -44,7 +44,6 @@ protected:
 private:
     const QStringList pingArguments;
     const QString * const pingCommand = nullptr;
-    QProcess * const pingProcess = nullptr;
     ClientState_t state = ClientState_t::DISCONNECTED;
 };
 

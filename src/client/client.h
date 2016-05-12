@@ -125,6 +125,7 @@ public:
 signals:
 
 public slots:
+    void HandleStateChange( unsigned int argState );
     //! This slot is called the first time a new client sends a text message. This message should contain the correct password, otherwise the connection will be closed.
     void PasswordReceived( QString argMessage );
     //! This slot gets called if the client's socket disconnected and cleans it up, also changing the client's status

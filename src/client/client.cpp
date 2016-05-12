@@ -33,12 +33,15 @@ ell::Client::Client( const QString &argHostName, const QString &argIP, const QSt
     clientPinger{ new ClientPinger{ &ip, argSettingsStorage->pingCommand, this } },
     settingsStorage{ argSettingsStorage }
 {
+    connect( clientPinger, SIGNAL( stateChanged( unsigned int ) ),
+             this, SLOT( HandleStateChange( unsigned int ) ) );
+
+    clientPinger->start();
 }
 
 ell::Client::~Client() {
     clientPinger->requestInterruption();
     clientPinger->wait( 4096 );
-    delete clientPinger;
 }
 
 void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {
@@ -82,6 +85,10 @@ void ell::Client::Boot() {
     wakeonlanProcess.startDetached( *settingsStorage->wakeonlanCommand, arguments );
 
     state = ClientState_t::BOOTING;
+}
+
+void ell::Client::HandleStateChange( unsigned int argState ) {
+    state = static_cast< ClientState_t >( argState );
 }
 
 void ell::Client::KillzLeaf() {

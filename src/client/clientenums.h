@@ -22,7 +22,7 @@
 
 namespace ell {
 
-enum class ClientState_t : unsigned short int {
+enum class ClientState_t : unsigned int {
     BOOTING,
     SHUTTING_DOWN,
     ZLEAF_RUNNING,
