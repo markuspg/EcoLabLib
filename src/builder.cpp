@@ -112,6 +112,7 @@ void ell::Builder::ReadSettings() {
     lprCommand = ReadSettingsItem( "lpr_command", true );
     networkBroadcastAddress = ReadSettingsItem( "network_broadcast_address", false );
     orseeURL = ReadSettingsItem( "orsee_url", false );
+    pingCommand = ReadSettingsItem( "ping_command", true );
     postscriptViewer = ReadSettingsItem( "postscript_viewer", true );
     ps2pdfCommand = ReadSettingsItem( "ps2pdf_command", true );
     publicKeyPathRoot = ReadSettingsItem( "public_key_path_root", true );

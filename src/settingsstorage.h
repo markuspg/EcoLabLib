@@ -67,6 +67,7 @@ public:
     const std::unique_ptr< const QString > networkBroadcastAddress = nullptr;   //! The network broadcast address of the laboratory (used for wake-on-lan)
     const QStringList * const notProperlySetVariables = nullptr;    //! This list stores all variables whose loading or initialization failed
     const std::unique_ptr< const QString > orseeURL = nullptr;  //! The URL to the laboratory's ORSEE page
+    const QString * const pingCommand = nullptr;    //! The path to the ping command used to query the clients' statuses
     const std::unique_ptr< const QString > postscriptViewer = nullptr;  //! The path to a postscript viewer
     const std::unique_ptr< const QProcessEnvironment > processEnvironment = nullptr;    //! Stores a process environment for newly created processes
     const std::unique_ptr< const QString > ps2pdfCommand = nullptr; //! The path to convert postscript files to pdf

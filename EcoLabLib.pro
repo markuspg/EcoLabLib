@@ -19,6 +19,7 @@ SOURCES += src/ecolablib.cpp \
     src/settingsstorage.cpp \
     src/client/client.cpp \
     src/client/clientmanager.cpp \
+    src/client/clientpinger.cpp \
     src/session/sessionsmodel.cpp \
     src/session/session.cpp \
     src/session/ztree.cpp \
@@ -30,7 +31,9 @@ HEADERS += src/ecolablib.h\
     src/builder.h \
     src/settingsstorage.h \
     src/client/client.h \
+    src/client/clientenums.h \
     src/client/clientmanager.h \
+    src/client/clientpinger.h \
     src/session/sessionsmodel.h \
     src/session/session.h \
     src/session/ztree.h \

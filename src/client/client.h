@@ -22,6 +22,7 @@
 
 #include <stdexcept>
 
+#include "clientenums.h"
 #include "../ecolablib_global.h"
 #include "../settingsstorage.h"
 
@@ -30,13 +31,7 @@
 
 namespace ell {
 
-enum class ClientState_t : unsigned short int {
-    BOOTING,
-    CONNECTED,
-    DISCONNECTED,
-    SHUTTING_DOWN,
-    ZLEAF_RUNNING
-};
+class ClientPinger;
 
 //! Represents a client in the laboratory
 /*!
@@ -63,6 +58,7 @@ public:
                      const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
                      const SettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     Client( const Client &argClient ) = delete;
+    ~Client();
 
     const QString hostName;             //! The hostname of the client
     const QString ip;                   //! Its IP address
@@ -135,6 +131,7 @@ public slots:
     void WebSocketDisconnected();
 
 private:
+    ClientPinger * const clientPinger = nullptr;
     std::unique_ptr < const QString > sessionPort = nullptr;    //! The port the z-Leaf on this client uses (for the 'TVClients')
     const SettingsStorage * const settingsStorage = nullptr; //! Contains all external settings
     ClientState_t state = ClientState_t::DISCONNECTED;    //! The client's state

@@ -40,6 +40,7 @@ ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argPa
     networkBroadcastAddress{ argBuilder.networkBroadcastAddress },
     notProperlySetVariables{ argBuilder.notProperlySetVariables },
     orseeURL{ argBuilder.orseeURL },
+    pingCommand{ argBuilder.pingCommand },
     postscriptViewer{ argBuilder.postscriptViewer },
     processEnvironment{ argBuilder.processEnvironment },
     ps2pdfCommand{ argBuilder.ps2pdfCommand },
@@ -67,4 +68,5 @@ ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argPa
 
 ell::SettingsStorage::~SettingsStorage() {
     delete notProperlySetVariables;
+    delete pingCommand;
 }

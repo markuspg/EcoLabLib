@@ -18,6 +18,7 @@
  */
 
 #include "client.h"
+#include "clientpinger.h"
 
 ell::Client::Client( const QString &argHostName, const QString &argIP, const QString &argMAC,
                       const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
@@ -29,8 +30,15 @@ ell::Client::Client( const QString &argHostName, const QString &argIP, const QSt
     webcamAvailable{ static_cast< bool >( argWebcamAvailable.toUInt() ) },
     xPosition{ argXPosition.toUInt() },
     yPosition{ argYPosition.toUInt() },
+    clientPinger{ new ClientPinger{ &ip, argSettingsStorage->pingCommand, this } },
     settingsStorage{ argSettingsStorage }
 {
+}
+
+ell::Client::~Client() {
+    clientPinger->requestInterruption();
+    clientPinger->wait( 4096 );
+    delete clientPinger;
 }
 
 void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {

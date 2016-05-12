@@ -66,6 +66,7 @@ public:
     QString *networkBroadcastAddress = nullptr;
     QStringList *notProperlySetVariables = nullptr;
     QString *orseeURL = nullptr;
+    QString *pingCommand = nullptr;
     QString *postscriptViewer = nullptr;
     const QProcessEnvironment * const processEnvironment = nullptr;
     QString *ps2pdfCommand = nullptr;
