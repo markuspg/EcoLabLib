@@ -98,15 +98,16 @@ void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
 
 void ell::Builder::ReadSettings() {
     QString *tempAdminUsers = ReadSettingsItem( settings, "admin_users", false );
-    browserCommand = ReadSettingsItem( toolSettings, "browser_command", true );
+    browserCommand = ReadSettingsItem( toolSettings, "browser_command", true, true );
     certFile = ReadSettingsItem( settings, "cert_file_path", true );
     clientConnectionPassword = ReadSettingsItem( settings, "client_connection_password", false );
-    QString *tempDefaultReceiptIndex = ReadSettingsItem( settings, "default_receipt_index", false );
+    QString *tempDefaultReceiptIndex = ReadSettingsItem( settings, "default_receipt_index",
+                                                         false, true );
     dvipsCommand = ReadSettingsItem( toolSettings, "dvips_command", true );
     ecolablibInstallDir = ReadSettingsItem( settings, "ecolablib_installation_directory", true );
-    fileManager = ReadSettingsItem( toolSettings, "file_manager", true );
+    fileManager = ReadSettingsItem( toolSettings, "file_manager", true, true );
     QString *tempGlobalListening = ReadSettingsItem( settings, "global_listening", false );
-    QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port", false );
+    QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port", false, true );
     keyFile = ReadSettingsItem( settings, "key_file_path", true );
     killallCommand = ReadSettingsItem( toolSettings, "killall_command", true );
     latexCommand = ReadSettingsItem( toolSettings, "latex_command", true );
@@ -141,7 +142,6 @@ void ell::Builder::ReadSettings() {
     webcamURLs = SplitStringListsToStrings( '|', tempWebcamURLs );
     // If the names or URLs are missing or their lengths do not match, delete them
     if ( !webcamNames || !webcamURLs || !( webcamNames->length() == webcamURLs->length() ) ) {
-        SaveInvalidSettings( "general webcam settings" );
         delete webcamNames;
         webcamNames = nullptr;
         delete webcamURLs;
@@ -160,10 +160,9 @@ void ell::Builder::ReadSettings() {
 
 QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
                                          const QString &argVariableName,
-                                         const bool &argIsFile ) {
+                                         const bool argIsFile, const bool argUnimportant ) {
     // If setting variable is not available, return 'nullptr'
-    if ( !argSettingsStorage.contains( argVariableName ) ) {
-        true;
+    if ( !argSettingsStorage.contains( argVariableName ) && !argUnimportant ) {
         SaveInvalidSettings( argVariableName );
 
         return nullptr;

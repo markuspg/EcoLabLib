@@ -124,10 +124,12 @@ private:
     /**
      * @param argVariableName   The name of the variable which shall be read
      * @param argIsFile         Should be true, if the variable is a file and should be checked for its existance
+     * @param argUnimportant    Labcontrol will not complain on startup, if this variable is not set
      * @return                  The represented value, if reading was successful, otherwise 'nullptr'
      */
     QString *ReadSettingsItem( const QSettings &argSettingsStorage,
-                               const QString &argVariableName, const bool &argIsFile );
+                               const QString &argVariableName, const bool argIsFile,
+                               const bool argUnimportant = false );
     //! Saves settings which failed to load properly into the 'notProperlySetVariables' QStringList
     /**
      * \param argVariableName The name of the variable which failed to be loaded properly
