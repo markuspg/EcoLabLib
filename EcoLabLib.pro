@@ -47,15 +47,11 @@ unix {
     INSTALLS += target
 }
 
-OTHER_FILES += \
-    CHANGELOG.md \
+DISTFILES += CHANGELOG.md \
     Doxyfile \
     LICENSE \
     README.md \
+    doc/doc.md \
     data/EcoLabLib.conf \
-    data/example_header.tex \
-    doc/doc.md
-
-DISTFILES += \
-    LICENSE \
-    doc/doc.md
+    data/EcoLabLibDependencies.conf \
+    data/example_header.tex

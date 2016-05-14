@@ -27,7 +27,7 @@ ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argPa
     clientConnectionPassword{ argBuilder.clientConnectionPassword },
     defaultReceiptIndex{ argBuilder.defaultReceiptIndex },
     dvipsCommand{ argBuilder.dvipsCommand },
-    ecolablibInstallationDirectory{ argBuilder.ecolablibInstallationDirectory },
+    ecolablibInstallationDirectory{ argBuilder.ecolablibInstallDir },
     fileManager{ argBuilder.fileManager },
     globalListening{ argBuilder.globalListening },
     initialzTreePort{ argBuilder.initialzTreePort },
@@ -61,7 +61,6 @@ ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argPa
     webcamURLs{ argBuilder.webcamURLs },
     wineCommand{ argBuilder.wineCommand },
     wmctrlCommand{ argBuilder.wmctrlCommand },
-    xsetCommand{ argBuilder.xsetCommand },
     zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory }
 {
 }

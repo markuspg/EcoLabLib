@@ -22,7 +22,8 @@
 ell::Builder::Builder( QObject *argParent ) :
     QObject{ argParent },
     processEnvironment{ new QProcessEnvironment{ QProcessEnvironment::systemEnvironment() } },
-    settings{ "Economic Laboratory", "EcoLabLib", this }
+    settings{ "Economic Laboratory", "EcoLabLib", this },
+    toolSettings{ "Economic Laboratory", "EcoLabLibDependencies", this }
 {
     ReadSettings();
 
@@ -67,10 +68,10 @@ quint16 *ell::Builder::ConvertToNumber( const QString &argVariableName, QString 
 
 void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
     // Detect the installed LaTeX headers
-    if ( ecolablibInstallationDirectory ) {
+    if ( ecolablibInstallDir ) {
         // Get all files ending with '_header.tex'
-        QDir latexDirectory{ *ecolablibInstallationDirectory,
-                    "*_header.tex", QDir::Name, QDir::CaseSensitive | QDir::Files | QDir::Readable };
+        QDir latexDirectory{ *ecolablibInstallDir, "*_header.tex",
+                             QDir::Name, QDir::CaseSensitive | QDir::Files | QDir::Readable };
         if ( !latexDirectory.exists() || latexDirectory.entryList().isEmpty() ) {
             true;
             installedLaTeXHeaders = new QStringList{ "None found" };
@@ -96,44 +97,43 @@ void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
 }
 
 void ell::Builder::ReadSettings() {
-    QString *tempAdminUsers = ReadSettingsItem( "admin_users", false );
-    browserCommand = ReadSettingsItem( "browser_command", true );
-    certFile = ReadSettingsItem( "cert_file_path", true );
-    clientConnectionPassword = ReadSettingsItem( "client_connection_password", false );
-    QString *tempDefaultReceiptIndex = ReadSettingsItem( "default_receipt_index", false );
-    dvipsCommand = ReadSettingsItem( "dvips_command", true );
-    ecolablibInstallationDirectory = ReadSettingsItem( "ecolablib_installation_directory", true );
-    fileManager = ReadSettingsItem( "file_manager", true );
-    QString *tempGlobalListening = ReadSettingsItem( "global_listening", false );
-    QString *tempInitialzTreePort = ReadSettingsItem( "initial_ztree_port", false );
-    keyFile = ReadSettingsItem( "key_file_path", true );
-    killallCommand = ReadSettingsItem( "killall_command", true );
-    latexCommand = ReadSettingsItem( "latex_command", true );
-    lprCommand = ReadSettingsItem( "lpr_command", true );
-    networkBroadcastAddress = ReadSettingsItem( "network_broadcast_address", false );
-    orseeURL = ReadSettingsItem( "orsee_url", false );
-    pingCommand = ReadSettingsItem( "ping_command", true );
-    postscriptViewer = ReadSettingsItem( "postscript_viewer", true );
-    ps2pdfCommand = ReadSettingsItem( "ps2pdf_command", true );
-    publicKeyPathRoot = ReadSettingsItem( "public_key_path_root", true );
-    publicKeyPathUser = ReadSettingsItem( "public_key_path_user", true );
-    rmCommand = ReadSettingsItem( "rm_command", true );
-    scpCommand = ReadSettingsItem( "scp_command", true );
-    serverIP = ReadSettingsItem( "server_ip", false );
-    QString *tempServerPort = ReadSettingsItem( "server_port", false );
-    sshCommand = ReadSettingsItem( "ssh_command", true );
-    terminalEmulatorCommand = ReadSettingsItem( "terminal_emulator_command", true );
-    QString *tempUseSSH = ReadSettingsItem( "use_ssh", false );
-    userNameOnClients = ReadSettingsItem( "user_name_on_clients", false );
-    vncViewer = ReadSettingsItem( "vnc_viewer", true );
-    wakeonlanCommand = ReadSettingsItem( "wakeonlan_command", true );
-    webcamDisplayCommand = ReadSettingsItem( "webcam_display_command", true );
-    QString *tempWebcamNames = ReadSettingsItem( "webcam_names", false );
-    QString *tempWebcamURLs = ReadSettingsItem( "webcam_urls", false );
-    wineCommand = ReadSettingsItem( "wine_command", true );
-    wmctrlCommand = ReadSettingsItem( "wmctrl_command", true );
-    xsetCommand = ReadSettingsItem( "xset_command", true );
-    zTreeInstallationDirectory = ReadSettingsItem( "ztree_installation_directory", true );
+    QString *tempAdminUsers = ReadSettingsItem( settings, "admin_users", false );
+    browserCommand = ReadSettingsItem( toolSettings, "browser_command", true );
+    certFile = ReadSettingsItem( settings, "cert_file_path", true );
+    clientConnectionPassword = ReadSettingsItem( settings, "client_connection_password", false );
+    QString *tempDefaultReceiptIndex = ReadSettingsItem( settings, "default_receipt_index", false );
+    dvipsCommand = ReadSettingsItem( toolSettings, "dvips_command", true );
+    ecolablibInstallDir = ReadSettingsItem( settings, "ecolablib_installation_directory", true );
+    fileManager = ReadSettingsItem( toolSettings, "file_manager", true );
+    QString *tempGlobalListening = ReadSettingsItem( settings, "global_listening", false );
+    QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port", false );
+    keyFile = ReadSettingsItem( settings, "key_file_path", true );
+    killallCommand = ReadSettingsItem( toolSettings, "killall_command", true );
+    latexCommand = ReadSettingsItem( toolSettings, "latex_command", true );
+    lprCommand = ReadSettingsItem( toolSettings, "lpr_command", true );
+    networkBroadcastAddress = ReadSettingsItem( settings, "network_broadcast_address", false );
+    orseeURL = ReadSettingsItem( settings, "orsee_url", false );
+    pingCommand = ReadSettingsItem( toolSettings, "ping_command", true );
+    postscriptViewer = ReadSettingsItem( toolSettings, "postscript_viewer", true );
+    ps2pdfCommand = ReadSettingsItem( toolSettings, "ps2pdf_command", true );
+    publicKeyPathRoot = ReadSettingsItem( settings, "public_key_path_root", true );
+    publicKeyPathUser = ReadSettingsItem( settings, "public_key_path_user", true );
+    rmCommand = ReadSettingsItem( toolSettings, "rm_command", true );
+    scpCommand = ReadSettingsItem( toolSettings, "scp_command", true );
+    serverIP = ReadSettingsItem( settings, "server_ip", false );
+    QString *tempServerPort = ReadSettingsItem( settings, "server_port", false );
+    sshCommand = ReadSettingsItem( toolSettings, "ssh_command", true );
+    terminalEmulatorCommand = ReadSettingsItem( toolSettings, "terminal_emulator_command", true );
+    QString *tempUseSSH = ReadSettingsItem( settings, "use_ssh", false );
+    userNameOnClients = ReadSettingsItem( settings, "user_name_on_clients", false );
+    vncViewer = ReadSettingsItem( toolSettings, "vnc_viewer", true );
+    wakeonlanCommand = ReadSettingsItem( toolSettings, "wakeonlan_command", true );
+    webcamDisplayCommand = ReadSettingsItem( toolSettings, "webcam_display_command", true );
+    QString *tempWebcamNames = ReadSettingsItem( settings, "webcam_names", false );
+    QString *tempWebcamURLs = ReadSettingsItem( settings, "webcam_urls", false );
+    wineCommand = ReadSettingsItem( toolSettings, "wine_command", true );
+    wmctrlCommand = ReadSettingsItem( toolSettings, "wmctrl_command", true );
+    zTreeInstallationDirectory = ReadSettingsItem( settings, "ztree_installation_directory", true );
 
     // Create the QStringLists by splitting
     adminUsers = SplitStringListsToStrings( '|', tempAdminUsers );
@@ -158,15 +158,17 @@ void ell::Builder::ReadSettings() {
     serverPort = ConvertToNumber( "server_port", tempServerPort );
 }
 
-QString *ell::Builder::ReadSettingsItem(const QString &argVariableName, const bool &argIsFile) {
+QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
+                                         const QString &argVariableName,
+                                         const bool &argIsFile ) {
     // If setting variable is not available, return 'nullptr'
-    if ( !settings.contains( argVariableName ) ) {
+    if ( !argSettingsStorage.contains( argVariableName ) ) {
         true;
         SaveInvalidSettings( argVariableName );
 
         return nullptr;
     } else {
-        QString *tempString = new QString{ settings.value( argVariableName ).toString() };
+        QString *tempString = new QString{ argSettingsStorage.value( argVariableName ).toString() };
         // If the variable is a file, check for existance and set to 'nullptr' on failure
         if ( argIsFile && !CheckPath( tempString ) ) {
             SaveInvalidSettings( argVariableName );

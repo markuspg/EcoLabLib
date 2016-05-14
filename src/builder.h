@@ -53,7 +53,7 @@ public:
     QString *clientConnectionPassword = nullptr;
     quint16 *defaultReceiptIndex = nullptr;
     QString *dvipsCommand = nullptr;
-    QString *ecolablibInstallationDirectory = nullptr;
+    QString *ecolablibInstallDir = nullptr;
     QString *fileManager = nullptr;
     bool *globalListening = nullptr;
     quint16 *initialzTreePort = nullptr;
@@ -87,7 +87,6 @@ public:
     QStringList *webcamURLs = nullptr;
     QString *wineCommand = nullptr;
     QString *wmctrlCommand = nullptr;
-    QString *xsetCommand = nullptr;
     QString *zTreeInstallationDirectory = nullptr;
 
 signals:
@@ -95,7 +94,8 @@ signals:
 public slots:
 
 private:
-    QSettings settings;     //! Is used to load all settings' values
+    const QSettings settings;     //! Is used to load all settings' values
+    const QSettings toolSettings; //! Stores information about EcoLabLib's external dependencies
 
     //! Checks if the specified path exists and returns false if not
     /**
@@ -126,7 +126,8 @@ private:
      * @param argIsFile         Should be true, if the variable is a file and should be checked for its existance
      * @return                  The represented value, if reading was successful, otherwise 'nullptr'
      */
-    QString *ReadSettingsItem( const QString &argVariableName, const bool &argIsFile );
+    QString *ReadSettingsItem( const QSettings &argSettingsStorage,
+                               const QString &argVariableName, const bool &argIsFile );
     //! Saves settings which failed to load properly into the 'notProperlySetVariables' QStringList
     /**
      * \param argVariableName The name of the variable which failed to be loaded properly

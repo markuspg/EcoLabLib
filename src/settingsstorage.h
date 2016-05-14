@@ -88,7 +88,6 @@ public:
     const std::unique_ptr< const QStringList > webcamURLs = nullptr;    //! An array of the corresponding URLs (should be in the same order)
     const std::unique_ptr< const QString > wineCommand = nullptr;   //! The path of wine (only relevant for UNIX systems)
     const std::unique_ptr< const QString > wmctrlCommand = nullptr; //! The path of the wmctrl command to change window names on UNIX systems
-    const std::unique_ptr< const QString > xsetCommand = nullptr; //! The path of the xset command to deactivate screensavers on UNIX systems
     const std::unique_ptr< const QString > zTreeInstallationDirectory = nullptr; //! The directory where all z-Tree executables are stored (in subfolders 'zTree_X.Y.Z' or 'zTree_X.Y.ZZ')
 
 signals:
