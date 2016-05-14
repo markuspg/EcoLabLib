@@ -21,13 +21,12 @@
 #include "clientpinger.h"
 
 ell::Client::Client( const QString &argHostName, const QString &argIP, const QString &argMAC,
-                      const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
-                      const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
+                     const QString &argXPosition, const QString &argYPosition,
+                     const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
     QObject{ argParent },
     hostName{ argHostName },
     ip{ argIP },
     mac{ argMAC },
-    webcamAvailable{ static_cast< bool >( argWebcamAvailable.toUInt() ) },
     xPosition{ argXPosition.toUInt() },
     yPosition{ argYPosition.toUInt() },
     clientPinger{ new ClientPinger{ &ip, argSettingsStorage->pingCommand, this } },

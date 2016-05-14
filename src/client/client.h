@@ -55,7 +55,7 @@ public:
        \param argParent 'ell::Client's parent object
      */
     explicit Client( const QString &argHostName, const QString &argIP, const QString &argMAC,
-                     const QString &argWebcamAvailable, const QString &argXPosition, const QString &argYPosition,
+                     const QString &argXPosition, const QString &argYPosition,
                      const SettingsStorage * const argSettingsStorage, QObject *argParent = nullptr );
     Client( const Client &argClient ) = delete;
     ~Client();
@@ -63,7 +63,6 @@ public:
     const QString hostName;             //! The hostname of the client
     const QString ip;                   //! Its IP address
     const QString mac;                  //! Its MAC address
-    const bool webcamAvailable = 0;     //! If a webcam is attached to the client
     const unsigned int xPosition = 1;   //! The client's x coordinate in the laboratory
     const unsigned int yPosition = 1;   //! The client's y coordinate in the laboratory
 

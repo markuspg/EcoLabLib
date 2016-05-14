@@ -103,10 +103,6 @@ ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStor
     if ( clientMACs.length() != clientQuantity ) {
         throw std::runtime_error{ "The quantity of client macs (variable 'client_macs') does not match the set client quantity" };
     }
-    QStringList clientWebcams = clientData.value( "client_webcams" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
-    if ( clientWebcams.length() != clientQuantity ) {
-        throw std::runtime_error{ "The quantity of client webcam (variable 'client_webcams') indicators does not match the set client quantity" };
-    }
     QStringList clientXPositions = clientData.value( "client_xpos" ).toString().split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
     if ( clientXPositions.length() != clientQuantity ) {
         throw std::runtime_error{ "The quantity of client x positions (variable 'client_xpos') does not match the set client quantity" };
@@ -119,8 +115,9 @@ ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStor
     // If all preparations where successful, create the 'clients' QVector and add the ell::Client instances to it
     clients = new QVector< Client* >;
     for ( int i = 0; i < clientQuantity; i++ ) {
-        clients->append( new Client{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ], clientWebcams[ i ], clientXPositions[ i ],
-                                        clientYPositions[ i ], settingsStorage, this } );
+        clients->append( new Client{ clientHostNames[ i ], clientIPs[ i ], clientMACs[ i ],
+                                     clientXPositions[ i ], clientYPositions[ i ],
+                                     settingsStorage, this } );
 
         // Add an corresponding entry to the 'client_ips_to_clients_map' std::map<QString, Client*>
         ( *clientIPsToClientsMap )[ clients->last()->ip ] = clients->last();
