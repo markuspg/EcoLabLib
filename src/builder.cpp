@@ -107,33 +107,36 @@ void ell::Builder::ReadSettings() {
     ecolablibInstallDir = ReadSettingsItem( settings, "ecolablib_installation_directory", true );
     fileManager = ReadSettingsItem( toolSettings, "file_manager", true, true );
     QString *tempGlobalListening = ReadSettingsItem( settings, "global_listening", false );
-    QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port", false, true );
+    QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port",
+                                                      false, true );
     keyFile = ReadSettingsItem( settings, "key_file_path", true );
     killallCommand = ReadSettingsItem( toolSettings, "killall_command", true );
     latexCommand = ReadSettingsItem( toolSettings, "latex_command", true );
     lprCommand = ReadSettingsItem( toolSettings, "lpr_command", true );
     networkBroadcastAddress = ReadSettingsItem( settings, "network_broadcast_address", false );
-    orseeURL = ReadSettingsItem( settings, "orsee_url", false );
+    orseeURL = ReadSettingsItem( settings, "orsee_url", false, true );
     pingCommand = ReadSettingsItem( toolSettings, "ping_command", true );
     postscriptViewer = ReadSettingsItem( toolSettings, "postscript_viewer", true );
     ps2pdfCommand = ReadSettingsItem( toolSettings, "ps2pdf_command", true );
-    publicKeyPathRoot = ReadSettingsItem( settings, "public_key_path_root", true );
-    publicKeyPathUser = ReadSettingsItem( settings, "public_key_path_user", true );
+    publicKeyPathRoot = ReadSettingsItem( settings, "public_key_path_root", true, true );
+    publicKeyPathUser = ReadSettingsItem( settings, "public_key_path_user", true, true );
     rmCommand = ReadSettingsItem( toolSettings, "rm_command", true );
-    scpCommand = ReadSettingsItem( toolSettings, "scp_command", true );
+    scpCommand = ReadSettingsItem( toolSettings, "scp_command", true, true );
     serverIP = ReadSettingsItem( settings, "server_ip", false );
     QString *tempServerPort = ReadSettingsItem( settings, "server_port", false );
-    sshCommand = ReadSettingsItem( toolSettings, "ssh_command", true );
-    terminalEmulatorCommand = ReadSettingsItem( toolSettings, "terminal_emulator_command", true );
-    QString *tempUseSSH = ReadSettingsItem( settings, "use_ssh", false );
+    sshCommand = ReadSettingsItem( toolSettings, "ssh_command", true, true );
+    terminalEmulatorCommand = ReadSettingsItem( toolSettings, "terminal_emulator_command",
+                                                true, true );
+    QString *tempUseSSH = ReadSettingsItem( settings, "use_ssh", false, true );
     userNameOnClients = ReadSettingsItem( settings, "user_name_on_clients", false );
-    vncViewer = ReadSettingsItem( toolSettings, "vnc_viewer", true );
+    vncViewer = ReadSettingsItem( toolSettings, "vnc_viewer", true, true );
     wakeonlanCommand = ReadSettingsItem( toolSettings, "wakeonlan_command", true );
-    webcamDisplayCommand = ReadSettingsItem( toolSettings, "webcam_display_command", true );
-    QString *tempWebcamNames = ReadSettingsItem( settings, "webcam_names", false );
-    QString *tempWebcamURLs = ReadSettingsItem( settings, "webcam_urls", false );
+    webcamDisplayCommand = ReadSettingsItem( toolSettings, "webcam_display_command",
+                                             true, true );
+    QString *tempWebcamNames = ReadSettingsItem( settings, "webcam_names", false, true );
+    QString *tempWebcamURLs = ReadSettingsItem( settings, "webcam_urls", false, true );
     wineCommand = ReadSettingsItem( toolSettings, "wine_command", true );
-    wmctrlCommand = ReadSettingsItem( toolSettings, "wmctrl_command", true );
+    wmctrlCommand = ReadSettingsItem( toolSettings, "wmctrl_command", true, true );
     zTreeInstallationDirectory = ReadSettingsItem( settings, "ztree_installation_directory", true );
 
     // Create the QStringLists by splitting

@@ -49,6 +49,11 @@ void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {
         return;
     }
 
+    if ( !settingsStorage->publicKeyPathUser || !settingsStorage->scpCommand
+         || !settingsStorage->userNameOnClients ) {
+        return;
+    }
+
     QStringList arguments;
     arguments << "-2" << "-B" << "-i" << *settingsStorage->publicKeyPathUser << "-l" << "65536"
               << "-r" << argDirectoryToBeam
