@@ -165,21 +165,27 @@ QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
                                          const QString &argVariableName,
                                          const bool argIsFile, const bool argUnimportant ) {
     // If setting variable is not available, return 'nullptr'
-    if ( !argSettingsStorage.contains( argVariableName ) && !argUnimportant ) {
-        SaveInvalidSettings( argVariableName );
+    if ( !argSettingsStorage.contains( argVariableName ) ) {
+        if ( !argUnimportant ) {
+            SaveInvalidSettings( argVariableName );
+        }
 
         return nullptr;
     } else {
         QString *tempString = new QString{ argSettingsStorage.value( argVariableName ).toString() };
         // If the variable is a file, check for existance and set to 'nullptr' on failure
         if ( argIsFile && !CheckPath( tempString ) ) {
-            SaveInvalidSettings( argVariableName );
+            if ( !argUnimportant ) {
+                SaveInvalidSettings( argVariableName );
+            }
             delete tempString;
             tempString = nullptr;
         }
         // Empty strings count as not set, so delete them for correct error handling
         if ( tempString && tempString->isEmpty() ) {
-            SaveInvalidSettings( argVariableName );
+            if ( !argUnimportant ) {
+                SaveInvalidSettings( argVariableName );
+            }
             delete tempString;
             tempString = nullptr;
         }
