@@ -30,6 +30,11 @@ ell::ClientPinger::ClientPinger( const QString * const argIP,
 
 void ell::ClientPinger::run() {
     ClientState_t newState = ClientState_t::UNINITIALIZED;
+
+    if ( !pingCommand ) {
+        return;
+    }
+
     QProcess * const pingProcess = new QProcess;
     pingProcess->setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
 
