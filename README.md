@@ -2,7 +2,7 @@
 
 ## Purpose
 
-*EcoLabLib* is a library doing all work for *Labcontrol*, which functions just as graphical user interface to *EcoLabLib*. Together they shall support and simplify the conduction of economic experiments. *EcoLabLib* offers the following functionality:
+*EcoLabLib* is a library doing all work for *Labcontrol*, which functions as a graphical user interface to *EcoLabLib*. Together they shall support and simplify the conduction of economic experiments. *EcoLabLib* offers the following functionality:
 
 * Booting and shutting down clients
 * Starting and killing *z-Leaves* on the clients
@@ -10,7 +10,7 @@
 * Automatic receipts creation and printing according to different templates
 * Conducting administrative tasks on the clients
 * Displaying the laboratory's webcams
-* Opening *ORSEE*
+* Opening *ORSEE* in a web browser
 * Displaying the clients' file systems in a file manager
 * Beaming media files to the clients
 * Receiving help messages from the clients
@@ -24,4 +24,4 @@
 
 ## Further acknowledgements
 
-For full functionality all of the above mentioned programs should be installed and configured in the laboratory. Installation and configuration are described in detail in every tool's *doc* folder.
+For full functionality all of the above mentioned programs should be installed and configured in the laboratory. Installation and configuration are described in detail in every tool's *doc* folder. An automated installation script for installing a laboratory server on a *Debian Linux* system is delivered as *install_debian.sh*.
