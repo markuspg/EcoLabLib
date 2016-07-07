@@ -2,6 +2,9 @@
 
 set -e
 
+echo -e "\e[32mAdding the 'i386' architecture needed by 'Wine' on 64bit systems\e[0m"
+sudo dpkg --add-architecture i386
+
 echo -e '\e[32mResynchronizing the package index files\e[0m'
 sudo apt-get -q update
 
