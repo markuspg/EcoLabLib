@@ -64,8 +64,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ecolablib.key -out e
 sudo cp -v ecolablib.cert /usr/local/share/ecolablib
 sudo cp -v ecolablib.key /usr/local/share/ecolablib
 
-echo -e "\e[32mInstalling 'Labcontrol' icons and '.desktop' file\e[0m"
-sudo cp -Rv Labcontrol/data/icons /usr/local/share/ecolablib
+echo -e "\e[32mInstalling 'Labcontrol' '.desktop' file\e[0m"
 sudo cp -v Labcontrol/labcontrol.desktop /usr/share/applications
 
 echo -e '\e[32mCreating the main directory for all z-Tree executables\e[0m'
