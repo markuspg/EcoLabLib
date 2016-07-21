@@ -114,9 +114,13 @@ void ell::EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString
     startLocalzLeafProcess.startDetached( program, arguments );
 }
 
-void ell::EcoLabLib::StartNewSession( QVector< Client* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
-                                 const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
-                                 const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion ) {
+void ell::EcoLabLib::StartNewSession( QVector< ell::Client* > * const argAssociatedClients,
+                                      const QString &argParticipiantNameReplacement,
+                                      const bool &argPrintAnonymousReceipts,
+                                      const QString &argReceiptsHeader,
+                                      const QString &argzTreeDataTargetPath,
+                                      const quint16 &argzTreePort,
+                                      const QString &argzTreeVersion ) {
     sessionsModel->push_back( new Session{ argParticipiantNameReplacement, argAssociatedClients, argReceiptsHeader,
                                               argPrintAnonymousReceipts, settingsStorage, argzTreeDataTargetPath, argzTreePort,
                                               argzTreeVersion, this } );

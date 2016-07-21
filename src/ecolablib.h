@@ -117,9 +117,12 @@ public slots:
        \param argzTreePort The port on which the z-Tree of this session shall listen
        \param argzTreeVersion The version this session's z-Tree shall use
      */
-    void StartNewSession( QVector< Client* > * const argAssociatedClients, const QString &argParticipiantNameReplacement,
-                          const bool &argPrintAnonymousReceipts, const QString &argReceiptsHeader,
-                          const QString &argzTreeDataTargetPath, const quint16 &argzTreePort, const QString &argzTreeVersion );
+    void StartNewSession( QVector< ell::Client* > * const argAssociatedClients,
+                          const QString &argParticipiantNameReplacement,
+                          const bool &argPrintAnonymousReceipts,
+                          const QString &argReceiptsHeader,
+                          const QString &argzTreeDataTargetPath,
+                          const quint16 &argzTreePort, const QString &argzTreeVersion );
 
 private:
     SessionsModel *sessionsModel = nullptr;  //! Stores all started sessions
