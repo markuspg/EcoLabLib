@@ -17,6 +17,8 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "clientmanager.h"
 
 ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStorage, QObject *argParent ) :
@@ -24,6 +26,7 @@ ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStor
     clientIPsToClientsMap{ new QMap< QString, Client* > },
     settingsStorage{ argSettingsStorage }
 {
+    qDebug() << "Initializing ClientManager";
     if ( settingsStorage->certFile && settingsStorage->keyFile ) {
         websocketServer = new QWebSocketServer{ QStringLiteral( "ellClientManager" ),
                                                 QWebSocketServer::SecureMode, this };
@@ -123,6 +126,7 @@ ell::ClientManager::ClientManager( const SettingsStorage * const argSettingsStor
         ( *clientIPsToClientsMap )[ clients->last()->ip ] = clients->last();
     }
     clients->squeeze();
+    qDebug() << "Successfully initialized" << clients->size() << "clients";
 
     OpenHelpRequestServer();
 }
@@ -216,9 +220,11 @@ void ell::ClientManager::SendHelpRequestReply() {
     if ( unknownClient ) {
         helpRequestMessage->append( tr( "Unknown client asked for help.") );
         helpRequestMessage->append( tr( "An unknown client with IP '%1' asked for help.").arg( peerAddress ) );
+        qDebug() << "An unknown client with IP" << peerAddress << "asked for help.";
     } else {
         helpRequestMessage->append( tr( "'%1' asked for help.").arg( peerName ) );
         helpRequestMessage->append( tr( "'%1' asked for help.").arg( peerName ) );
+        qDebug() << "Client" << peerName << "asked for help";
     }
 
     emit HelpRequestRetrieved( helpRequestMessage );

@@ -17,6 +17,8 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "builder.h"
 
 ell::Builder::Builder( QObject *argParent ) :
@@ -25,6 +27,7 @@ ell::Builder::Builder( QObject *argParent ) :
     settings{ "Economic Laboratory", "EcoLabLib", this },
     toolSettings{ "Economic Laboratory", "EcoLabLibDependencies", this }
 {
+    qDebug() << "Intializing Builder to load settings for 'SettingsStorage'";
     ReadSettings();
 
     DetectInstalledZTreeVersionsAndLaTeXHeaders();
@@ -75,9 +78,11 @@ void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
         if ( !latexDirectory.exists() || latexDirectory.entryList().isEmpty() ) {
             true;
             installedLaTeXHeaders = new QStringList{ "None found" };
+            qDebug() << "No installed LaTeX headers could be found in" << *ecolablibInstallDir;
         } else {
             installedLaTeXHeaders = new QStringList{ latexDirectory.entryList() };
             installedLaTeXHeaders->replaceInStrings( "_header.tex", "" );
+            qDebug() << "The following LaTeX headers were detected:" << *installedLaTeXHeaders;
         }
     }
 
@@ -87,16 +92,19 @@ void ell::Builder::DetectInstalledZTreeVersionsAndLaTeXHeaders() {
         QDir zTreeDirectory{ *zTreeInstallationDirectory, "zTree_*", QDir::Name,
                     QDir::NoDotAndDotDot | QDir::Dirs | QDir::Readable | QDir::CaseSensitive };
         if ( zTreeDirectory.entryList().isEmpty() ) {
+            qDebug() << "No instance of zTree could be found in" << *zTreeInstallationDirectory;
             true;
         }
         else {
             installedzTreeVersions = new QStringList{ zTreeDirectory.entryList() };
             installedzTreeVersions->replaceInStrings( "zTree_", "" );
+            qDebug() << "The following zTree versions were detected:" << *installedzTreeVersions;
         }
     }
 }
 
 void ell::Builder::ReadSettings() {
+    qDebug() << "Reading settings from config files";
     QString *tempAdminUsers = ReadSettingsItem( settings, "admin_users", false );
     browserCommand = ReadSettingsItem( toolSettings, "browser_command", true, true );
     certFile = ReadSettingsItem( settings, "cert_file_path", true );
@@ -166,6 +174,8 @@ QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
                                          const bool argIsFile, const bool argUnimportant ) {
     // If setting variable is not available, return 'nullptr'
     if ( !argSettingsStorage.contains( argVariableName ) ) {
+        qDebug() << "[ERR] Variable" << argVariableName
+                 << "is missing in the configuration files";
         if ( !argUnimportant ) {
             SaveInvalidSettings( argVariableName );
         }
@@ -178,6 +188,7 @@ QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
             if ( !argUnimportant ) {
                 SaveInvalidSettings( argVariableName );
             }
+            qDebug() << "[ERR]" << *tempString << "is not a proper path";
             delete tempString;
             tempString = nullptr;
         }
@@ -186,8 +197,14 @@ QString *ell::Builder::ReadSettingsItem( const QSettings &argSettingsStorage,
             if ( !argUnimportant ) {
                 SaveInvalidSettings( argVariableName );
             }
+            qDebug() << "[ERR]" << argVariableName << "was not set";
             delete tempString;
             tempString = nullptr;
+        }
+        if ( tempString ) {
+            qDebug() << argVariableName << "initialized with" << *tempString;
+        } else {
+            qDebug() << "[ERR] Variable" << argVariableName << "could not be loaded";
         }
         return tempString;
     }

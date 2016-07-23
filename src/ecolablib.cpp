@@ -17,16 +17,18 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ecolablib.h"
+#include <QDebug>
 
+#include "ecolablib.h"
 
 ell::EcoLabLib::EcoLabLib( const Builder &argBuilder, QObject *argParent ) :
     QObject{ argParent },
     sessionsModel{ new SessionsModel{ this } },
     settingsStorage{ new SettingsStorage{ argBuilder, this } },
     clientManager{ settingsStorage, this },
-      userName{ settingsStorage->processEnvironment->value( "USER", "" ) }
+    userName{ settingsStorage->processEnvironment->value( "USER", "" ) }
 {
+    qDebug() << "Initializing EcoLabLib";
     CheckIfUserIsAdmin();
     connect( &clientManager, SIGNAL( HelpRequestRetrieved( QStringList* ) ),
              this, SIGNAL( HelpRequestRetrieved( QStringList* ) ) );
@@ -36,6 +38,7 @@ void ell::EcoLabLib::CheckIfUserIsAdmin() {
     if ( userName == "" ) {
         true;
         userIsAdmin = false;
+        qDebug() << "No user name could be queried, admin functionality will be disabled";
         return;
     }
 
@@ -43,22 +46,28 @@ void ell::EcoLabLib::CheckIfUserIsAdmin() {
         for ( auto s : *settingsStorage->adminUsers ) {
             if ( s == userName ) {
                 userIsAdmin = true;
+                qDebug() << "User" << userName << "is admin";
                 return;
             }
         }
     }
 
+    qDebug() << "User" << userName << "is no admin, admin functionality will be disabled";
     userIsAdmin = false;
 }
 
 void ell::EcoLabLib::KillLocalzLeaves() {
     if ( !settingsStorage->killallCommand ) {
+        qDebug() << "The 'killall_command' configuration variable"
+                    " was not properly set, skipping";
         return;
     }
 
     QProcess killzLeavesProcess;
     killzLeavesProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
-    killzLeavesProcess.startDetached( *settingsStorage->killallCommand, QStringList{ "zleaf.exe" } );
+    killzLeavesProcess.startDetached( *settingsStorage->killallCommand,
+                                      QStringList{ "zleaf.exe" } );
+    qDebug() << *settingsStorage->killallCommand << QStringList{ "zleaf.exe" };
 }
 
 bool ell::EcoLabLib::ShowORSEE() {
@@ -67,6 +76,10 @@ bool ell::EcoLabLib::ShowORSEE() {
         showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
         return showORSEEProcess.startDetached( *settingsStorage->browserCommand,
                                                QStringList{ *settingsStorage->orseeURL } );
+        qDebug() << *settingsStorage->browserCommand << *settingsStorage->orseeURL;
+    } else {
+        qDebug() << "The 'browser_command' and/or 'orsee_url' configuration variable(s)"
+                    " was not properly set, skipping";
     }
 
     return false;
