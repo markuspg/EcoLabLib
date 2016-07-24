@@ -17,6 +17,8 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "settingsstorage.h"
 
 ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argParent ) :
@@ -63,6 +65,7 @@ ell::SettingsStorage::SettingsStorage( const Builder &argBuilder, QObject *argPa
     wmctrlCommand{ argBuilder.wmctrlCommand },
     zTreeInstallationDirectory{ argBuilder.zTreeInstallationDirectory }
 {
+    qDebug() << "Initialized 'SettingsStorage' from 'Builder'";
 }
 
 ell::SettingsStorage::~SettingsStorage() {

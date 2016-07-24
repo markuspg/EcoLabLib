@@ -36,6 +36,8 @@ ell::Client::Client( const QString &argHostName, const QString &argIP, const QSt
              this, SLOT( HandleStateChange( unsigned int ) ) );
 
     clientPinger->start();
+
+    qDebug() << "Created client" << hostName << ip << mac << xPosition << yPosition;
 }
 
 ell::Client::~Client() {
@@ -46,11 +48,14 @@ ell::Client::~Client() {
 void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {
     // Break, if the client is neither connected nor running a z-Leaf
     if ( state != ClientState_t::CONNECTED && state != ClientState_t::ZLEAF_RUNNING ) {
+        qDebug() << "Client" << hostName << "is in a state not applicable for beaming, skipping";
         return;
     }
 
     if ( !settingsStorage->publicKeyPathUser || !settingsStorage->scpCommand
          || !settingsStorage->userNameOnClients ) {
+        qDebug() << "The 'public_key_path_user', 'scp_command' and/or 'user_name_on_clients'"
+                    " configuration variable(s) was not properly set, skipping";
         return;
     }
 
@@ -62,17 +67,18 @@ void ell::Client::BeamFile( const QString &argDirectoryToBeam ) const {
     // Start the process
     QProcess beamFileProcess;
     beamFileProcess.setProcessEnvironment( QProcessEnvironment::systemEnvironment() );
+    qDebug() << *settingsStorage->scpCommand << arguments;
     beamFileProcess.startDetached( *settingsStorage->scpCommand, arguments );
 }
 
 void ell::Client::Boot() {
     if ( !settingsStorage->networkBroadcastAddress || !settingsStorage->serverIP
          || !settingsStorage->wakeonlanCommand ) {
+        qDebug() << "The 'network_broadcast_address', 'server_ip' and/or 'wakeonlan_command'"
+                    " configuration variable(s) was not properly set, skipping";
         return;
     }
-    if ( state == ClientState_t::CONNECTED || state == ClientState_t::SHUTTING_DOWN ) {
-        return;
-    }
+
     QStringList arguments;
     // For Debian based UNIXes shipping the 'wakeonlan' program
     if ( settingsStorage->wakeonlanCommand->contains( "wakeonlan" ) ) {
@@ -86,12 +92,14 @@ void ell::Client::Boot() {
     // Start the process
     QProcess wakeonlanProcess;
     wakeonlanProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    qDebug() << *settingsStorage->wakeonlanCommand << arguments;
     wakeonlanProcess.startDetached( *settingsStorage->wakeonlanCommand, arguments );
 
     state = ClientState_t::BOOTING;
 }
 
 void ell::Client::HandleStateChange( unsigned int argState ) {
+    qDebug() << "Client" << hostName << "state changed to" << argState;
     state = static_cast< ClientState_t >( argState );
 }
 
@@ -101,11 +109,15 @@ void ell::Client::KillzLeaf() {
 
 void ell::Client::OpenFileSystem( const bool &argAsRoot ) const {
     if ( !settingsStorage->fileManager ) {
+        qDebug() << "The 'file_manager' configuration variable"
+                    " was not properly set, skipping";
         return;
     }
 
     // Do nothing, if the client is not in an applicable state
     if ( !( state == ClientState_t::CONNECTED || state == ClientState_t::ZLEAF_RUNNING ) ) {
+        qDebug() << "Client" << hostName << "is in a state not applicable for"
+                    " opening the file system, skipping";
         return;
     }
 
@@ -116,6 +128,8 @@ void ell::Client::OpenFileSystem( const bool &argAsRoot ) const {
         if ( settingsStorage->userNameOnClients ) {
             userToBeUsed = *settingsStorage->userNameOnClients;
         } else {
+            qDebug() << "The 'user_name_on_clients' configuration"
+                        " variable was not properly set, skipping";
             return;
         }
     }
@@ -124,6 +138,7 @@ void ell::Client::OpenFileSystem( const bool &argAsRoot ) const {
 
     QProcess openFilesystemProcess;
     openFilesystemProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    qDebug() << *settingsStorage->fileManager << arguments;
     openFilesystemProcess.startDetached( *settingsStorage->fileManager, arguments );
 }
 
@@ -131,12 +146,16 @@ void ell::Client::OpenTerminal( const QString &argCommand, const bool &argOpenAs
     if ( settingsStorage->terminalEmulatorCommand && settingsStorage->sshCommand ) {
         // Do nothing, if the client is not in an applicable state
         if ( !( state == ClientState_t::CONNECTED || state == ClientState_t::ZLEAF_RUNNING ) ) {
+            qDebug() << "Client" << hostName << "is in a state not applicable for"
+                        " opening a terminal, skipping";
             return;
         }
 
         QStringList arguments;
         if ( !argOpenAsRoot ) {
             if ( !settingsStorage->publicKeyPathUser || !settingsStorage->userNameOnClients ) {
+                qDebug() << "The 'public_key_path_user' and/or 'user_name_on_clients'"
+                            " configuration variable(s) was not properly set, skipping";
                 return;
             }
             arguments << "--title" << hostName << "-e"
@@ -144,6 +163,8 @@ void ell::Client::OpenTerminal( const QString &argCommand, const bool &argOpenAs
                                   + " " + *settingsStorage->userNameOnClients + "@" + ip };
         } else {
             if ( !settingsStorage->publicKeyPathRoot ) {
+                qDebug() << "The 'public_key_path_root' configuration"
+                            " variable was not properly set, skipping";
                 return;
             }
             arguments << "--title" << hostName << "-e"
@@ -165,7 +186,11 @@ void ell::Client::OpenTerminal( const QString &argCommand, const bool &argOpenAs
 
         QProcess openTerminalProcess;
         openTerminalProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+        qDebug() << *settingsStorage->terminalEmulatorCommand << arguments;
         openTerminalProcess.startDetached( *settingsStorage->terminalEmulatorCommand, arguments );
+    } else {
+        qDebug() << "The 'terminal_emulator_command' and/or 'ssh_command' configuration"
+                    " variable(s) was not properly set, skipping";
     }
 }
 
@@ -182,7 +207,11 @@ void ell::Client::PasswordReceived( QString argMessage ) {
 
 void ell::Client::SendMessage( const QString &argMessage ) {
     if ( webSocket ) {
+        qDebug() << "Sending message" << argMessage << "to client" << hostName;
         webSocket->sendTextMessage( argMessage );
+    } else {
+        qDebug() << "Message" << argMessage << "could not be sent to client"
+                    " due to not existing websocket connection";
     }
 }
 
@@ -208,6 +237,7 @@ void ell::Client::SetzLeafVersion( QString * const argzLeafVersion ) {
 
 void ell::Client::ShowDesktop() {
     if ( !settingsStorage->vncViewer ) {
+        qDebug() << "The 'vnc_viewer' configuration variable was not properly set, skipping";
         return;
     }
 
@@ -215,6 +245,7 @@ void ell::Client::ShowDesktop() {
 
     QProcess showDesktopProcess;
     showDesktopProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+    qDebug() << *settingsStorage->vncViewer << arguments;
     showDesktopProcess.startDetached( *settingsStorage->vncViewer, arguments );
 }
 
@@ -223,12 +254,17 @@ void ell::Client::Shutdown() {
 }
 
 void ell::Client::StartzLeaf( const QString * const fakeName ) {
-    // Don't crash if the port or version for z-Leaf are not set yet
-    if ( !sessionPort || !settingsStorage->serverIP || !zleafVersion ) {
+    if ( !settingsStorage->serverIP ) {
+        qDebug() << "The 'server_ip' configuration variable was not properly set, skipping";
         return;
+    }
+    // Don't crash if the port or version for z-Leaf are not set yet
+    if ( !sessionPort || !zleafVersion ) {
+        qDebug() << "The session port or the z-Leaf version were not properly set, skipping";
         if ( fakeName ) {
             delete fakeName;
         }
+        return;
     }
 
     if ( !fakeName ) {
@@ -243,7 +279,9 @@ void ell::Client::StartzLeaf( const QString * const fakeName ) {
 }
 
 void ell::Client::TextMessageReceived( QString argMessage ) {
-    QStringList tempMessageSplit = argMessage.split( '|', QString::SkipEmptyParts, Qt::CaseSensitive );
+    qDebug() << "Client" << hostName << "sent message" << argMessage;
+    QStringList tempMessageSplit = argMessage.split( '|', QString::SkipEmptyParts,
+                                                     Qt::CaseSensitive );
 
     bool conversionSucceeded = false;
     int messageID = tempMessageSplit[ 0 ].toInt( &conversionSucceeded );
@@ -267,4 +305,5 @@ void ell::Client::WebSocketDisconnected() {
     webSocket->deleteLater();
     webSocket = nullptr;
     state = ClientState_t::DISCONNECTED;
+    qDebug() << "Client" << hostName << "disconnected";
 }

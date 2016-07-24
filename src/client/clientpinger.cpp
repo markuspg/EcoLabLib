@@ -17,6 +17,8 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "clientpinger.h"
 
 ell::ClientPinger::ClientPinger( const QString * const argIP,
@@ -26,6 +28,8 @@ ell::ClientPinger::ClientPinger( const QString * const argIP,
     pingArguments{ QStringList{} << "-c" << "1" << "-w" << "1" << "-q" << *argIP },
     pingCommand{ argPingCommand }
 {
+    qDebug() << "Created 'ClientPinger' for IP" << *argIP << "with command"
+             << *pingCommand << "and arguments" << pingArguments;
 }
 
 void ell::ClientPinger::run() {

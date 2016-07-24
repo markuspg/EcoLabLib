@@ -74,9 +74,9 @@ bool ell::EcoLabLib::ShowORSEE() {
     if ( settingsStorage->browserCommand && settingsStorage->orseeURL ) {
         QProcess showORSEEProcess;
         showORSEEProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
+        qDebug() << *settingsStorage->browserCommand << *settingsStorage->orseeURL;
         return showORSEEProcess.startDetached( *settingsStorage->browserCommand,
                                                QStringList{ *settingsStorage->orseeURL } );
-        qDebug() << *settingsStorage->browserCommand << *settingsStorage->orseeURL;
     } else {
         qDebug() << "The 'browser_command' and/or 'orsee_url' configuration variable(s)"
                     " was not properly set, skipping";
@@ -90,7 +90,11 @@ bool ell::EcoLabLib::ShowPreprints() {
         QProcess showPreprintsProcess;
         showPreprintsProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
         QStringList arguments{ QStringList{} << *settingsStorage->ecolablibInstallationDirectory +  "/preprints" };
+        qDebug() << *settingsStorage->fileManager << arguments;
         return showPreprintsProcess.startDetached( *settingsStorage->fileManager, arguments );
+    } else {
+        qDebug() << "The 'browser_command' and/or 'orsee_url' configuration variable(s)"
+                    " was not properly set, skipping";
     }
 
     return false;
@@ -98,25 +102,31 @@ bool ell::EcoLabLib::ShowPreprints() {
 
 bool ell::EcoLabLib::ShowWebcam( const QString &argWebcamURL ) {
     if ( !settingsStorage->webcamDisplayCommand ) {
+        qDebug() << "The 'webcam_display_command' configuration variable"
+                    " was not properly set, skipping";
         return false;
     }
 
     QProcess showWebcamProcess;
     showWebcamProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
     QStringList arguments{ QStringList{} << argWebcamURL };
+    qDebug() << *settingsStorage->webcamDisplayCommand << arguments;
     return showWebcamProcess.startDetached( *settingsStorage->webcamDisplayCommand, arguments );
 }
 
-void ell::EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString &argzLeafVersion, const int &argzTreePort ) {
+void ell::EcoLabLib::StartLocalzLeaf( const QString &argzLeafName,
+                                      const QString &argzLeafVersion,
+                                      const int &argzTreePort ) {
+    if ( !settingsStorage->wineCommand || !settingsStorage->zTreeInstallationDirectory ) {
+        qDebug() << "The 'wine_command' and/or 'ztree_installation_directory' configuration"
+                    " variable(s) was not properly set, skipping";
+        return;
+    }
     QProcess startLocalzLeafProcess;
     startLocalzLeafProcess.setProcessEnvironment( *settingsStorage->processEnvironment );
 
     QString program;
     QStringList arguments;
-
-    if ( !settingsStorage->wineCommand || !settingsStorage->zTreeInstallationDirectory ) {
-        return;
-    }
 
     program = *settingsStorage->wineCommand;
     arguments.append( *settingsStorage->zTreeInstallationDirectory
@@ -124,6 +134,7 @@ void ell::EcoLabLib::StartLocalzLeaf( const QString &argzLeafName, const QString
     arguments << "/server" << "127.0.0.1"
               << "/channel" << QString::number( argzTreePort - 7000 )
               << "/name" << argzLeafName;
+    qDebug() << program << arguments;
     startLocalzLeafProcess.startDetached( program, arguments );
 }
 
