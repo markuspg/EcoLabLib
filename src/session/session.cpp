@@ -44,6 +44,8 @@ ell::Session::Session( const QString &argAnonymousReceiptsPlaceholder, QVector< 
     if ( settingsStorage->wmctrlCommand ) {
         QTimer::singleShot( 5000, this, SLOT( RenameWindow() ) );
     }
+    qDebug() << "Created new session with z-Tree version" << zTreeVersionString
+             << "on port" << zTreePort;
 }
 
 ell::Session::~Session() {

@@ -17,12 +17,16 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "ztree.h"
 
 ell::zTree::zTree( const SettingsStorage * const argSettingsStorage, const QString &argZTreeDataTargetPath,
                     const int &argZTreePort, const QString &argZTreeVersionPath, QObject *argParent ) :
     QObject{ argParent }
 {
+    qDebug() << "Starting new z-Tree instance storing data in" << argZTreeDataTargetPath
+             << "using" << argZTreeVersionPath << "and listening on port" << argZTreePort;
     connect( &ztreeInstance, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SIGNAL( zTreeClosed( int, QProcess::ExitStatus ) ) );
     QString program;
@@ -41,5 +45,6 @@ ell::zTree::zTree( const SettingsStorage * const argSettingsStorage, const QStri
 
     ztreeInstance.setProcessEnvironment( *argSettingsStorage->processEnvironment );
     ztreeInstance.setWorkingDirectory( QDir::currentPath() );
+    qDebug() << program << arguments;
     ztreeInstance.start( program, arguments );
 }

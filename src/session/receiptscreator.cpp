@@ -17,6 +17,8 @@
  *  along with EcoLabLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "receiptscreator.h"
 
 ell::ReceiptsCreator::ReceiptsCreator( const QString * const argAnonymousReceiptsPlaceholder, const bool &argAnonReceipts,
@@ -37,6 +39,13 @@ ell::ReceiptsCreator::ReceiptsCreator( const QString * const argAnonymousReceipt
 
     connect( &fileCheckTimer, &QTimer::timeout, this, &ReceiptsCreator::PrintReceipts );
     fileCheckTimer.start( 1000 );
+
+    qDebug() << "Created new 'ReceiptsCreator' instance with the following settings:\n"
+             << "anonymousReceipts:" << anonymousReceipts << "\n"
+             << "anonymousReceiptsPlaceholder:" << *anonymousReceiptsPlaceholder << "\n"
+             << "dateString:" << *dateString << "\n"
+             << "latexHeaderName:" << *latexHeaderName << "\n"
+             << "zTreeDataTargetPath:" << *zTreeDataTargetPath;
 }
 
 ell::ReceiptsCreator::~ReceiptsCreator() {
@@ -50,6 +59,7 @@ ell::ReceiptsCreator::~ReceiptsCreator() {
 }
 
 void ell::ReceiptsCreator::CreateReceiptsFromPaymentFile() {
+    qDebug() << "Creating receipts from payment file";
     // Get the data needed for receipts creation from the payment file
     QList< QString > *rawParticipantsData = nullptr;
     rawParticipantsData = GetParticipantsDataFromPaymentFile();
@@ -181,6 +191,7 @@ QVector< ell::PaymentEntry_t* > *ell::ReceiptsCreator::ExtractParticipantsData( 
 }
 
 QList<QString> *ell::ReceiptsCreator::GetParticipantsDataFromPaymentFile() {
+    qDebug() << "Getting participants' data from payment file" << paymentFile.fileName();
     // Create the vector to store the single lines of the file
     QList<QString> *participantsData = nullptr;
 
@@ -245,6 +256,7 @@ void ell::ReceiptsCreator::MakeReceiptsAnonymous( bool argAlsoAnonymizeClients, 
 void ell::ReceiptsCreator::PrintReceipts() {
     // If the payment file exists, print it
     if ( paymentFile.exists() ) {
+        qDebug() << "Payment file found, starting receipts creation and printing";
         fileCheckTimer.stop();
         // This delay shall ensure, that the payment file is completely written by z-Tree
         QTimer::singleShot( 5000, this, SLOT( CreateReceiptsFromPaymentFile() ) );
