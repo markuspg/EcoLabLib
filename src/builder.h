@@ -55,7 +55,6 @@ public:
     QString *dvipsCommand = nullptr;
     QString *ecolablibInstallDir = nullptr;
     QString *fileManager = nullptr;
-    bool *globalListening = nullptr;
     quint16 *initialzTreePort = nullptr;
     QStringList *installedLaTeXHeaders = nullptr;
     QStringList *installedzTreeVersions = nullptr;

@@ -114,7 +114,6 @@ void ell::Builder::ReadSettings() {
     dvipsCommand = ReadSettingsItem( toolSettings, "dvips_command", true );
     ecolablibInstallDir = ReadSettingsItem( settings, "ecolablib_installation_directory", true );
     fileManager = ReadSettingsItem( toolSettings, "file_manager", true, true );
-    QString *tempGlobalListening = ReadSettingsItem( settings, "global_listening", false );
     QString *tempInitialzTreePort = ReadSettingsItem( settings, "initial_ztree_port",
                                                       false, true );
     keyFile = ReadSettingsItem( settings, "key_file_path", true );
@@ -160,7 +159,6 @@ void ell::Builder::ReadSettings() {
     }
 
     // Convert the boolean values
-    globalListening = ConvertToBool( tempGlobalListening );
     useSSH = ConvertToBool( tempUseSSH );
 
     // Convert the numeric values

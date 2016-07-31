@@ -56,7 +56,6 @@ public:
     const std::unique_ptr< const QString > dvipsCommand = nullptr;  //! The path to convert a dvi file to postscript
     const std::unique_ptr< const QString > ecolablibInstallationDirectory = nullptr;    //! The directory where 'EcolabLib's data will be stored (e.g. receipt headers, preprints etc.)
     const std::unique_ptr< const QString > fileManager = nullptr;   //! The path to open a file manager
-    const std::unique_ptr< const bool > globalListening = nullptr;  //! True, if the server shall listen on any network interface (dangerous), otherwise false
     const std::unique_ptr< const quint16 > initialzTreePort = nullptr;  //! The default port which shall be set for new z-Tree instances
     const std::unique_ptr< const QStringList > installedLaTeXHeaders = nullptr; //! Stores all detected LaTeX headers
     const std::unique_ptr< const QStringList > installedzTreeVersions = nullptr;    //! Stores all detected z-Tree versions
