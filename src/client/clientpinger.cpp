@@ -47,7 +47,7 @@ void ell::ClientPinger::run() {
             return;
         } else {
             pingProcess->start( *pingCommand, pingArguments );
-            if ( !pingProcess->waitForFinished( 4096 ) || pingProcess->exitCode() != 0 ) {
+            if ( !pingProcess->waitForFinished( 2048 ) || pingProcess->exitCode() != 0 ) {
                 newState = ClientState_t::DISCONNECTED;
             } else {
                 newState = ClientState_t::CONNECTED;
