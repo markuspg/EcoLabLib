@@ -47,7 +47,9 @@ void ell::ClientPinger::run() {
             return;
         } else {
             pingProcess->start( *pingCommand, pingArguments );
-            if ( !pingProcess->waitForFinished( 2048 ) || pingProcess->exitCode() != 0 ) {
+            if ( !pingProcess->waitForFinished( 2048 )
+                 || pingProcess->exitCode() != 0
+                 || pingProcess->exitStatus() != QProcess::NormalExit ) {
                 newState = ClientState_t::DISCONNECTED;
             } else {
                 newState = ClientState_t::CONNECTED;
@@ -56,7 +58,7 @@ void ell::ClientPinger::run() {
 
         if ( newState != state ) {
             state = newState;
-            emit stateChanged( static_cast< unsigned int >( state ) );
+            emit stateChanged( state );
         }
 
         QThread::sleep( 1 );

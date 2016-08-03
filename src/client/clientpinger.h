@@ -34,7 +34,7 @@ public:
                            QObject *argParent = nullptr );
 
 signals:
-    void stateChanged( unsigned int newState );
+    void stateChanged( ClientState_t argState );
 
 public slots:
 

@@ -32,8 +32,8 @@ ell::Client::Client( const QString &argHostName, const QString &argIP, const QSt
     clientPinger{ new ClientPinger{ &ip, argSettingsStorage->pingCommand, this } },
     settingsStorage{ argSettingsStorage }
 {
-    connect( clientPinger, SIGNAL( stateChanged( unsigned int ) ),
-             this, SLOT( HandleStateChange( unsigned int ) ) );
+    connect( clientPinger, &ClientPinger::stateChanged,
+             this, &Client::HandleStateChange );
 
     clientPinger->start();
 
@@ -95,12 +95,13 @@ void ell::Client::Boot() {
     qDebug() << *settingsStorage->wakeonlanCommand << arguments;
     wakeonlanProcess.startDetached( *settingsStorage->wakeonlanCommand, arguments );
 
-    state = ClientState_t::BOOTING;
+    HandleStateChange( ClientState_t::BOOTING );
 }
 
-void ell::Client::HandleStateChange( unsigned int argState ) {
-    qDebug() << "Client" << hostName << "state changed to" << argState;
-    state = static_cast< ClientState_t >( argState );
+void ell::Client::HandleStateChange( ClientState_t argState ) {
+    qDebug() << "Client" << hostName << "changed state to"
+             << static_cast< unsigned int >( argState );
+    state = argState;
 }
 
 void ell::Client::KillzLeaf() {
@@ -227,7 +228,7 @@ void ell::Client::SetWebSocket( QWebSocket *argWebSocket ) {
     webSocket = argWebSocket;
     webSocket->setParent( this );
     if ( webSocket->isValid() ) {
-        state = ClientState_t::CONNECTED;
+        HandleStateChange( ClientState_t::CONNECTED );
     }
 }
 
@@ -291,10 +292,10 @@ void ell::Client::TextMessageReceived( QString argMessage ) {
 
     switch ( messageID ) {
     case 0:
-        state = ClientState_t::ZLEAF_RUNNING;
+        HandleStateChange( ClientState_t::ZLEAF_RUNNING );
         break;
     case 1:
-        state = ClientState_t::CONNECTED;
+        HandleStateChange( ClientState_t::CONNECTED );
         break;
     default:
         true;
@@ -304,6 +305,6 @@ void ell::Client::TextMessageReceived( QString argMessage ) {
 void ell::Client::WebSocketDisconnected() {
     webSocket->deleteLater();
     webSocket = nullptr;
-    state = ClientState_t::DISCONNECTED;
+    HandleStateChange( ClientState_t::DISCONNECTED );
     qDebug() << "Client" << hostName << "disconnected";
 }
