@@ -33,7 +33,7 @@ ell::ClientPinger::ClientPinger( const QString * const argIP,
 }
 
 void ell::ClientPinger::run() {
-    ClientState_t newState = ClientState_t::UNINITIALIZED;
+    ClientState_t newState = ClientState_t::DISCONNECTED;
 
     if ( !pingCommand ) {
         return;

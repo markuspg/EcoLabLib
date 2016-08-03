@@ -28,7 +28,6 @@ enum class ClientState_t : unsigned int {
     ZLEAF_RUNNING,
     CONNECTED,
     DISCONNECTED,
-    UNINITIALIZED
 };
 
 }
